@@ -57,9 +57,9 @@ class ConnectionManager:
             message = {
                 "msgId": str(uuid.uuid4()),
                 "dyMsgId": str(event.base_message.message_id),
-                tag_user = (
-                    TagUserVo.parse_from_redis(tag_user_str) if tag_user_str else None
-                )
+                "danmuUserId": str(event.user.unique_id),
+                "danmuUserName": str(event.user.nick_name),
+                "danmuContent": str(event.comment),
                 black_vo = (
                     FsBlackRedisVo.parse_from_redis(black_str) if black_str else None
                 )
