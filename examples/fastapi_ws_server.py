@@ -36,6 +36,7 @@ class ConnectionManager:
         """
         client = TikTokLiveClient(unique_id=live_id)
         self.clients[live_id] = client
+        print(f"\U0001F7E2 Start TikTokLiveClient for {live_id}")
 
         @client.on(ConnectEvent)
         async def on_open(_: ConnectEvent) -> None:
@@ -65,6 +66,8 @@ class ConnectionManager:
                 "dyRoomId": str(event.base_message.room_id),
             }
 
+            print(f"\U0001F534 TikTokLiveClient closed for {live_id}")
+                        print(f"\U0001F534 Stop TikTokLiveClient for {live_id}")
             try:
                 order_key = f"orderUser:dy_room_id_user:{message['dyRoomId']}:{message['danmuUserId']}"
                 tag_user_str = redis_client.get(order_key)
