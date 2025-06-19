@@ -95,6 +95,11 @@ class ConnectionManager:
             pass
         finally:
             await client.disconnect(close_client=True)
+            async with self.lock:
+                if self.clients.get(live_id) is client:
+                    self.clients.pop(live_id, None)
+                if self.tasks.get(live_id) is asyncio.current_task():
+                    self.tasks.pop(live_id, None)
             print(f"\U0001f534 TikTokLiveClient closed for {live_id}")
 
     async def connect(self, websocket: WebSocket, live_id: str) -> None:
@@ -102,9 +107,18 @@ class ConnectionManager:
         async with self.lock:
             if live_id not in self.active_connections:
                 self.active_connections[live_id] = set()
-                # Create a background TikTokLiveClient only once per live_id
-                if live_id not in self.clients:
-                    self.tasks[live_id] = asyncio.create_task(self._run_client(live_id))
+
+            # Ensure a running TikTokLiveClient exists
+            if (
+                live_id not in self.clients
+                or not self.clients[live_id].connected
+            ):
+                # Stop any stale client before starting a new one
+                if live_id in self.clients:
+                    await self.clients[live_id].disconnect(close_client=True)
+
+                self.tasks[live_id] = asyncio.create_task(self._run_client(live_id))
+
             # Track the newly connected front end
             self.active_connections[live_id].add(websocket)
         await websocket.send_text("LIVING")
