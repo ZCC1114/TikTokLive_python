@@ -2,6 +2,7 @@ import asyncio
 import json
 import uuid
 from typing import Dict, Set
+import contextlib
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from starlette.middleware.cors import CORSMiddleware
@@ -109,13 +110,16 @@ class ConnectionManager:
                 self.active_connections[live_id] = set()
 
             # Ensure a running TikTokLiveClient exists
-            if (
-                live_id not in self.clients
-                or not self.clients[live_id].connected
-            ):
+            if live_id not in self.clients or not self.clients[live_id].connected:
                 # Stop any stale client before starting a new one
                 if live_id in self.clients:
                     await self.clients[live_id].disconnect(close_client=True)
+
+                if live_id in self.tasks:
+                    task = self.tasks.pop(live_id)
+                    task.cancel()
+                    with contextlib.suppress(Exception):
+                        await task
 
                 self.tasks[live_id] = asyncio.create_task(self._run_client(live_id))
 
@@ -133,10 +137,12 @@ class ConnectionManager:
                         print(f"\U0001f534 Stop TikTokLiveClient for {live_id}")
                         await self.clients[live_id].disconnect(close_client=True)
                     if live_id in self.tasks:
-                        self.tasks[live_id].cancel()
+                        task = self.tasks.pop(live_id)
+                        task.cancel()
+                        with contextlib.suppress(Exception):
+                            await task
                     self.active_connections.pop(live_id, None)
                     self.clients.pop(live_id, None)
-                    self.tasks.pop(live_id, None)
 
     async def broadcast(self, live_id: str, text: str) -> None:
         clients = list(self.active_connections.get(live_id, []))
