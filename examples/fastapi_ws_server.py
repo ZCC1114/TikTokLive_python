@@ -15,7 +15,11 @@ app = FastAPI()
 
 
 class ConnectionManager:
-    """Manage WebSocket clients and TikTokLive connections."""
+    """Manage front-end WebSocket connections and live clients.
+
+    For each ``live_id`` only a single :class:`TikTokLiveClient` is created and
+    its events are broadcast to all connected front ends.
+    """
 
     def __init__(self) -> None:
         self.active_connections: Dict[str, Set[WebSocket]] = {}
@@ -24,7 +28,11 @@ class ConnectionManager:
         self.lock = asyncio.Lock()
 
     async def _run_client(self, live_id: str) -> None:
-        """Start TikTokLiveClient and forward comments to front-end."""
+        """Start a TikTokLiveClient for ``live_id`` and forward comments.
+
+        This coroutine runs in the background and broadcasts each comment to all
+        currently connected WebSocket clients.
+        """
         client = TikTokLiveClient(unique_id=live_id)
         self.clients[live_id] = client
 
@@ -33,6 +41,9 @@ class ConnectionManager:
             message = {
                 "msgId": str(uuid.uuid4()),
                 "dyMsgId": str(event.base_message.message_id),
+                # Create a background TikTokLiveClient only once per live_id
+            # Track the newly connected front end
+                    # No front-end connections left: stop the TikTokLiveClient
                 "danmuUserId": str(event.user.unique_id),
                 "danmuUserName": str(event.user.nick_name),
                 "danmuContent": str(event.comment),
