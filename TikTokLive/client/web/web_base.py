@@ -132,7 +132,8 @@ class TikTokHTTPClient:
         """
 
         await self._httpx.aclose()
-        await self._curl_cffi.close()
+        if self._curl_cffi is not None:
+            await self._curl_cffi.close()
 
     def set_session(self, session_id: str | None, tt_target_idc: str | None) -> None:
         """
