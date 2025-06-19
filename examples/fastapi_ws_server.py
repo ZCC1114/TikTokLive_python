@@ -125,7 +125,8 @@ class ConnectionManager:
             if live_id not in self.active_connections:
                 self.active_connections[live_id] = set()
 
-            if live_id not in self.clients or not self.clients[live_id].connected:
+            task = self.tasks.get(live_id)
+            if task is None or task.done():
                 stop_client = self.clients.pop(live_id, None)
                 stop_task = self.tasks.pop(live_id, None)
                 self.tasks[live_id] = asyncio.create_task(self._run_client(live_id))
