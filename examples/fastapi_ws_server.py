@@ -44,11 +44,11 @@ class ConnectionManager:
         @client.on(ControlEvent)
         async def on_control(event: ControlEvent) -> None:
             await self.broadcast(live_id, str(event.action.value))
-            if event.action in {
-                ControlAction.CONTROL_ACTION_STREAM_ENDED,
-                ControlAction.CONTROL_ACTION_STREAM_SUSPENDED,
-            }:
+            if event.action == ControlAction.CONTROL_ACTION_STREAM_ENDED:
                 print("\u76f4\u64ad\u95f4\u5df2\u7ed3\u675f")
+                for ws in list(self.active_connections.get(live_id, [])):
+                    await ws.close()
+                    await self.remove(ws, live_id)
                 await client.disconnect(close_client=True)
 
         @client.on(CommentEvent)
