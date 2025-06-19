@@ -60,29 +60,24 @@ class ConnectionManager:
                 "danmuUserId": str(event.user.unique_id),
                 "danmuUserName": str(event.user.nick_name),
                 "danmuContent": str(event.comment),
-                black_vo = (
-                    FsBlackRedisVo.parse_from_redis(black_str) if black_str else None
-                )
-            print(f"\U0001f534 TikTokLiveClient closed for {live_id}")
-                        print(f"\U0001f534 Stop TikTokLiveClient for {live_id}")
-                "danmuUserName": str(event.user.nick_name),
-                "danmuContent": str(event.comment),
                 "dyRoomId": str(event.base_message.room_id),
             }
 
-            print(f"\U0001F534 TikTokLiveClient closed for {live_id}")
-                        print(f"\U0001F534 Stop TikTokLiveClient for {live_id}")
             try:
                 order_key = f"orderUser:dy_room_id_user:{message['dyRoomId']}:{message['danmuUserId']}"
                 tag_user_str = redis_client.get(order_key)
-                tag_user = TagUserVo.parse_from_redis(tag_user_str) if tag_user_str else None
+                tag_user = (
+                    TagUserVo.parse_from_redis(tag_user_str) if tag_user_str else None
+                )
                 if tag_user:
                     message["orderNumber"] = tag_user.orderNumber or ""
                 else:
                     message["orderNumber"] = ""
 
                 black_str = redis_client.get(f"black:{message['danmuUserId']}")
-                black_vo = FsBlackRedisVo.parse_from_redis(black_str) if black_str else None
+                black_vo = (
+                    FsBlackRedisVo.parse_from_redis(black_str) if black_str else None
+                )
                 if black_vo:
                     message["blackLevel"] = str(black_vo.blackLevel)
                     message["createdUsers"] = black_vo.createdUsers
@@ -100,14 +95,17 @@ class ConnectionManager:
             pass
         finally:
             await client.disconnect(close_client=True)
+            print(f"\U0001f534 TikTokLiveClient closed for {live_id}")
 
     async def connect(self, websocket: WebSocket, live_id: str) -> None:
         await websocket.accept()
         async with self.lock:
             if live_id not in self.active_connections:
                 self.active_connections[live_id] = set()
+                # Create a background TikTokLiveClient only once per live_id
                 if live_id not in self.clients:
                     self.tasks[live_id] = asyncio.create_task(self._run_client(live_id))
+            # Track the newly connected front end
             self.active_connections[live_id].add(websocket)
         await websocket.send_text("LIVING")
 
@@ -116,7 +114,9 @@ class ConnectionManager:
             if live_id in self.active_connections:
                 self.active_connections[live_id].discard(websocket)
                 if not self.active_connections[live_id]:
+                    # No front-end connections left: stop the TikTokLiveClient
                     if live_id in self.clients:
+                        print(f"\U0001f534 Stop TikTokLiveClient for {live_id}")
                         await self.clients[live_id].disconnect(close_client=True)
                     if live_id in self.tasks:
                         self.tasks[live_id].cancel()
