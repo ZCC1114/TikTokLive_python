@@ -105,44 +105,46 @@ class ConnectionManager:
 
     async def connect(self, websocket: WebSocket, live_id: str) -> None:
         await websocket.accept()
+        stop_task = None
+        stop_client = None
         async with self.lock:
             if live_id not in self.active_connections:
                 self.active_connections[live_id] = set()
 
-            # Ensure a running TikTokLiveClient exists
             if live_id not in self.clients or not self.clients[live_id].connected:
-                # Stop any stale client before starting a new one
-                if live_id in self.clients:
-                    await self.clients[live_id].disconnect(close_client=True)
-
-                if live_id in self.tasks:
-                    task = self.tasks.pop(live_id)
-                    task.cancel()
-                    with contextlib.suppress(Exception):
-                        await task
-
+                stop_client = self.clients.pop(live_id, None)
+                stop_task = self.tasks.pop(live_id, None)
                 self.tasks[live_id] = asyncio.create_task(self._run_client(live_id))
 
-            # Track the newly connected front end
             self.active_connections[live_id].add(websocket)
+
+        if stop_client:
+            await stop_client.disconnect(close_client=True)
+        if stop_task:
+            stop_task.cancel()
+            with contextlib.suppress(BaseException):
+                await stop_task
+
         await websocket.send_text("LIVING")
 
     async def remove(self, websocket: WebSocket, live_id: str) -> None:
+        stop_task = None
+        stop_client = None
         async with self.lock:
             if live_id in self.active_connections:
                 self.active_connections[live_id].discard(websocket)
                 if not self.active_connections[live_id]:
-                    # No front-end connections left: stop the TikTokLiveClient
-                    if live_id in self.clients:
-                        print(f"\U0001f534 Stop TikTokLiveClient for {live_id}")
-                        await self.clients[live_id].disconnect(close_client=True)
-                    if live_id in self.tasks:
-                        task = self.tasks.pop(live_id)
-                        task.cancel()
-                        with contextlib.suppress(Exception):
-                            await task
+                    stop_client = self.clients.pop(live_id, None)
+                    stop_task = self.tasks.pop(live_id, None)
                     self.active_connections.pop(live_id, None)
-                    self.clients.pop(live_id, None)
+
+        if stop_client:
+            print(f"\U0001f534 Stop TikTokLiveClient for {live_id}")
+            await stop_client.disconnect(close_client=True)
+        if stop_task:
+            stop_task.cancel()
+            with contextlib.suppress(BaseException):
+                await stop_task
 
     async def broadcast(self, live_id: str, text: str) -> None:
         clients = list(self.active_connections.get(live_id, []))
