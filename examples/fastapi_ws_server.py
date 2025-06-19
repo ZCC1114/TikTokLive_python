@@ -7,7 +7,8 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from starlette.middleware.cors import CORSMiddleware
 
 from TikTokLive.client.client import TikTokLiveClient
-from TikTokLive.events import CommentEvent
+from TikTokLive.events import CommentEvent, ControlEvent, ConnectEvent
+from TikTokLive.proto.custom_proto import ControlAction
 from redis_helper import FsBlackRedisVo, TagUserVo, redis_client
 
 
@@ -35,6 +36,20 @@ class ConnectionManager:
         """
         client = TikTokLiveClient(unique_id=live_id)
         self.clients[live_id] = client
+
+        @client.on(ConnectEvent)
+        async def on_open(_: ConnectEvent) -> None:
+            print("\u3010\u221A\u3011WebSocket\u8fde\u63a5\u6210\u529f.")
+
+        @client.on(ControlEvent)
+        async def on_control(event: ControlEvent) -> None:
+            await self.broadcast(live_id, str(event.action.value))
+            if event.action in {
+                ControlAction.CONTROL_ACTION_STREAM_ENDED,
+                ControlAction.CONTROL_ACTION_STREAM_SUSPENDED,
+            }:
+                print("\u76f4\u64ad\u95f4\u5df2\u7ed3\u675f")
+                await client.disconnect(close_client=True)
 
         @client.on(CommentEvent)
         async def on_comment(event: CommentEvent) -> None:
