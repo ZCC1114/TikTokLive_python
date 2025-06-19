@@ -15,17 +15,11 @@ from redis_helper import FsBlackRedisVo, TagUserVo, redis_client
                 )
                 tag_user_str = redis_client.get(order_key)
                 tag_user = (
-                    TagUserVo.parse_from_redis(tag_user_str) if tag_user_str else None
-                )
-                if tag_user:
-                    message["orderNumber"] = tag_user.orderNumber or ""
-                else:
-                    message["orderNumber"] = ""
+                order_key = f"orderUser:dy_room_id_user:{message['dyRoomId']}:{message['danmuUserId']}"
+                tag_user = TagUserVo.parse_from_redis(tag_user_str) if tag_user_str else None
 
                 black_str = redis_client.get(f"black:{message['danmuUserId']}")
-                black_vo = (
-                    FsBlackRedisVo.parse_from_redis(black_str) if black_str else None
-                )
+                black_vo = FsBlackRedisVo.parse_from_redis(black_str) if black_str else None
                 if black_vo:
                     message["blackLevel"] = str(black_vo.blackLevel)
                     message["createdUsers"] = black_vo.createdUsers
