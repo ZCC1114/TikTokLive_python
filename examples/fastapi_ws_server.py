@@ -31,8 +31,8 @@ class ConnectionManager:
             message = {
                 "user": event.user.unique_id,
                 "comment": event.comment,
-                "comment_id": event.base_message.message_id,
-                "room_id": event.base_message.room_id,
+                "comment_id": str(event.base_message.message_id),
+                "room_id": str(event.base_message.room_id),
             }
             await self.broadcast(live_id, json.dumps(message, ensure_ascii=False))
 
@@ -66,11 +66,11 @@ class ConnectionManager:
                     self.clients.pop(live_id, None)
                     self.tasks.pop(live_id, None)
 
-    async def broadcast(self, live_id: str, message: str) -> None:
+    async def broadcast(self, live_id: str, text: str) -> None:
         clients = list(self.active_connections.get(live_id, []))
         for connection in clients:
             try:
-                await connection.send_text(message)
+                await connection.send_text(text)
             except Exception:
                 await self.remove(connection, live_id)
 
