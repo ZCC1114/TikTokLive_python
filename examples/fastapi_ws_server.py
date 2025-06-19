@@ -1,9 +1,40 @@
 import asyncio
 import json
 import uuid
-from typing import Dict, Set
+from redis_helper import FsBlackRedisVo, TagUserVo, redis_client
+                "msgId": str(uuid.uuid4()),
+                "dyMsgId": str(event.base_message.message_id),
+                "danmuUserId": event.user.unique_id,
+                "danmuUserName": event.user.nick_name,
+                "danmuContent": event.comment,
+                "dyRoomId": str(event.base_message.room_id),
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+            try:
+                order_key = (
+                    f"orderUser:dy_room_id_user:{message['dyRoomId']}:{message['danmuUserId']}"
+                )
+                tag_user_str = redis_client.get(order_key)
+                tag_user = (
+                    TagUserVo.parse_from_redis(tag_user_str) if tag_user_str else None
+                )
+                if tag_user:
+                    message["orderNumber"] = tag_user.orderNumber or ""
+                else:
+                    message["orderNumber"] = ""
+
+                black_str = redis_client.get(f"black:{message['danmuUserId']}")
+                black_vo = (
+                    FsBlackRedisVo.parse_from_redis(black_str) if black_str else None
+                )
+                if black_vo:
+                    message["blackLevel"] = str(black_vo.blackLevel)
+                    message["createdUsers"] = black_vo.createdUsers
+                else:
+                    message["blackLevel"] = "0"
+                    message["createdUsers"] = "[]"
+            except Exception as e:
+                print(f"\u274c 标签信息获取失败: {e}")
+
 from starlette.middleware.cors import CORSMiddleware
 
 from TikTokLive.client.client import TikTokLiveClient
