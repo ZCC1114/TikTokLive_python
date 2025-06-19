@@ -60,7 +60,9 @@ class ConnectionManager:
         @client.on(CommentEvent)
         async def on_comment(event: CommentEvent) -> None:
             comment_id = str(event.base_message.message_id)
-            cache = self.recent_ids[live_id]
+            cache = self.recent_ids.get(live_id)
+            if cache is None:
+                return
             if comment_id in cache:
                 return
             cache.append(comment_id)
