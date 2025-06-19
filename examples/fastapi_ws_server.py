@@ -36,11 +36,11 @@ class ConnectionManager:
         """
         client = TikTokLiveClient(unique_id=live_id)
         self.clients[live_id] = client
-        print(f"\U0001F7E2 Start TikTokLiveClient for {live_id}")
+        print(f"\U0001f7e2 Start TikTokLiveClient for {live_id}")
 
         @client.on(ConnectEvent)
         async def on_open(_: ConnectEvent) -> None:
-            print("\u3010\u221A\u3011WebSocket\u8fde\u63a5\u6210\u529f.")
+            print("\u3010\u221a\u3011WebSocket\u8fde\u63a5\u6210\u529f.")
 
         @client.on(ControlEvent)
         async def on_control(event: ControlEvent) -> None:
@@ -57,10 +57,14 @@ class ConnectionManager:
             message = {
                 "msgId": str(uuid.uuid4()),
                 "dyMsgId": str(event.base_message.message_id),
-                # Create a background TikTokLiveClient only once per live_id
-            # Track the newly connected front end
-                    # No front-end connections left: stop the TikTokLiveClient
-                "danmuUserId": str(event.user.unique_id),
+                tag_user = (
+                    TagUserVo.parse_from_redis(tag_user_str) if tag_user_str else None
+                )
+                black_vo = (
+                    FsBlackRedisVo.parse_from_redis(black_str) if black_str else None
+                )
+            print(f"\U0001f534 TikTokLiveClient closed for {live_id}")
+                        print(f"\U0001f534 Stop TikTokLiveClient for {live_id}")
                 "danmuUserName": str(event.user.nick_name),
                 "danmuContent": str(event.comment),
                 "dyRoomId": str(event.base_message.room_id),

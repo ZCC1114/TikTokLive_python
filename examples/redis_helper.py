@@ -40,7 +40,11 @@ class FsBlackRedisVo(BaseModel):
         try:
             raw = json.loads(json_str)
             users = raw.get("createdUsers", [])
-            if isinstance(users, list) and len(users) == 2 and isinstance(users[1], list):
+            if (
+                isinstance(users, list)
+                and len(users) == 2
+                and isinstance(users[1], list)
+            ):
                 users_list = users[1]
             else:
                 users_list = []
