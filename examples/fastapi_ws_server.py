@@ -31,6 +31,8 @@ class ConnectionManager:
             message = {
                 "user": event.user.unique_id,
                 "comment": event.comment,
+                "comment_id": event.base_message.message_id,
+                "room_id": event.base_message.room_id,
             }
             await self.broadcast(live_id, json.dumps(message, ensure_ascii=False))
 
