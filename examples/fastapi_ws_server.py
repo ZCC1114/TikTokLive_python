@@ -1,5 +1,6 @@
 import asyncio
 import json
+import uuid
 from typing import Dict, Set
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -29,10 +30,12 @@ class ConnectionManager:
         @client.on(CommentEvent)
         async def on_comment(event: CommentEvent) -> None:
             message = {
-                "user": event.user.unique_id,
-                "comment": event.comment,
-                "comment_id": str(event.base_message.message_id),
-                "room_id": str(event.base_message.room_id),
+                "msgId": str(uuid.uuid4()),
+                "dyMsgId": str(event.base_message.message_id),
+                "danmuUserId": str(event.user.unique_id),
+                "danmuUserName": str(event.user.nick_name),
+                "danmuContent": str(event.comment),
+                "dyRoomId": str(event.base_message.room_id)
             }
             await self.broadcast(live_id, json.dumps(message, ensure_ascii=False))
 
