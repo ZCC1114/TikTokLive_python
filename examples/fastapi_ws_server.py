@@ -3,7 +3,6 @@ import json
 import uuid
 from typing import Dict, Set
 import contextlib
-from collections import deque
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from starlette.middleware.cors import CORSMiddleware
@@ -29,8 +28,6 @@ class ConnectionManager:
         self.clients: Dict[str, TikTokLiveClient] = {}
         self.tasks: Dict[str, asyncio.Task] = {}
         self.lock = asyncio.Lock()
-        self.recent_ids: Dict[str, deque[str]] = {}
-        self.max_cache = 100
 
     async def _run_client(self, live_id: str) -> None:
         """Start a TikTokLiveClient for ``live_id`` and forward comments.
@@ -40,7 +37,6 @@ class ConnectionManager:
         """
         client = TikTokLiveClient(unique_id=live_id)
         self.clients[live_id] = client
-        self.recent_ids.setdefault(live_id, deque(maxlen=self.max_cache))
         print(f"\U0001f7e2 Start TikTokLiveClient for {live_id}")
 
         @client.on(ConnectEvent)
@@ -60,12 +56,6 @@ class ConnectionManager:
         @client.on(CommentEvent)
         async def on_comment(event: CommentEvent) -> None:
             comment_id = str(event.base_message.message_id)
-            cache = self.recent_ids.get(live_id)
-            if cache is None:
-                return
-            if comment_id in cache:
-                return
-            cache.append(comment_id)
 
             message = {
                 "msgId": str(uuid.uuid4()),
@@ -113,8 +103,6 @@ class ConnectionManager:
                     self.clients.pop(live_id, None)
                 if self.tasks.get(live_id) is asyncio.current_task():
                     self.tasks.pop(live_id, None)
-                if live_id not in self.active_connections:
-                    self.recent_ids.pop(live_id, None)
             print(f"\U0001f534 TikTokLiveClient closed for {live_id}")
 
     async def connect(self, websocket: WebSocket, live_id: str) -> None:
@@ -152,7 +140,6 @@ class ConnectionManager:
                     stop_client = self.clients.pop(live_id, None)
                     stop_task = self.tasks.pop(live_id, None)
                     self.active_connections.pop(live_id, None)
-                    self.recent_ids.pop(live_id, None)
 
         if stop_client:
             print(f"\U0001f534 Stop TikTokLiveClient for {live_id}")
