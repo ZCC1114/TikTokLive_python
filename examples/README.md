@@ -1,6 +1,6 @@
 # TikTokLive Examples
 
-The following examples have been curated to cover both the basics and some of the less obvious features of TikTokLive. 
+The following examples have been curated to cover both the basics and some of the less obvious features of TikTokLive.
 If you have an example project, please [create a pull request](https://github.com/isaackogan/TikTokLive/pulls) so others can learn!
 
 ## Current Examples
@@ -11,7 +11,7 @@ If you have an example project, please [create a pull request](https://github.co
 - [Recording Livestreams - recording.py](recording.py)
 - [Editing HTTP Defaults - web_defaults.py](web_defaults.py)
 - [Checking If User Is Live - check_live.py](check_live.py)
-
+- [FastAPI WebSocket Server - fastapi_ws_server.py](fastapi_ws_server.py)
 
 ## Documentation
 
