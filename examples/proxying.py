@@ -6,7 +6,7 @@ from TikTokLive.events import ConnectEvent
 
 # Create the client
 client: TikTokLiveClient = TikTokLiveClient(
-    unique_id="@tv_asahi_news",
+    unique_id="@yuyuhouse412",
 
     # You can configure a proxy for web requests
     web_proxy=Proxy("http://hostname:port", auth=("username", "password")),
