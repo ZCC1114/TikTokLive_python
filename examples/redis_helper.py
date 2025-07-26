@@ -4,7 +4,7 @@ from typing import Optional, List, Annotated
 import redis
 from pydantic import BaseModel, Field
 
-redis_client = redis.Redis(host="52.77.231.48", port=6379, password='fastSort8888',decode_responses=True)
+redis_client = redis.Redis(host="54.179.69.237", port=6379, password='fastSort8888',decode_responses=True)
 
 
 class TagUserVo(BaseModel):
