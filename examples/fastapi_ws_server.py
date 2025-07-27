@@ -45,13 +45,17 @@ class ConnectionManager:
 
         @client.on(ControlEvent)
         async def on_control(event: ControlEvent) -> None:
-            await self.broadcast(live_id, str(event.action.value))
+            await self.broadcast(live_id, str(event.action))
             if event.action == ControlAction.CONTROL_ACTION_STREAM_ENDED:
                 print("\u76f4\u64ad\u95f4\u5df2\u7ed3\u675f")
                 for ws in list(self.active_connections.get(live_id, [])):
                     await ws.close()
                     await self.remove(ws, live_id)
-                await client.disconnect(close_client=True)
+                try:
+                    await client.disconnect(close_client=True)
+                except Exception as e:
+                    print(f"Disconnect error: {e}")
+
 
         @client.on(CommentEvent)
         async def on_comment(event: CommentEvent) -> None:
@@ -97,7 +101,10 @@ class ConnectionManager:
         except asyncio.CancelledError:
             pass
         finally:
-            await client.disconnect(close_client=True)
+            try:
+                await client.disconnect(close_client=True)
+            except Exception as e:
+                print(f"Disconnect error: {e}")
             async with self.lock:
                 if self.clients.get(live_id) is client:
                     self.clients.pop(live_id, None)
