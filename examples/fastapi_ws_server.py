@@ -150,7 +150,10 @@ class ConnectionManager:
 
         if stop_client:
             print(f"\U0001f534 Stop TikTokLiveClient for {live_id}")
-            await stop_client.disconnect(close_client=True)
+            try:
+                await stop_client.disconnect(close_client=True)
+            except Exception as e:
+                print(f"Disconnect error: {e}")
         if stop_task:
             stop_task.cancel()
             with contextlib.suppress(BaseException):
