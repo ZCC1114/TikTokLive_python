@@ -43,19 +43,44 @@ class ConnectionManager:
         async def on_open(_: ConnectEvent) -> None:
             print("\u3010\u221a\u3011WebSocket\u8fde\u63a5\u6210\u529f.")
 
+        ## 直播间状态变化
+        # @client.on(ControlEvent)
+        # async def on_control(event: ControlEvent) -> None:
+        #     await self.broadcast(live_id, str(event.action))
+        #     if event.action == ControlAction.CONTROL_ACTION_STREAM_ENDED:
+        #         print("\u76f4\u64ad\u95f4\u5df2\u7ed3\u675f")
+        #         for ws in list(self.active_connections.get(live_id, [])):
+        #             await ws.close()
+        #             await self.remove(ws, live_id)
+        #         try:
+        #             await client.disconnect(close_client=True)
+        #         except Exception as e:
+        #             print(f"Disconnect error: {e}")
         @client.on(ControlEvent)
         async def on_control(event: ControlEvent) -> None:
-            await self.broadcast(live_id, str(event.action))
+            # 1. 明确状态码映射，推送数字字符串
             if event.action == ControlAction.CONTROL_ACTION_STREAM_ENDED:
-                print("\u76f4\u64ad\u95f4\u5df2\u7ed3\u675f")
-                for ws in list(self.active_connections.get(live_id, [])):
-                    await ws.close()
-                    await self.remove(ws, live_id)
-                try:
-                    await client.disconnect(close_client=True)
-                except Exception as e:
-                    print(f"Disconnect error: {e}")
+                status = 3
+            elif event.action == ControlAction.CONTROL_ACTION_STREAM_PAUSED:
+                status = 1
+            elif event.action == ControlAction.CONTROL_ACTION_STREAM_UNPAUSED:
+                status = 2
+            else:
+                status = 0
 
+            # 2. 推送数字字符串（和 Java、抖音完全一致）
+            await self.broadcast(live_id, str(status))
+
+            # # 3. 保留你现有业务逻辑：直播结束时断开所有本直播间前端，并清理 client
+            # if status == 3:
+            #     print("直播间已结束")
+            #     for ws in list(self.active_connections.get(live_id, [])):
+            #         await ws.close()
+            #         await self.remove(ws, live_id)
+            #     try:
+            #         await client.disconnect(close_client=True)
+            #     except Exception as e:
+            #         print(f"Disconnect error: {e}")
 
         @client.on(CommentEvent)
         async def on_comment(event: CommentEvent) -> None:
