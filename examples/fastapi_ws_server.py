@@ -93,6 +93,7 @@ class ConnectionManager:
                 "danmuUserName": str(event.user.nick_name),
                 "danmuContent": str(event.comment),
                 "dyRoomId": str(event.base_message.room_id),
+                "fansStatus": str(0)
             }
 
             try:
