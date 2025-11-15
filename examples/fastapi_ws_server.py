@@ -3,6 +3,7 @@ import json
 import uuid
 from typing import Dict, Set
 import contextlib
+import os
 
 import logging
 
@@ -20,6 +21,7 @@ from starlette.middleware.cors import CORSMiddleware
 from TikTokLive.client.client import TikTokLiveClient
 from TikTokLive.events import CommentEvent, ControlEvent, ConnectEvent
 from TikTokLive.proto.custom_proto import ControlAction
+from TikTokLive.client.web.web_settings import WebDefaults
 from redis_helper import FsBlackRedisVo, TagUserVo, redis_client
 
 
@@ -45,6 +47,14 @@ class ConnectionManager:
         This coroutine runs in the background and broadcasts each comment to all
         currently connected WebSocket clients.
         """
+        api_key = os.getenv("EULERSTREAM_API_KEY", "")
+        if api_key:
+            WebDefaults.tiktok_sign_api_key = api_key
+            logger.info(f"当前 WebDefaults.tiktok_sign_api_key = {WebDefaults.tiktok_sign_api_key[:8]}****")
+        else:
+            logger.warning("环境变量 EULERSTREAM_API_KEY 为空，将使用默认限流配置")
+
+
         client = TikTokLiveClient(unique_id=live_id)
         self.clients[live_id] = client
         logger.info(f"\U0001f7e2 Start TikTokLiveClient for {live_id}")
@@ -52,6 +62,7 @@ class ConnectionManager:
         @client.on(ConnectEvent)
         async def on_open(_: ConnectEvent) -> None:
             logger.info("\u3010\u221a\u3011WebSocket\u8fde\u63a5\u6210\u529f.")
+            await self.broadcast(live_id, "LIVING")
 
         ## 直播间状态变化
         # @client.on(ControlEvent)
@@ -171,7 +182,7 @@ class ConnectionManager:
             with contextlib.suppress(BaseException):
                 await stop_task
 
-        await websocket.send_text("LIVING")
+        # await websocket.send_text("LIVING")
 
     async def remove(self, websocket: WebSocket, live_id: str) -> None:
         stop_task = None
