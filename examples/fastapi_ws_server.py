@@ -4,6 +4,16 @@ import uuid
 from typing import Dict, Set
 import contextlib
 
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
+)
+
+logger = logging.getLogger("fastsort_ws")
+
+
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from starlette.middleware.cors import CORSMiddleware
 
@@ -37,11 +47,11 @@ class ConnectionManager:
         """
         client = TikTokLiveClient(unique_id=live_id)
         self.clients[live_id] = client
-        print(f"\U0001f7e2 Start TikTokLiveClient for {live_id}")
+        logger.info(f"\U0001f7e2 Start TikTokLiveClient for {live_id}")
 
         @client.on(ConnectEvent)
         async def on_open(_: ConnectEvent) -> None:
-            print("\u3010\u221a\u3011WebSocket\u8fde\u63a5\u6210\u529f.")
+            logger.info("\u3010\u221a\u3011WebSocket\u8fde\u63a5\u6210\u529f.")
 
         ## 直播间状态变化
         # @client.on(ControlEvent)
@@ -118,7 +128,7 @@ class ConnectionManager:
                     message["blackLevel"] = "0"
                     message["createdUsers"] = "[]"
             except Exception as e:
-                print(f"\u274c 标签信息获取失败: {e}")
+                logger.error(f"\u274c 标签信息获取失败: {e}")
 
             await self.broadcast(live_id, json.dumps(message, ensure_ascii=False))
 
@@ -130,13 +140,13 @@ class ConnectionManager:
             try:
                 await client.disconnect(close_client=True)
             except Exception as e:
-                print(f"Disconnect error: {e}")
+                logger.error(f"Disconnect error: {e}")
             async with self.lock:
                 if self.clients.get(live_id) is client:
                     self.clients.pop(live_id, None)
                 if self.tasks.get(live_id) is asyncio.current_task():
                     self.tasks.pop(live_id, None)
-            print(f"\U0001f534 TikTokLiveClient closed for {live_id}")
+            logger.info(f"\U0001f534 TikTokLiveClient closed for {live_id}")
 
     async def connect(self, websocket: WebSocket, live_id: str) -> None:
         await websocket.accept()
@@ -175,11 +185,11 @@ class ConnectionManager:
                     self.active_connections.pop(live_id, None)
 
         if stop_client:
-            print(f"\U0001f534 Stop TikTokLiveClient for {live_id}")
+            logger.info(f"\U0001f534 Stop TikTokLiveClient for {live_id}")
             try:
                 await stop_client.disconnect(close_client=True)
             except Exception as e:
-                print(f"Disconnect error: {e}")
+                logger.error(f"Disconnect error: {e}")
         if stop_task:
             stop_task.cancel()
             with contextlib.suppress(BaseException):
