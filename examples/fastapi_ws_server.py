@@ -7,6 +7,8 @@ import os
 
 import logging
 
+import httpx
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
@@ -40,6 +42,8 @@ class ConnectionManager:
         self.clients: Dict[str, TikTokLiveClient] = {}
         self.tasks: Dict[str, asyncio.Task] = {}
         self.lock = asyncio.Lock()
+        # 记录每个 live_id 的“是否已经连上 TikTok”
+        self.live_connected: Dict[str, bool] = {}
 
     async def _run_client(self, live_id: str) -> None:
         """Start a TikTokLiveClient for ``live_id`` and forward comments.
@@ -62,21 +66,20 @@ class ConnectionManager:
         @client.on(ConnectEvent)
         async def on_open(_: ConnectEvent) -> None:
             logger.info("\u3010\u221a\u3011WebSocket\u8fde\u63a5\u6210\u529f.")
-            await self.broadcast(live_id, "LIVING")
+            # 标记这个直播间已经连上 TikTok
+            async with self.lock:
+                self.live_connected[live_id] = True
+                # 拿一份当前所有连接的快照，避免在锁里 await
+                targets = list(self.active_connections.get(live_id, []))
 
-        ## 直播间状态变化
-        # @client.on(ControlEvent)
-        # async def on_control(event: ControlEvent) -> None:
-        #     await self.broadcast(live_id, str(event.action))
-        #     if event.action == ControlAction.CONTROL_ACTION_STREAM_ENDED:
-        #         print("\u76f4\u64ad\u95f4\u5df2\u7ed3\u675f")
-        #         for ws in list(self.active_connections.get(live_id, [])):
-        #             await ws.close()
-        #             await self.remove(ws, live_id)
-        #         try:
-        #             await client.disconnect(close_client=True)
-        #         except Exception as e:
-        #             print(f"Disconnect error: {e}")
+            # 给当前所有已连接的前端发一次 LIVING（第一次连上时）
+            for ws in targets:
+                try:
+                    await ws.send_text("LIVING")
+                except Exception:
+                    # 某个连接挂了就算了，不影响别人
+                    pass
+
         @client.on(ControlEvent)
         async def on_control(event: ControlEvent) -> None:
             # 1. 明确状态码映射，推送数字字符串
@@ -91,17 +94,6 @@ class ConnectionManager:
 
             # 2. 推送数字字符串（和 Java、抖音完全一致）
             await self.broadcast(live_id, str(status))
-
-            # # 3. 保留你现有业务逻辑：直播结束时断开所有本直播间前端，并清理 client
-            # if status == 3:
-            #     print("直播间已结束")
-            #     for ws in list(self.active_connections.get(live_id, [])):
-            #         await ws.close()
-            #         await self.remove(ws, live_id)
-            #     try:
-            #         await client.disconnect(close_client=True)
-            #     except Exception as e:
-            #         print(f"Disconnect error: {e}")
 
         @client.on(CommentEvent)
         async def on_comment(event: CommentEvent) -> None:
@@ -144,45 +136,71 @@ class ConnectionManager:
             await self.broadcast(live_id, json.dumps(message, ensure_ascii=False))
 
         try:
+            # 启动 TikTokLiveClient（这里里面会去请求 EulerStream）
             await client.start()
+
         except asyncio.CancelledError:
-            pass
+            # 正常取消（比如前端都断开了），不算错误
+            logger.info(f"TikTokLiveClient task cancelled for {live_id}")
+        except httpx.ReadTimeout:
+            # 签名服务超时：后端记一条 warning，并告诉前端“超时”
+            logger.warning(f"Sign API ReadTimeout，停止本次客户端: {live_id}")
+            await self.broadcast(live_id, "SIGN_API_TIMEOUT")
+        except Exception:
+            # 其他未知异常：记录栈信息，并告诉前端“连接失败”
+            logger.exception(f"TikTokLiveClient 运行异常: {live_id}")
+            await self.broadcast(live_id, "LIVE_CONNECT_ERROR")
         finally:
+            # 无论如何都做资源清理
             try:
                 await client.disconnect(close_client=True)
             except Exception as e:
-                logger.error(f"Disconnect error: {e}")
+                # 这里很容易重复关闭，所以用 warning 或直接忽略
+                logger.warning(f"Disconnect 时出错（可能已经断开，无需处理）: {e}")
             async with self.lock:
                 if self.clients.get(live_id) is client:
                     self.clients.pop(live_id, None)
                 if self.tasks.get(live_id) is asyncio.current_task():
                     self.tasks.pop(live_id, None)
-            logger.info(f"\U0001f534 TikTokLiveClient closed for {live_id}")
+            logger.info(f"🔴 TikTokLiveClient closed for {live_id}")
 
     async def connect(self, websocket: WebSocket, live_id: str) -> None:
+        # 1. 接受前端 WebSocket 连接
         await websocket.accept()
-        stop_task = None
-        stop_client = None
+
+        already_connected = False
+
         async with self.lock:
+            # 2. 维护当前直播间的前端连接集合
             if live_id not in self.active_connections:
                 self.active_connections[live_id] = set()
-
-            task = self.tasks.get(live_id)
-            if task is None or task.done():
-                stop_client = self.clients.pop(live_id, None)
-                stop_task = self.tasks.pop(live_id, None)
-                self.tasks[live_id] = asyncio.create_task(self._run_client(live_id))
-
             self.active_connections[live_id].add(websocket)
 
-        if stop_client:
-            await stop_client.disconnect(close_client=True)
-        if stop_task:
-            stop_task.cancel()
-            with contextlib.suppress(BaseException):
-                await stop_task
+            already_connected = self.live_connected.get(live_id, False)
 
-        # await websocket.send_text("LIVING")
+            # 3. 如果这个直播间还没有对应的 TikTokLiveClient，就创建一个
+            if live_id not in self.clients:
+                logger.info(f"为 {live_id} 创建新的 TikTokLiveClient")
+                task = asyncio.create_task(self._run_client(live_id))
+                self.tasks[live_id] = task
+            else:
+                logger.info(
+                    f"{live_id} 已有 TikTokLiveClient，复用现有 client，"
+                    f"当前前端连接数 = {len(self.active_connections[live_id])}"
+                )
+
+        try:
+            if already_connected:
+                # 如果 TikTok 那边已经连上了，新的前端直接收到 LIVING
+                await websocket.send_text("LIVING")
+            else:
+                # 如果 TikTok 还没连上，让前端先显示“连接中”
+                await websocket.send_text("CONNECTING")
+        except Exception:
+            # 如果刚 accept 完就发不出去，也不要让它影响后面的逻辑
+            logger.warning(f"给 {live_id} 发送 CONNECTING 失败，可能前端已断开")
+
+
 
     async def remove(self, websocket: WebSocket, live_id: str) -> None:
         stop_task = None
@@ -194,6 +212,7 @@ class ConnectionManager:
                     stop_client = self.clients.pop(live_id, None)
                     stop_task = self.tasks.pop(live_id, None)
                     self.active_connections.pop(live_id, None)
+                    self.live_connected.pop(live_id, None)
 
         if stop_client:
             logger.info(f"\U0001f534 Stop TikTokLiveClient for {live_id}")
