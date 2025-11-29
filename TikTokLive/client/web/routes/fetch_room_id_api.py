@@ -48,7 +48,8 @@ class FetchRoomIdAPIRoute(ClientRoute):
                     "uniqueId": unique_id,
                     "sourceType": 54
                 }
-            )
+            ),
+            sign_url=True
         )
 
         response_json: dict = response.json()
