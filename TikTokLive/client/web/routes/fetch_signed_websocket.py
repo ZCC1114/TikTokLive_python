@@ -1,3 +1,4 @@
+import enum
 import json
 import os
 from http.cookies import SimpleCookie
@@ -16,6 +17,16 @@ from TikTokLive.proto import ProtoMessageFetchResult
 from TikTokLive.proto.custom_extras import WebcastPushFrame
 
 
+class WebcastPlatform(enum.Enum):
+    """
+    Enum for the platform to request the WebSocket URL for
+
+    """
+
+    WEB = "web"
+    MOBILE = "mobile"
+
+
 class FetchSignedWebSocketRoute(ClientRoute):
     """
     Call the signature server to receive the TikTok websocket URL
@@ -24,16 +35,15 @@ class FetchSignedWebSocketRoute(ClientRoute):
 
     async def __call__(
             self,
+            platform: WebcastPlatform,
             room_id: Optional[int] = None,
-            preferred_agent_ids: list[str] = None,
             session_id: Optional[str] = None,
-            tt_target_idc: Optional[str] = None,
+            tt_target_idc: Optional[str] = None
     ) -> ProtoMessageFetchResult:
         """
         Call the method to get the first ProtoMessageFetchResult (as bytes) to use to upgrade to WebSocket & perform the first ack
 
         :param room_id: Override the room ID to fetch the webcast for
-        :param preferred_agent_ids: The preferred agent ID to use for the request
         :return: The ProtoMessageFetchResult forwarded from the sign server proxy, as raw bytes
 
         """
@@ -43,11 +53,10 @@ class FetchSignedWebSocketRoute(ClientRoute):
         sign_params: dict = {
             'client': CLIENT_NAME,
             'room_id': room_id or self._web.params.get('room_id', None),
-            'user_agent': self._web.headers['User-Agent']
+            'user_agent': self._web.headers['User-Agent'],
+            'platform': platform.value,
+            'client_enter': True
         }
-
-        if preferred_agent_ids is not None:
-            sign_params['preferred_agent_ids'] = ",".join(preferred_agent_ids)
 
         # The session ID we want to add to the request
         session_id: str = session_id or self._web.cookies.get('sessionid')
@@ -58,10 +67,14 @@ class FetchSignedWebSocketRoute(ClientRoute):
             sign_params['tt_target_idc'] = tt_target_idc
             self._logger.warning("Sending session ID to sign server for WebSocket connection. This is a risky operation.")
 
+        if platform == WebcastPlatform.MOBILE and not session_id:
+            raise ValueError("Mobile platform requires a 'sessionid' cookie to be set, via client.web.set_session().")
+
         try:
             response: httpx.Response = await signer_client.get(
                 url=WebDefaults.tiktok_sign_url + "/webcast/fetch/",
                 params=sign_params,
+                timeout=15
             )
         except httpx.ConnectError as ex:
             raise SignAPIError(
@@ -74,7 +87,7 @@ class FetchSignedWebSocketRoute(ClientRoute):
             f"Attempted to fetch WebSocket information fetch from the Sign Server API! <-> "
             f"Status: {response.status_code} - "
             f"Agent ID: \"{response.headers.get('X-Agent-Id', 'N/A')}\" - "
-            f"Log ID: {response.headers.get('X-Log-Id')} - "
+            f"Log ID: {response.headers.get('X-Request-Id')} - "
             f"Log Code: {response.headers.get('X-Log-Code')} "
             f"<->"
         )

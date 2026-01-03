@@ -3,7 +3,7 @@ TikTokLive Python API (Unofficial)
 TikTokLive is an unofficial Python API wrapper for TikTok LIVE written in Python. With this library you can connect to any TikTok livestream and fetch all data available to users in a stream using just a creator's `@unique_id`.
 
 [![Discord](https://img.shields.io/discord/977648006063091742?logo=discord&label=TikTokLive%20Discord&labelColor=%23171717&color=%231877af)](https://discord.gg/N3KSxzvDX8)
-![Connections](https://tiktok.eulerstream.com/analytics/pips/1)
+![Connections](https://tiktok.eulerstream.com/analytics/pips)
 ![Downloads](https://pepy.tech/badge/tiktoklive)
 ![Stars](https://img.shields.io/github/stars/isaackogan/TikTokLive?style=flat&color=0274b5)
 ![Forks](https://img.shields.io/github/forks/isaackogan/TikTokLive?style=flat&color=0274b5)
@@ -12,9 +12,24 @@ TikTokLive is an unofficial Python API wrapper for TikTok LIVE written in Python
 > [!NOTE]
 > This is <strong>not</strong> a production-ready API. It is a reverse engineering project. Use the [WebSocket API](https://www.eulerstream.com/websockets) for production.
 
+<!--
 <a href="https://www.eulerstream.com/websockets" target="_blank">
     <img src="https://www.eulerstream.com/api/advert?l2=WebSocket+API&r=15&b=1.5&bc=404854&o=0.95"/>
 </a>
+-->
+
+## Captcha Service
+
+<table>
+<tr>
+    <td><br/><img width="180px" style="border-radius: 10px" src="https://raw.githubusercontent.com/isaackogan/TikTokLive/master/.github/SquareLogo.png"><br/><br/></td>
+    <td>
+        <a href="https://www.eulerstream.com/captchas">
+            <strong>Euler Stream</strong> offers TikTok CAPTCHA solutions powered by the latest 2025 LLMs, CNNs, and computer vision AI models.
+        </a>
+    </td>
+</tr>
+</table>
 
 <!--
 Temporarily Removed May 3rd 2025
@@ -219,7 +234,7 @@ If you know what an event does, [make a pull request](https://github.com/isaacko
 <li><code>GoalUpdateEvent</code> - Triggered when the subscriber goal is updated</li>
 <li><code>ControlEvent</code> - Triggered when a stream action occurs (e.g. Livestream start, end)</li>
 <li><code>LikeEvent</code> - Triggered when the stream receives a like</li>
-<li><code>SubscribeEvent</code> - Triggered when someone subscribes to the TikTok creator</li>
+<li><code>SuperFanEvent</code> - Triggered when someone becomes a Super Fan of the TikTok creator</li>
 <li><code>PollEvent</code> - Triggered when the creator launches a new poll</li>
 <li><code>CommentEvent</code> - Triggered when a comment is sent in the stream</li>
 <li><code>RoomEvent</code> - Messages broadcasted to all users in the room (e.g. "Welcome to TikTok LIVE!")</li>
@@ -444,11 +459,6 @@ async def on_gift(event: GiftEvent):
     elif not event.gift.streakable:
         print(f"{event.user.unique_id} sent \"{event.gift.name}\"")
 ```
-
-### `SubscribeEvent`
-
-This event will only fire when a session ID (account login) is passed to the HTTP client *before* connecting to TikTok LIVE.
-You can set the session ID with [`client.web.set_session_id(...)`](https://github.com/isaackogan/TikTokLive/blob/master/examples/logged_in.py).
 
 ## Checking If A User Is Live
 
