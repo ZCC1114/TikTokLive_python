@@ -1,0 +1,16 @@
+[Unit]
+Description=FastSort Python Service (TikTokLive FastAPI WebSocket, Blue)
+After=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=/home/ec2-user/fastsort/TikTokLive-python-blue
+ExecStart=/home/ec2-user/miniconda3/envs/tiktoklive/bin/python examples/fastapi_ws_server.py
+Restart=always
+RestartSec=5
+SuccessExitStatus=143
+Environment="EULERSTREAM_API_KEY=euler_ODdkZDY2MmJjMGQ5OTgzNzBiMDY5Y2VhZTgyZmNlNTIzY2E0YmIyYjM4OWNkNjVjNGNmMTY2"
+
+[Install]
+WantedBy=multi-user.target
