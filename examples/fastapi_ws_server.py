@@ -5,16 +5,13 @@ from typing import Dict, Set
 import contextlib
 import os
 
-import logging
-
 import httpx
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
-)
+from log_config import setup_logging
+import logging
 
-logger = logging.getLogger("fastsort_ws")
+setup_logging()
+logger = logging.getLogger(__name__)
 
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -167,6 +164,7 @@ class ConnectionManager:
     async def connect(self, websocket: WebSocket, live_id: str) -> None:
         # 1. 接受前端 WebSocket 连接
         await websocket.accept()
+        logger.info(f"前端连接接入: live_id={live_id}")
 
         already_connected = False
 
@@ -175,6 +173,9 @@ class ConnectionManager:
             if live_id not in self.active_connections:
                 self.active_connections[live_id] = set()
             self.active_connections[live_id].add(websocket)
+            logger.info(
+                f"live_id={live_id} 前端连接数={len(self.active_connections[live_id])}"
+            )
 
             already_connected = self.live_connected.get(live_id, False)
 
@@ -193,9 +194,11 @@ class ConnectionManager:
             if already_connected:
                 # 如果 TikTok 那边已经连上了，新的前端直接收到 LIVING
                 await websocket.send_text("LIVING")
+                logger.info(f"live_id={live_id} 初始状态=LIVING")
             else:
                 # 如果 TikTok 还没连上，让前端先显示“连接中”
                 await websocket.send_text("CONNECTING")
+                logger.info(f"live_id={live_id} 初始状态=CONNECTING")
         except Exception:
             # 如果刚 accept 完就发不出去，也不要让它影响后面的逻辑
             logger.warning(f"给 {live_id} 发送 CONNECTING 失败，可能前端已断开")
@@ -213,6 +216,7 @@ class ConnectionManager:
                     stop_task = self.tasks.pop(live_id, None)
                     self.active_connections.pop(live_id, None)
                     self.live_connected.pop(live_id, None)
+                    logger.info(f"live_id={live_id} 无前端连接，准备关闭 TikTokLiveClient")
 
         if stop_client:
             logger.info(f"\U0001f534 Stop TikTokLiveClient for {live_id}")
@@ -231,6 +235,7 @@ class ConnectionManager:
             try:
                 await connection.send_text(text)
             except Exception:
+                logger.warning(f"live_id={live_id} 广播失败，移除连接")
                 await self.remove(connection, live_id)
 
 
@@ -254,8 +259,10 @@ async def websocket_endpoint(websocket: WebSocket, live_id: str) -> None:
             if data == "ping":
                 await websocket.send_text("pong")
     except WebSocketDisconnect:
+        logger.info(f"前端客户端断开: live_id={live_id}")
         await manager.remove(websocket, live_id)
     except Exception:
+        logger.exception(f"前端连接异常: live_id={live_id}")
         await manager.remove(websocket, live_id)
 
 
