@@ -1,4 +1,20 @@
-# Dev-related packages
+# Core service dependencies
+fastapi>=0.110.0
+uvicorn>=0.22.0
+httpx>=0.26.0
+redis>=5.0.0
+pydantic>=2.0.0
+
+# TikTokLive core dependencies
+pyee>=9.0.4
+ffmpy>=0.3.0
+websockets_proxy==0.1.3
+betterproto==2.0.0b7
 async-timeout>=4.0.3  # Fix: python_socks/async_/asyncio/_proxy.py import package
+mashumaro>=3.5
+protobuf3-to-dict>=0.1.5
+protobuf>=3.19.4
+
+# Misc
 jinja2
 python-dotenv

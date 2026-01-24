@@ -10,8 +10,6 @@ ExecStart=/home/ec2-user/miniconda3/envs/tiktoklive/bin/python examples/fastapi_
 Restart=always
 RestartSec=5
 SuccessExitStatus=143
-StandardOutput=append:/home/ec2-user/fastsort/TikTokLive-python/ws.log
-StandardError=append:/home/ec2-user/fastsort/TikTokLive-python/ws.log
 Environment="EULERSTREAM_API_KEY=euler_ODdkZDY2MmJjMGQ5OTgzNzBiMDY5Y2VhZTgyZmNlNTIzY2E0YmIyYjM4OWNkNjVjNGNmMTY2"
 
 
