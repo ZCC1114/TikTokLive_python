@@ -49,6 +49,7 @@ class ConnectionManager:
         currently connected WebSocket clients.
         """
         api_key = os.getenv("EULERSTREAM_API_KEY", "")
+        debug_raw_comment_event = os.getenv("DEBUG_TIKTOK_RAW_COMMENT_EVENT", "0") == "1"
         if api_key:
             WebDefaults.tiktok_sign_api_key = api_key
             logger.info(f"当前 WebDefaults.tiktok_sign_api_key = {WebDefaults.tiktok_sign_api_key[:8]}****")
@@ -96,10 +97,32 @@ class ConnectionManager:
         async def on_comment(event: CommentEvent) -> None:
             comment_id = str(event.base_message.message_id)
 
+            if debug_raw_comment_event:
+                raw_event = {}
+                try:
+                    if hasattr(event, "to_dict"):
+                        raw_event = event.to_dict()
+                    else:
+                        raw_event = dict(getattr(event, "__dict__", {}))
+                except Exception as e:
+                    raw_event = {"_serialize_error": str(e)}
+
+                try:
+                    logger.info(
+                        "RAW_COMMENT_EVENT_JSON=%s",
+                        json.dumps(raw_event, ensure_ascii=False, default=str),
+                    )
+                except Exception as e:
+                    logger.warning(f"RAW_COMMENT_EVENT_JSON 序列化失败: {e}")
+
+                if getattr(event, "bytes", None):
+                    logger.info("RAW_COMMENT_EVENT_BASE64=%s", event.as_base64)
+
             message = {
                 "msgId": str(uuid.uuid4()),
                 "dyMsgId": comment_id,
                 "danmuUserId": str(event.user.unique_id),
+                "username": str(event.user.username or event.user.unique_id),
                 "danmuUserName": str(event.user.nick_name),
                 "danmuContent": str(event.comment),
                 "dyRoomId": str(event.base_message.room_id),
