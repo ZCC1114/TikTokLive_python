@@ -1,4 +1,5 @@
 """API Url for euler sign services"""
+import json
 import os
 import re
 from typing import Optional, TypedDict, Literal
@@ -7,7 +8,12 @@ import httpx
 from httpx import URL
 
 from TikTokLive.__version__ import PACKAGE_VERSION
-from TikTokLive.client.errors import UnexpectedSignatureError, SignatureMissingTokensError, PremiumEndpointError
+from TikTokLive.client.errors import (
+    UnexpectedSignatureError,
+    SignatureMissingTokensError,
+    PremiumEndpointError,
+    SignAPIError,
+)
 from TikTokLive.client.web.web_settings import WebDefaults
 from TikTokLive.client.web.web_utils import check_authenticated_session
 
@@ -141,16 +147,29 @@ class TikTokSigner:
                 "Failed to retrieve JSON from a signed request: " + str(response)
             ) from ex
 
-        if sign_response['code'] == 403:
+        if response.status_code == 403 or sign_response.get('code') == 403:
             raise PremiumEndpointError(
                 "You do not have permission from the signature provider to sign this URL.",
-                api_message=sign_response['message'],
+                api_message=sign_response.get('message', 'No additional error details were provided by the sign server.'),
                 response=response
             )
 
-        if "msToken" not in sign_response['response']['signedUrl']:
+        if response.status_code != 200 or sign_response.get('code') != 200:
+            raise SignAPIError(
+                SignAPIError.ErrorReason.SIGN_NOT_200,
+                (
+                    f"Failed request to Sign API with status code {response.status_code} "
+                    f"and the following payload:\n{json.dumps(sign_response, ensure_ascii=False)}"
+                ),
+                response=response
+            )
+
+        signed_url: Optional[str] = (sign_response.get('response') or {}).get('signedUrl')
+
+        if not signed_url or "msToken" not in signed_url:
             raise SignatureMissingTokensError(
-                "Failed to sign a request due to missing tokens in response!"
+                "Failed to sign a request due to missing tokens in response!",
+                response=response
             )
 
         return sign_response

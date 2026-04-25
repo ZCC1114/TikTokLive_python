@@ -5,7 +5,7 @@ from typing import Optional
 
 from httpx import Response
 
-from TikTokLive.client.errors import UserOfflineError, UserNotFoundError, TikTokLiveError
+from TikTokLive.client.errors import UserOfflineError, UserNotFoundError, TikTokLiveError, SignAPIError
 from TikTokLive.client.web.web_base import ClientRoute
 from TikTokLive.client.web.web_settings import WebDefaults
 
@@ -55,6 +55,8 @@ class FetchRoomIdLiveHTMLRoute(ClientRoute):
         try:
             api_route = FetchRoomIdAPIRoute(web=self._web)
             return str(await api_route(unique_id))
+        except (UserNotFoundError, SignAPIError):
+            raise
         except Exception as ex:
             # If the API also fails, raise a UserNotFoundError with a clear message
             raise UserNotFoundError(

@@ -4,11 +4,21 @@ import uuid
 from typing import Dict, Set
 import contextlib
 import os
+import logging
 
 import httpx
 
-from log_config import setup_logging
-import logging
+try:
+    from log_config import setup_logging
+except ModuleNotFoundError:
+    try:
+        from examples.log_config import setup_logging
+    except ModuleNotFoundError:
+        def setup_logging() -> None:
+            logging.basicConfig(
+                level=logging.INFO,
+                format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
+            )
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -21,7 +31,11 @@ from TikTokLive.client.client import TikTokLiveClient
 from TikTokLive.events import CommentEvent, ControlEvent, ConnectEvent
 from TikTokLive.proto.custom_proto import ControlAction
 from TikTokLive.client.web.web_settings import WebDefaults
-from redis_helper import FsBlackRedisVo, TagUserVo, redis_client
+
+try:
+    from redis_helper import FsBlackRedisVo, TagUserVo, redis_client
+except ModuleNotFoundError:
+    from examples.redis_helper import FsBlackRedisVo, TagUserVo, redis_client
 
 
 app = FastAPI()
@@ -292,4 +306,5 @@ async def websocket_endpoint(websocket: WebSocket, live_id: str) -> None:
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8765)
+    port = int(os.getenv("PORT", "8765"))
+    uvicorn.run(app, host="0.0.0.0", port=port)

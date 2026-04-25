@@ -6,11 +6,11 @@ After=network.target
 Type=simple
 User=ec2-user
 WorkingDirectory=/home/ec2-user/fastsort/TikTokLive-python-green
-ExecStart=/home/ec2-user/miniconda3/envs/tiktoklive/bin/python examples/fastapi_ws_server.py
+ExecStart=/home/ec2-user/miniconda3/envs/tiktoklive/bin/uvicorn examples.fastapi_ws_server:app --host 0.0.0.0 --port 8865
 Restart=always
 RestartSec=5
 SuccessExitStatus=143
-Environment="EULERSTREAM_API_KEY=euler_ODdkZDY2MmJjMGQ5OTgzNzBiMDY5Y2VhZTgyZmNlNTIzY2E0YmIyYjM4OWNkNjVjNGNmMTY2"
+Environment="EULERSTREAM_API_KEY=euler_NjZiM2NlMDlhN2RhMDNhOWRmZmExMDIwNDE5ZDk5YzU4MTZlN2ZmOGU5ZTRjYmRkY2Y1ZmIx"
 
 [Install]
 WantedBy=multi-user.target
