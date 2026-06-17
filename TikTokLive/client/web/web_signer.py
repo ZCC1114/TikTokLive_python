@@ -47,20 +47,33 @@ class TikTokSigner:
 
     """
 
+    @staticmethod
+    def _get_sign_api_timeout(sign_api_timeout: Optional[float]) -> float:
+        if sign_api_timeout is not None:
+            return sign_api_timeout
+
+        try:
+            return float(os.environ.get("SIGN_API_TIMEOUT_SECONDS", "20"))
+        except (TypeError, ValueError):
+            return 20.0
+
     def __init__(
             self,
             sign_api_key: Optional[str] = None,
-            sign_api_base: Optional[str] = None
+            sign_api_base: Optional[str] = None,
+            sign_api_timeout: Optional[float] = None
     ):
         """
         Initialize the signing class
 
         :param sign_api_key: API key for signing requests
+        :param sign_api_timeout: Timeout for signature provider requests
 
         """
 
         self._sign_api_key: Optional[str] = sign_api_key or WebDefaults.tiktok_sign_api_key or os.environ.get("SIGN_API_KEY")
         self._sign_api_base: str = sign_api_base or WebDefaults.tiktok_sign_url or os.environ.get("SIGN_API_URL")
+        self._sign_api_timeout: float = self._get_sign_api_timeout(sign_api_timeout)
 
         initial_headers: dict[str, str] = {
             "User-Agent": f"TikTokLive.py/{PACKAGE_VERSION}"
@@ -71,6 +84,7 @@ class TikTokSigner:
 
         self._httpx: httpx.AsyncClient = httpx.AsyncClient(
             headers=initial_headers,
+            timeout=self._sign_api_timeout,
             verify=False
         )
 

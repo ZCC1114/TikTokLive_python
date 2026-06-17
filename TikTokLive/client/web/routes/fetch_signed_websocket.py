@@ -1,3 +1,4 @@
+import asyncio
 import json
 import os
 from http.cookies import SimpleCookie
@@ -14,6 +15,20 @@ from TikTokLive.client.web.web_utils import check_authenticated_session
 from TikTokLive.client.ws.ws_utils import extract_webcast_response_message
 from TikTokLive.proto import ProtoMessageFetchResult
 from TikTokLive.proto.custom_extras import WebcastPushFrame
+
+
+def _get_float_env(name: str, default: float) -> float:
+    try:
+        return float(os.environ.get(name, default))
+    except (TypeError, ValueError):
+        return default
+
+
+def _get_int_env(name: str, default: int) -> int:
+    try:
+        return int(os.environ.get(name, default))
+    except (TypeError, ValueError):
+        return default
 
 
 class FetchSignedWebSocketRoute(ClientRoute):
@@ -58,17 +73,46 @@ class FetchSignedWebSocketRoute(ClientRoute):
             sign_params['tt_target_idc'] = tt_target_idc
             self._logger.warning("Sending session ID to sign server for WebSocket connection. This is a risky operation.")
 
-        try:
-            response: httpx.Response = await signer_client.get(
-                url=WebDefaults.tiktok_sign_url + "/webcast/fetch/",
-                params=sign_params,
-            )
-        except httpx.ConnectError as ex:
+        timeout_seconds: float = _get_float_env("SIGN_API_TIMEOUT_SECONDS", 20.0)
+        retries: int = max(_get_int_env("SIGN_API_RETRIES", 2), 0)
+        retry_backoff_seconds: float = max(_get_float_env("SIGN_API_RETRY_BACKOFF_SECONDS", 1.0), 0.0)
+        response: Optional[httpx.Response] = None
+
+        for attempt in range(retries + 1):
+            try:
+                response = await signer_client.get(
+                    url=WebDefaults.tiktok_sign_url + "/webcast/fetch/",
+                    params=sign_params,
+                    timeout=timeout_seconds,
+                )
+                break
+            except httpx.ReadTimeout:
+                if attempt >= retries:
+                    raise
+
+                wait_seconds = retry_backoff_seconds * (attempt + 1)
+                self._logger.warning(
+                    "Sign API ReadTimeout for room_id=%s, retrying in %.1fs (%s/%s)",
+                    sign_params.get("room_id"),
+                    wait_seconds,
+                    attempt + 1,
+                    retries,
+                )
+                if wait_seconds:
+                    await asyncio.sleep(wait_seconds)
+            except httpx.ConnectError as ex:
+                raise SignAPIError(
+                    SignAPIError.ErrorReason.CONNECT_ERROR,
+                    "Failed to connect to the sign server due to an httpx.ConnectError!",
+                    response=None
+                ) from ex
+
+        if response is None:
             raise SignAPIError(
-                SignAPIError.ErrorReason.CONNECT_ERROR,
-                "Failed to connect to the sign server due to an httpx.ConnectError!",
+                SignAPIError.ErrorReason.EMPTY_PAYLOAD,
+                "Sign API did not return a response.",
                 response=None
-            ) from ex
+            )
 
         self._logger.debug(
             f"Attempted to fetch WebSocket information fetch from the Sign Server API! <-> "
