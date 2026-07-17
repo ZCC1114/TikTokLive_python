@@ -41,6 +41,30 @@ class WebcastPushFrame(betterproto.Message):
 
 
 @dataclass(eq=False, repr=False)
+class HeartbeatMessage(betterproto.Message):
+    """Heartbeat keepalive payload wrapped in a WebcastPushFrame."""
+
+    room_id: int = betterproto.uint64_field(1)
+    send_packet_seq_id: int = betterproto.uint64_field(2)
+
+
+@dataclass(eq=False, repr=False)
+class WebcastImEnterRoomMessage(betterproto.Message):
+    """Message sent after the WebSocket opens to activate the room stream."""
+
+    room_id: int = betterproto.int64_field(1)
+    room_tag: str = betterproto.string_field(2)
+    live_region: str = betterproto.string_field(3)
+    live_id: int = betterproto.int64_field(4)
+    identity: str = betterproto.string_field(5)
+    cursor: str = betterproto.string_field(6)
+    account_type: int = betterproto.int64_field(7)
+    enter_unique_id: int = betterproto.int64_field(8)
+    filter_welcome_msg: str = betterproto.string_field(9)
+    is_anchor_continue_keep_msg: bool = betterproto.bool_field(10)
+
+
+@dataclass(eq=False, repr=False)
 class HeartbeatFrameRoomInfo(betterproto.Message):
     room_id: int = betterproto.uint64_field(1)
 

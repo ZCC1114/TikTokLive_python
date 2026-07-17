@@ -11,7 +11,7 @@ from TikTokLive.client.logger import TikTokLiveLogHandler
 from TikTokLive.client.web.web_settings import WebDefaults
 from TikTokLive.client.ws.ws_connect import WebcastProxyConnect, WebcastConnect, WebcastProxy, WebcastIterator
 from TikTokLive.proto import ProtoMessageFetchResult
-from TikTokLive.proto.custom_extras import WebcastPushFrame, HeartbeatFrame
+from TikTokLive.proto.custom_extras import WebcastPushFrame, HeartbeatMessage, WebcastImEnterRoomMessage
 
 
 class WebcastWSClient:
@@ -31,6 +31,7 @@ class WebcastWSClient:
 
         """
 
+        self._seq_id: int = 1
         self._ws_kwargs: dict = ws_kwargs or {}
         self._logger = TikTokLiveLogHandler.get_logger()
         self._ping_loop: Optional[Task] = None
@@ -256,10 +257,10 @@ class WebcastWSClient:
 
             # The first message does NOT need an ack since we perform the ack with the actual WebSocket connect URI
             if webcast_response.is_first:
-                self.restart_ping_loop(room_id=room_id)
+                await self.enter_room(room_id=room_id)
 
             # Ack when necessary
-            if webcast_response.need_ack:
+            if webcast_response.need_ack and webcast_push_frame is not None:
                 await self.send_ack(webcast_response=webcast_response, webcast_push_frame=webcast_push_frame)
 
             # Yield the response
@@ -269,12 +270,12 @@ class WebcastWSClient:
             if not self.connected:
                 break
 
-        # Cancel the ping loop if it hasn't started to
-        if not self._ping_loop.done() and not self._ping_loop.cancelled():
-            self._ping_loop.cancel()
+        if self._ping_loop is not None:
+            if not self._ping_loop.done() and not self._ping_loop.cancelled():
+                self._ping_loop.cancel()
 
-        if not self._ping_loop.done():
-            await self._ping_loop
+            if not self._ping_loop.done():
+                await self._ping_loop
 
         # Reset internal state
         self._ping_loop = None
@@ -289,7 +290,32 @@ class WebcastWSClient:
         if self._ping_loop:
             self._ping_loop.cancel()
 
+        self._seq_id = 1
         self._ping_loop = asyncio.create_task(self._ping_loop_fn(room_id))
+
+    async def enter_room(self, room_id: int) -> None:
+        """Activate continuous event delivery after the WebSocket handshake."""
+
+        enter_room_message = WebcastImEnterRoomMessage(
+            room_id=room_id,
+            room_tag="",
+            live_id=12,
+            identity="audience",
+            cursor="",
+            account_type=0,
+            enter_unique_id=0,
+            filter_welcome_msg="0",
+            is_anchor_continue_keep_msg=False,
+        )
+
+        await self.send(
+            message=WebcastPushFrame(
+                payload_type="im_enter_room",
+                payload_encoding="pb",
+                payload=bytes(enter_room_message),
+            )
+        )
+        self.restart_ping_loop(room_id=room_id)
 
     async def _ping_loop_fn(self, room_id: int) -> None:
         """
@@ -307,9 +333,6 @@ class WebcastWSClient:
             if self._connection_generator is not None and self._connection_generator.ws_options is not None:
                 ping_interval = float(self._connection_generator.ws_options.get("ping-interval", ping_interval))
 
-            # Create the heartbeat message (it is always the same)
-            hb_message: bytes = bytes(HeartbeatFrame.from_defaults(room_id=room_id))
-
         except:
             self._logger.error("Failed to start ping loop!", exc_info=True)
             return
@@ -318,8 +341,20 @@ class WebcastWSClient:
         try:
             self._logger.debug(f"Starting ping loop with interval of {ping_interval} seconds.")
             while self.connected:
-                # Send the ping
-                await self.send(message=hb_message)
+                heartbeat = HeartbeatMessage(
+                    room_id=room_id,
+                    send_packet_seq_id=self._seq_id,
+                )
+                self._seq_id += 1
+
+                await self.send(
+                    message=WebcastPushFrame(
+                        payload_encoding="pb",
+                        payload_type="hb",
+                        payload=bytes(heartbeat),
+                        headers={},
+                    )
+                )
 
                 # Every 10 seconds
                 await asyncio.sleep(ping_interval)
