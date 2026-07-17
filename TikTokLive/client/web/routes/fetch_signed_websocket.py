@@ -58,7 +58,9 @@ class FetchSignedWebSocketRoute(ClientRoute):
         sign_params: dict = {
             'client': CLIENT_NAME,
             'room_id': room_id or self._web.params.get('room_id', None),
-            'user_agent': self._web.headers['User-Agent']
+            'user_agent': self._web.headers['User-Agent'],
+            'platform': 'web',
+            'client_enter': 'true',
         }
 
         if preferred_agent_ids is not None:
@@ -76,15 +78,32 @@ class FetchSignedWebSocketRoute(ClientRoute):
         timeout_seconds: float = _get_float_env("SIGN_API_TIMEOUT_SECONDS", 20.0)
         retries: int = max(_get_int_env("SIGN_API_RETRIES", 2), 0)
         retry_backoff_seconds: float = max(_get_float_env("SIGN_API_RETRY_BACKOFF_SECONDS", 1.0), 0.0)
+        retryable_status_codes = {500, 502, 503, 504}
         response: Optional[httpx.Response] = None
 
         for attempt in range(retries + 1):
             try:
                 response = await signer_client.get(
-                    url=WebDefaults.tiktok_sign_url + "/webcast/fetch/",
+                    url=WebDefaults.tiktok_sign_url + "/webcast/fetch",
                     params=sign_params,
                     timeout=timeout_seconds,
                 )
+
+                if response.status_code in retryable_status_codes and attempt < retries:
+                    wait_seconds = retry_backoff_seconds * (attempt + 1)
+                    response_preview = response.text.replace("\n", " ")[:200]
+                    self._logger.warning(
+                        "Sign API returned HTTP %s (attempt %s/%s): %s; retrying in %.1fs",
+                        response.status_code,
+                        attempt + 1,
+                        retries + 1,
+                        response_preview,
+                        wait_seconds,
+                    )
+                    if wait_seconds:
+                        await asyncio.sleep(wait_seconds)
+                    continue
+
                 break
             except httpx.ReadTimeout:
                 if attempt >= retries:
