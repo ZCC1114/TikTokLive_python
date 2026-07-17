@@ -170,8 +170,10 @@ class ConnectionManager:
             await self.broadcast(live_id, json.dumps(message, ensure_ascii=False))
 
         try:
-            # 启动 TikTokLiveClient（这里里面会去请求 EulerStream）
-            await client.start()
+            # start() 只创建并返回 WebSocket 后台任务；必须继续等待该任务，
+            # 否则会立刻进入 finally，导致刚建立的弹幕连接被主动关闭。
+            websocket_task = await client.start()
+            await websocket_task
 
         except asyncio.CancelledError:
             # 正常取消（比如前端都断开了），不算错误
