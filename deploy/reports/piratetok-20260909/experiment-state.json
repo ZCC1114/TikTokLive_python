@@ -1,0 +1,27 @@
+{
+  "date": "2026-09-09",
+  "target_server": "163.7.2.127",
+  "source_commit": "ee836405ef122d7e2dd3403d99b91cb0d967977e",
+  "source_archive_sha256": "1abfbcd72201c8ea08b6cae77fe45d0062910908328487e1b895932ea4772838",
+  "server_smoke_probe_sha256": "320e897926a70f7723ca4ceeb69c5f793ed6d6424c8927055947d5ace98bea86",
+  "final_probe_sha256": "eeb47d6f3d096471ba2eb51e9287a528c7a7ff5337340ef24e6b98679a68adea",
+  "probe_version_note": "Final probe includes subsequent metric-only corrections validated offline; live bootstrap failure was measured with the server smoke version retained as piratetok_probe.used-smoke.py.",
+  "production_after": {
+    "active": true,
+    "main_pid": 13966,
+    "restart_count": 0,
+    "nginx_active": true,
+    "certbot_timer_active": true,
+    "ready": true,
+    "rooms": 0,
+    "subscribers": 0
+  },
+  "experiment_processes_remaining": 0,
+  "production_configuration_changed": false,
+  "stock_piratetok_bootstrap_successes": 0,
+  "formal_smoke_attempts": 2,
+  "received_comments": 0,
+  "long_duration_test_executed": false,
+  "fault_recovery_test_executed": false,
+  "conclusion": "Anonymous cookie bootstrap failed on server and local network; stability after a valid cookie remains untested."
+}

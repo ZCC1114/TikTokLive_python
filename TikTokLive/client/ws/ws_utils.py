@@ -1,6 +1,4 @@
-import base64
 import logging
-import os
 from gzip import GzipFile
 from http.cookies import SimpleCookie
 from io import BytesIO
@@ -71,7 +69,7 @@ def extract_webcast_push_frame(data: bytes, logger: logging.Logger = TikTokLiveL
     return WebcastPushFrame().parse(data)
 
 
-def extract_webcast_response_message(push_frame: WebcastPushFrame, logger: logging.Logger = TikTokLiveLogHandler.get_logger()) -> ProtoMessageFetchResult:
+def extract_webcast_response_message(push_frame: WebcastPushFrame, logger: logging.Logger = TikTokLiveLogHandler.get_logger(), max_payload_size: int = 16 * 1024 * 1024) -> ProtoMessageFetchResult:
     """
     Extract the ProtoMessageFetchResult from a push frame. If compression is enabled on the WebSocket,
     then messages will come gzipped. This method will decompress the payload if necessary.
@@ -82,6 +80,9 @@ def extract_webcast_response_message(push_frame: WebcastPushFrame, logger: loggi
     :return: ProtoMessageFetchResult The extracted response
 
     """
+
+    if len(push_frame.payload) > max_payload_size:
+        raise ValueError("Webcast payload exceeds the size limit")
 
     # If there is no compression header, return the payload parsed as-is
     if not push_frame.headers or 'compress_type' not in push_frame.headers or push_frame.headers['compress_type'] == 'none':
@@ -97,7 +98,9 @@ def extract_webcast_response_message(push_frame: WebcastPushFrame, logger: loggi
 
     # Decompress it
     try:
-        decompressed_bytes = gzip_file.read()
+        decompressed_bytes = gzip_file.read(max_payload_size + 1)
+        if len(decompressed_bytes) > max_payload_size:
+            raise ValueError("Decompressed webcast payload exceeds the size limit")
     finally:
         gzip_file.close()
 

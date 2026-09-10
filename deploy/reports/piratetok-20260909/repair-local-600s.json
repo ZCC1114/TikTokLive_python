@@ -1,0 +1,398 @@
+{
+  "started_at": "2026-09-09T15:11:50.972339+00:00",
+  "source_commit_expected": "ee836405ef122d7e2dd3403d99b91cb0d967977e",
+  "source_sha256": {
+    "auth/ttwid.py": "f3dbc8ef7309d04dd2d4d28de7808f89ac6f583b784dac2f83391339a9e346d0",
+    "http/api.py": "6d66964f330fc52834ab65aab844706a8623f2882981e03d63d46881c8810a98",
+    "connection/url.py": "f61c3432574d49058690436ec6adec7f5c56601907428fac7a9a999bb3cf0e2c",
+    "connection/frames.py": "cfb74bb31ea3abce906484205f923b46cec8ea34407ceea9b90281babe7a8f8e",
+    "proto/schema.py": "7606a8c0d64e1f094231e186351f732664f2c0b3b081154b63de9405355f43d9"
+  },
+  "dependencies": {
+    "betterproto": "2.0.0b7",
+    "websockets": "15.0.1",
+    "curl_cffi": "0.13.0"
+  },
+  "requested_seconds": 600.0,
+  "room_alias_sha256": "fa10794a840f86f911b8a6eb0a3f20a2875b7edc371578fe276d7f41d3854886",
+  "path": "PirateTok anonymous ttwid + unsigned WSS; independent lifecycle supervision",
+  "bootstrap_mode": "registered",
+  "bootstrap": {
+    "started_seconds": 0.004,
+    "result": "ok",
+    "completed_seconds": 2.267,
+    "cookie_present": true,
+    "diagnostics": {
+      "stages": [
+        {
+          "stage": "profile",
+          "seconds": 0.966,
+          "http_status": 200,
+          "http_version": 3,
+          "body_bytes": 1462,
+          "tt_system_error": 3
+        },
+        {
+          "stage": "homepage",
+          "seconds": 0.353,
+          "http_status": 200,
+          "http_version": 3,
+          "body_bytes": 1462,
+          "tt_system_error": 3
+        },
+        {
+          "stage": "register",
+          "seconds": 0.293,
+          "http_status": 200,
+          "http_version": 3,
+          "body_bytes": 69,
+          "api_code": 0
+        },
+        {
+          "stage": "room",
+          "seconds": 0.648,
+          "http_status": 200,
+          "http_version": 3,
+          "body_bytes": 21082,
+          "api_code": 0,
+          "live_status": 2,
+          "user_status": 2
+        }
+      ],
+      "seconds": 2.26
+    }
+  },
+  "resolve": {
+    "result": "ok",
+    "included_in_bootstrap": true
+  },
+  "attempts": [
+    {
+      "generation": 1,
+      "started_seconds": 2.268,
+      "counts": {
+        "raw_messages": 486,
+        "comments": 18,
+        "fresh_comments": 12,
+        "unique_comments_after_first_5s": 11
+      },
+      "handshake_ready_seconds": 3.563,
+      "handshake_duration_seconds": 1.295,
+      "first_frame_seconds": 3.835,
+      "last_frame_seconds": 179.803,
+      "first_message_seconds": 3.84,
+      "last_message_seconds": 179.803,
+      "first_comment_seconds": 3.843,
+      "last_comment_seconds": 173.925,
+      "first_fresh_comment_seconds": 5.773,
+      "last_fresh_comment_seconds": 173.925,
+      "error": {
+        "type": "ConnectionClosedError",
+        "api_code": 1006
+      },
+      "ended_by": "injected_transport_abort",
+      "ended_seconds": 180.002
+    },
+    {
+      "generation": 2,
+      "started_seconds": 180.204,
+      "counts": {
+        "raw_messages": 490,
+        "comments": 17,
+        "comment_duplicate_cross_reconnect": 6,
+        "fresh_comments": 11,
+        "unique_comments_after_first_5s": 11
+      },
+      "handshake_ready_seconds": 181.122,
+      "handshake_duration_seconds": 0.918,
+      "first_frame_seconds": 181.378,
+      "last_frame_seconds": 359.333,
+      "first_message_seconds": 181.381,
+      "last_message_seconds": 359.333,
+      "first_comment_seconds": 181.411,
+      "last_comment_seconds": 354.317,
+      "first_fresh_comment_seconds": 186.177,
+      "last_fresh_comment_seconds": 354.317,
+      "error": {
+        "type": "ConnectionClosedError",
+        "api_code": 1006
+      },
+      "ended_by": "injected_transport_abort",
+      "ended_seconds": 360.007
+    },
+    {
+      "generation": 3,
+      "started_seconds": 360.216,
+      "counts": {
+        "raw_messages": 571,
+        "comments": 26,
+        "comment_duplicate_cross_reconnect": 6,
+        "fresh_comments": 20,
+        "unique_comments_after_first_5s": 20
+      },
+      "handshake_ready_seconds": 361.578,
+      "handshake_duration_seconds": 1.362,
+      "first_frame_seconds": 361.838,
+      "last_frame_seconds": 599.551,
+      "first_message_seconds": 361.89,
+      "last_message_seconds": 599.551,
+      "first_comment_seconds": 361.89,
+      "last_comment_seconds": 581.384,
+      "first_fresh_comment_seconds": 388.544,
+      "last_fresh_comment_seconds": 581.384,
+      "ended_by": "deadline_or_cancel",
+      "ended_seconds": 600.246
+    }
+  ],
+  "faults": [
+    {
+      "scheduled_at": 180.0,
+      "at": 180.001,
+      "result": "transport_aborted",
+      "generation": 1,
+      "handshake_recovery_seconds": 1.121,
+      "recovered_generation": 2,
+      "message_recovery_seconds": 1.38,
+      "fresh_comment_recovery_seconds": 6.176
+    },
+    {
+      "scheduled_at": 360.0,
+      "at": 360.002,
+      "result": "transport_aborted",
+      "generation": 2,
+      "handshake_recovery_seconds": 1.576,
+      "recovered_generation": 3,
+      "message_recovery_seconds": 1.888,
+      "fresh_comment_recovery_seconds": 28.542
+    }
+  ],
+  "totals": {
+    "heartbeats_sent": 60,
+    "enter_room_sent": 3,
+    "raw_frames": 772,
+    "non_message_frames": 60,
+    "acks_sent": 712,
+    "raw_messages": 1547,
+    "comments": 61,
+    "comments_flagged_history": 18,
+    "fresh_comments": 43,
+    "raw_duplicate_cross_reconnect": 16,
+    "comment_duplicate_cross_reconnect": 12
+  },
+  "methods": {
+    "WebcastHotRoomMessage": 10,
+    "WebcastGameServerFeatureMessage": 3,
+    "WebcastChatMessage": 61,
+    "WebcastMemberMessage": 976,
+    "WebcastBarrageMessage": 5,
+    "WebcastRoomUserSeqMessage": 289,
+    "WebcastLikeMessage": 144,
+    "WebcastSocialMessage": 58,
+    "WebcastUnauthorizedMemberMessage": 1
+  },
+  "comment_buckets_30s": {
+    "0": 8,
+    "1": 1,
+    "2": 5,
+    "3": 1,
+    "4": 1,
+    "5": 2,
+    "6": 9,
+    "8": 1,
+    "9": 4,
+    "10": 2,
+    "11": 1,
+    "12": 7,
+    "14": 2,
+    "15": 8,
+    "16": 4,
+    "18": 3,
+    "19": 2
+  },
+  "resource_samples": [
+    {
+      "at": 0.256,
+      "rss_high_water_mib": 46.19
+    },
+    {
+      "at": 15.322,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 30.389,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 45.453,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 60.511,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 75.573,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 90.652,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 105.714,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 120.781,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 135.839,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 151.026,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 166.171,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 181.313,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 196.484,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 211.652,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 226.787,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 241.883,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 256.988,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 272.155,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 287.257,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 302.361,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 317.468,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 332.572,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 347.668,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 362.809,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 377.939,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 393.088,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 408.19,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 423.308,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 438.553,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 453.661,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 468.782,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 483.974,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 499.095,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 514.244,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 529.39,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 544.526,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 559.706,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 574.805,
+      "rss_high_water_mib": 49.75
+    },
+    {
+      "at": 589.905,
+      "rss_high_water_mib": 49.75
+    }
+  ],
+  "termination": "deadline",
+  "limitations": [
+    "No comparison source: missing upstream messages cannot be quantified.",
+    "Fresh timestamps depend on server/client clock alignment and history flags.",
+    "Observed reconnect delays exclude silent network-blackhole detection.",
+    "Successful sample is not a long-term uptime guarantee."
+  ],
+  "bootstrap_helper_sha256": "37ca8ed96749bf94cd61ffb53f8a9496c53e7743b6c791db09fbc76bd2184efd",
+  "source_actual_path": "/private/tmp/piratetok-research-live-py/piratetok_live",
+  "url_signature_parameters_present": false,
+  "wss_host": "webcast-ws.tiktok.com",
+  "observed_seconds": 600.251,
+  "rss_high_water_mib": 49.75,
+  "loop_lag_ms": {
+    "p50": 1.459,
+    "p95": 4.141,
+    "max": 118.759
+  },
+  "id_window_evictions": {
+    "raw": 0,
+    "comments": 0
+  },
+  "injected_faults_recovered_with_fresh_comment": 2,
+  "assessment": "fresh_comments_observed_review_metrics"
+}

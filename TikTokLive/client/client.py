@@ -1,27 +1,56 @@
 import asyncio
 import inspect
 import logging
+import time
 import traceback
-from asyncio import AbstractEventLoop, Task, CancelledError
+from asyncio import AbstractEventLoop, CancelledError, Task
+from contextlib import aclosing
 from logging import Logger
-from typing import Optional, Type, Dict, Any, Union, Callable, List, Coroutine, AsyncIterator
+from typing import (
+    Any,
+    AsyncIterator,
+    Callable,
+    Coroutine,
+    Dict,
+    List,
+    Optional,
+    Type,
+    Union,
+)
 
 import httpx
 from pyee.asyncio import AsyncIOEventEmitter
 from pyee.base import Handler
 
-from TikTokLive.client.errors import AlreadyConnectedError, UserOfflineError, UserNotFoundError
-from TikTokLive.client.logger import TikTokLiveLogHandler, LogLevel
+from TikTokLive.client.diagnostics import CommentDiagnostics
+from TikTokLive.client.errors import (
+    AlreadyConnectedError,
+    UserOfflineError,
+)
+from TikTokLive.client.logger import LogLevel, TikTokLiveLogHandler
 from TikTokLive.client.web.routes.fetch_user_unique_id import FailedResolveUserId
 from TikTokLive.client.web.web_client import TikTokWebClient
 from TikTokLive.client.web.web_settings import WebDefaults
 from TikTokLive.client.ws.ws_client import WebcastWSClient
 from TikTokLive.client.ws.ws_connect import WebcastProxy
-from TikTokLive.events import Event, EventHandler, ControlEvent
-from TikTokLive.events.custom_events import WebsocketResponseEvent, FollowEvent, ShareEvent, LiveEndEvent, \
-    DisconnectEvent, LivePauseEvent, LiveUnpauseEvent, UnknownEvent, CustomEvent, ConnectEvent
+from TikTokLive.events import CommentEvent, ControlEvent, Event, EventHandler
+from TikTokLive.events.custom_events import (
+    ConnectEvent,
+    CustomEvent,
+    DisconnectEvent,
+    FollowEvent,
+    LiveEndEvent,
+    LivePauseEvent,
+    LiveUnpauseEvent,
+    ShareEvent,
+    UnknownEvent,
+    WebsocketResponseEvent,
+)
 from TikTokLive.events.proto_events import EVENT_MAPPINGS, ProtoEvent
-from TikTokLive.proto import ProtoMessageFetchResult, ProtoMessageFetchResultBaseProtoMessage
+from TikTokLive.proto import (
+    ProtoMessageFetchResult,
+    ProtoMessageFetchResultBaseProtoMessage,
+)
 from TikTokLive.proto.custom_proto import ControlAction
 
 
@@ -59,15 +88,23 @@ class TikTokLiveClient(AsyncIOEventEmitter):
         """
 
         super().__init__()
+        self._starting = False
+        self._disconnect_lock = asyncio.Lock()
+        self._connected_event = asyncio.Event()
+        self.connect_timings: dict[str, float] = {}
+        self.connection_phase: str = "idle"
+        self._connection_started_at: float | None = None
+        self._handshake_started_at: float | None = None
 
         self._ws: WebcastWSClient = WebcastWSClient(
             ws_kwargs=ws_kwargs or {},
             ws_proxy=ws_proxy
         )
 
+        web_kwargs = dict(web_kwargs or {})
         self._web: TikTokWebClient = TikTokWebClient(
-            web_proxy=web_proxy or (web_kwargs or {}).pop("web_proxy", None),
-            **(web_kwargs or {})
+            web_proxy=web_proxy or web_kwargs.pop("web_proxy", None),
+            **web_kwargs
         )
 
         self._web.params['referer'] = f"https://www.tiktok.com/@{unique_id}/live"
@@ -79,6 +116,13 @@ class TikTokLiveClient(AsyncIOEventEmitter):
 
         # Overridable properties
         self.ignore_broken_payload: bool = False
+        # Optional awaitable sink for services that need bounded backpressure.
+        # Normal pyee listeners retain their original behavior.
+        self.event_sink = None
+        # Services can opt out of materializing unused protobuf envelope copies.
+        # Explicit raw-event listeners always retain their original events.
+        self.process_raw_events: bool = True
+        self.comment_diagnostics = CommentDiagnostics()
 
         # Properties
         self._is_userid: bool = is_userid
@@ -98,7 +142,7 @@ class TikTokLiveClient(AsyncIOEventEmitter):
 
         """
 
-        return unique_id \
+        return str(unique_id) \
             .replace(WebDefaults.tiktok_app_url + "/", "") \
             .replace("/live", "") \
             .replace("@", "", 1) \
@@ -113,7 +157,10 @@ class TikTokLiveClient(AsyncIOEventEmitter):
             fetch_gift_info: bool = False,
             fetch_live_check: bool = True,
             room_id: Optional[int] = None,
-            preferred_agent_ids: Optional[list[str]] = None
+            preferred_agent_ids: Optional[list[str]] = None,
+            wait_connected: bool = False,
+            sign_api_timeout: float | None = None,
+            sign_api_retries: int | None = None,
     ) -> Task:
         """
         Create a non-blocking connection to TikTok LIVE and return the task
@@ -126,59 +173,105 @@ class TikTokLiveClient(AsyncIOEventEmitter):
                         Useful when trying to scale, as scraping the HTML can result in TikTok blocks.
         :param compress_ws_events: Whether to compress the WebSocket events using gzip compression (you should probably have this on)
         :param preferred_agent_ids: The preferred agent IDs to use when connecting to the WebSocket
+        :param wait_connected: Wait for the WebSocket handshake and enter-room send before returning.
+                               Cancellation then also closes the pending reader/transport.
+        :param sign_api_timeout: Optional timeout for each signing request, in seconds.
+        :param sign_api_retries: Optional signing retries; services with a retry supervisor can use zero.
         :return: Task containing the heartbeat of the client
 
         """
 
-        if self._ws.connected:
-            raise AlreadyConnectedError("You can only make one connection per client!")
-
-        self._unique_id = await self._resolve_user_id(self._unique_id)
-
-        # <Required> Fetch room ID
+        if self._starting:
+            raise AlreadyConnectedError("A connection attempt is already running!")
+        self._starting = True
         try:
-            self._room_id: int = int(room_id or await self._web.fetch_room_id_from_html(self._unique_id))
-        except Exception as base_ex:
+            if self._ws.connected or (self._event_loop_task is not None and not self._event_loop_task.done()):
+                raise AlreadyConnectedError("You can only make one connection per client!")
 
-            if isinstance(base_ex, UserOfflineError) or isinstance(base_ex, UserNotFoundError):
-                raise base_ex
+            self.connect_timings = {}
+            self._connected_event.clear()
+            self._connection_started_at = time.monotonic()
+            self._handshake_started_at = None
+            self._unique_id = await self._connection_step("resolve_user", self._resolve_user_id(self._unique_id))
 
-            try:
-                self._logger.debug("Failed to parse room ID from HTML. Using API fallback.")
-                self._room_id: int = int(await self._web.fetch_room_id_from_api(self.unique_id))
-            except Exception as super_ex:
-                raise super_ex from base_ex
+            # HTML resolution owns its API fallback and preserves error types.
+            self._room_id = int(room_id or await self._connection_step(
+                "resolve_room", self._web.fetch_room_id_from_html(self._unique_id)
+            ))
+            self.connect_timings.setdefault("resolve_room_seconds", 0.0)
 
-        # Gram Room ID
-        self._web.params["room_id"] = str(self._room_id) or None
+            # Gram Room ID
+            self._web.params["room_id"] = str(self._room_id) or None
 
-        # <Optional> Fetch live status
-        if fetch_live_check and not await self._web.fetch_is_live(room_id=self._room_id):
-            raise UserOfflineError()
+            # <Optional> Fetch live status
+            if fetch_live_check:
+                if not await self._connection_step("live_check", self._web.fetch_is_live(room_id=self._room_id)):
+                    raise UserOfflineError()
+            else:
+                self.connect_timings["live_check_seconds"] = 0.0
 
-        # <Optional> Fetch room info
-        if fetch_room_info:
-            self._room_info = await self._web.fetch_room_info()
+            # <Optional> Fetch room info
+            if fetch_room_info:
+                self._room_info = await self._connection_step("room_info", self._web.fetch_room_info())
 
-        # <Optional> Fetch gift info
-        if fetch_gift_info:
-            self._gift_info = await self._web.fetch_gift_list()
+            # <Optional> Fetch gift info
+            if fetch_gift_info:
+                self._gift_info = await self._connection_step("gift_info", self._web.fetch_gift_list())
 
-        # <Required> Fetch the first response
-        initial_webcast_response: ProtoMessageFetchResult = await self._web.fetch_signed_websocket(
-            preferred_agent_ids=preferred_agent_ids
-        )
-
-        # Start the websocket connection & return it
-        self._event_loop_task = self._asyncio_loop.create_task(
-            self._ws_client_loop(
-                initial_webcast_response=initial_webcast_response,
-                process_connect_events=process_connect_events,
-                compress_ws_events=compress_ws_events
+            # <Required> Fetch the first response
+            sign_kwargs = {"preferred_agent_ids": preferred_agent_ids}
+            if sign_api_timeout is not None:
+                sign_kwargs["timeout_seconds"] = sign_api_timeout
+            if sign_api_retries is not None:
+                sign_kwargs["retries"] = sign_api_retries
+            initial_webcast_response: ProtoMessageFetchResult = await self._connection_step(
+                "sign", self._web.fetch_signed_websocket(**sign_kwargs)
             )
-        )
 
-        return self._event_loop_task
+            # Start the websocket connection & return it
+            self.connection_phase = "handshake"
+            self._handshake_started_at = time.monotonic()
+            self._event_loop_task = self._asyncio_loop.create_task(
+                self._ws_client_loop(
+                    initial_webcast_response=initial_webcast_response,
+                    process_connect_events=process_connect_events,
+                    compress_ws_events=compress_ws_events
+                )
+            )
+
+            if wait_connected:
+                await self._wait_for_connection()
+            return self._event_loop_task
+        finally:
+            self._starting = False
+            if self._connection_started_at is not None and not self._connected_event.is_set():
+                self.connect_timings["total_seconds"] = time.monotonic() - self._connection_started_at
+
+    async def _connection_step(self, name: str, operation):
+        """Record phase durations without collecting signed URLs or credentials."""
+        self.connection_phase = name
+        started_at = time.monotonic()
+        try:
+            return await operation
+        finally:
+            self.connect_timings[f"{name}_seconds"] = time.monotonic() - started_at
+
+    async def _wait_for_connection(self) -> None:
+        reader = self._event_loop_task
+        ready = asyncio.create_task(self._connected_event.wait())
+        try:
+            done, _ = await asyncio.wait({reader, ready}, return_when=asyncio.FIRST_COMPLETED)
+            if reader in done:
+                await reader
+                raise ConnectionError("WebSocket closed before the connection became ready")
+        except BaseException:
+            reader.cancel()
+            await asyncio.gather(reader, return_exceptions=True)
+            raise
+        finally:
+            ready.cancel()
+            await asyncio.gather(ready, return_exceptions=True)
+
 
     async def connect(
             self,
@@ -235,29 +328,36 @@ class TikTokLiveClient(AsyncIOEventEmitter):
 
         """
 
-        # Disconnect the WebSocket
-        await self._ws.disconnect()
+        try:
+            async with self._disconnect_lock:
+                try:
+                    await self._ws.disconnect()
+                    task = self._event_loop_task
+                    if task is not None and task is not asyncio.current_task():
+                        try:
+                            await asyncio.shield(task)
+                        except CancelledError:
+                            # A previously cancelled reader is an expected shutdown result.
+                            # Cancellation of this caller must still propagate after cleanup.
+                            if not task.cancelled():
+                                raise
+                        except Exception:
+                            self._logger.debug("Reader failed during disconnect", exc_info=True)
+                finally:
+                    self._event_loop_task = None
+                    try:
+                        if self._web.fetch_video_data.is_recording:
+                            self._web.fetch_video_data.stop()
+                    finally:
+                        self._room_id = None
+                        self._room_info = None
+                        self._gift_info = None
+        finally:
+            # A concurrent stream-end disconnect can already hold the lock.
+            # Even cancellation while waiting for it must release owned pools.
+            if close_client:
+                await self.close()
 
-        # Wait for the event loop task to finish
-        if self._event_loop_task is not None:
-            try:
-                await self._event_loop_task
-            except Exception:
-                self._logger.debug("an exception in event loop is ignored", exc_info=True)
-            self._event_loop_task = None
-
-        # If recording, stop it
-        if self._web.fetch_video_data.is_recording:
-            self._web.fetch_video_data.stop()
-
-        # Close the client (if discarding)
-        if close_client:
-            await self.close()
-
-        # Reset state vars
-        self._room_id = None
-        self._room_info = None
-        self._gift_info = None
 
     async def close(self) -> None:
         """
@@ -322,24 +422,37 @@ class TikTokLiveClient(AsyncIOEventEmitter):
 
         """
 
-        # Handle websocket connection
-        async for webcast_response in self._ws.connect(
-                initial_webcast_response=initial_webcast_response,
-                process_connect_events=process_connect_events,
-                compress_ws_events=compress_ws_events,
-                cookies=self._web.cookies,
-                room_id=self._room_id,
-                user_agent=self._web.headers['User-Agent']
-        ):
+        responses = self._ws.connect(
+            initial_webcast_response=initial_webcast_response,
+            process_connect_events=process_connect_events,
+            compress_ws_events=compress_ws_events,
+            cookies=self._web.cookies,
+            room_id=self._room_id,
+            user_agent=self._web.headers['User-Agent'],
+        )
+        try:
+            async with aclosing(responses):
+                async for webcast_response in responses:
+                    if webcast_response.is_first:
+                        now = time.monotonic()
+                        if self._handshake_started_at is not None:
+                            self.connect_timings["handshake_seconds"] = now - self._handshake_started_at
+                        if self._connection_started_at is not None:
+                            self.connect_timings["total_seconds"] = now - self._connection_started_at
+                        self.connection_phase = "connected"
+                        self._connected_event.set()
+                    async for event in self._parse_webcast_response(webcast_response):
+                        if self._logger.isEnabledFor(logging.DEBUG):
+                            self._logger.debug("Received Event '%s' [%s bytes]", event.type, event.size)
+                        if self.event_sink is not None:
+                            await self.event_sink(event)
+                        self.emit(event.type, event)
+        finally:
+            if not self._connected_event.is_set() and self._handshake_started_at is not None:
+                self.connect_timings["handshake_seconds"] = time.monotonic() - self._handshake_started_at
+            ev: DisconnectEvent = DisconnectEvent()
+            self.emit(ev.type, ev)
 
-            # Iterate over the events extracted
-            async for event in self._parse_webcast_response(webcast_response):
-                self._logger.debug(f"Received Event '{event.type}' [{event.size} bytes]")
-                self.emit(event.type, event)
-
-        # Send the Disconnect event when we disconnect
-        ev: DisconnectEvent = DisconnectEvent()
-        self.emit(ev.type, ev)
 
     async def _parse_webcast_response(self, webcast_response: ProtoMessageFetchResult) -> AsyncIterator[Event]:
         """
@@ -358,6 +471,13 @@ class TikTokLiveClient(AsyncIOEventEmitter):
         for message in webcast_response.messages:
             for event in await self._parse_webcast_response_message(webcast_response_message=message):
                 if event is not None:
+                    if type(event) is CommentEvent:
+                        self.comment_diagnostics.observe(
+                            event.base_message.room_id,
+                            event.base_message.message_id,
+                            initial=webcast_response.is_first,
+                            payload=message.payload,
+                        )
                     yield event
 
     async def _parse_webcast_response_message(
@@ -379,11 +499,15 @@ class TikTokLiveClient(AsyncIOEventEmitter):
 
         # Get the proto mapping for proto-events
         event_type: Optional[Type[ProtoEvent]] = EVENT_MAPPINGS.get(webcast_response_message.method)
-        response_event: Event = WebsocketResponseEvent().from_dict(webcast_response_message.to_dict())
+        response_event = (
+            WebsocketResponseEvent().from_dict(webcast_response_message.to_dict())
+            if self.process_raw_events or self.has_listener(WebsocketResponseEvent) else None
+        )
 
         # If the event is not tracked, return
         if event_type is None:
-            return [response_event, UnknownEvent().from_dict(webcast_response_message.to_dict())]
+            events = [UnknownEvent().from_dict(webcast_response_message.to_dict())]
+            return [response_event, *events] if response_event is not None else events
 
         # Get the underlying events
         try:
@@ -392,9 +516,9 @@ class TikTokLiveClient(AsyncIOEventEmitter):
             if not self.ignore_broken_payload:
                 self._logger.error(
                     traceback.format_exc() + "\nBroken Payload:\n" + str(webcast_response_message.payload))
-            return [response_event]
+            return [response_event] if response_event is not None else []
 
-        parsed_events: List[Event] = [response_event, proto_event]
+        parsed_events: List[Event] = [response_event, proto_event] if response_event is not None else [proto_event]
         custom_event: Optional[Event] = await self.handle_custom_event(webcast_response_message, proto_event)
 
         # Add the custom event IF not null
@@ -435,7 +559,7 @@ class TikTokLiveClient(AsyncIOEventEmitter):
                 return LiveEndEvent().parse(response.payload)
             elif event.action == ControlAction.CONTROL_ACTION_STREAM_PAUSED:
                 return LivePauseEvent().parse(response.payload)
-            elif event.action == ControlAction.CONTROL_ACTION_STREAM_PAUSED:
+            elif event.action == ControlAction.CONTROL_ACTION_STREAM_UNPAUSED:
                 return LiveUnpauseEvent().parse(response.payload)
             return None
 

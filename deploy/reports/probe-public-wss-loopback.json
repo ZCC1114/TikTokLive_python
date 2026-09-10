@@ -1,0 +1,92 @@
+{
+  "started_at": "2026-09-09T09:48:07.165447+00:00",
+  "room": "shalphoke69",
+  "requested_seconds": 75,
+  "clients": [
+    {
+      "index": 0,
+      "comments": 6,
+      "duplicate_ids": 0,
+      "statuses": [
+        {
+          "at": 1.483,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 10.073,
+          "value": "SIGN_API_TIMEOUT"
+        },
+        {
+          "at": 10.635,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 11.457,
+          "value": "LIVE_CONNECT_ERROR"
+        },
+        {
+          "at": 62.501,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 65.336,
+          "value": "LIVING"
+        }
+      ],
+      "pong_ms": [
+        185.585,
+        195.435,
+        196.611,
+        189.132,
+        189.839,
+        186.577,
+        201.655,
+        191.133
+      ],
+      "errors": [],
+      "websocket_open_seconds": 1.483,
+      "first_comment_seconds": 65.338,
+      "last_comment_seconds": 65.34,
+      "message_fields": [
+        "blackLevel",
+        "createdUsers",
+        "danmuContent",
+        "danmuUserId",
+        "danmuUserName",
+        "dyMsgId",
+        "dyRoomId",
+        "fansStatus",
+        "msgId",
+        "orderNumber",
+        "username"
+      ],
+      "observed_seconds": 75.2,
+      "pong_summary": {
+        "count": 8,
+        "median_ms": 191.133,
+        "max_ms": 201.655
+      },
+      "status_counts": {
+        "CONNECTING": 3,
+        "SIGN_API_TIMEOUT": 1,
+        "LIVE_CONNECT_ERROR": 1,
+        "LIVING": 1
+      }
+    }
+  ],
+  "health_samples": [
+    {
+      "at": 0.055,
+      "error": "JSONDecodeError"
+    },
+    {
+      "at": 31.015,
+      "error": "JSONDecodeError"
+    },
+    {
+      "at": 61.811,
+      "error": "JSONDecodeError"
+    }
+  ],
+  "elapsed_seconds": 75.2
+}

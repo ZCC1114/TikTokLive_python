@@ -1,0 +1,9 @@
+{
+  "kind": "initial_handshake_only",
+  "host": "Jakarta",
+  "room": "tv_asahi_news",
+  "phase": "cookie",
+  "resolve_seconds": 0.55,
+  "error_type": "RuntimeError",
+  "elapsed_seconds": 0.701
+}

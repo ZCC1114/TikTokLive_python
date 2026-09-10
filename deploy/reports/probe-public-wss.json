@@ -1,0 +1,162 @@
+{
+  "started_at": "2026-09-09T09:45:41.468208+00:00",
+  "room": "shalphoke69",
+  "requested_seconds": 90,
+  "clients": [
+    {
+      "index": 0,
+      "comments": 9,
+      "duplicate_ids": 0,
+      "statuses": [
+        {
+          "at": 1.082,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 8.212,
+          "value": "LIVE_CONNECT_ERROR"
+        },
+        {
+          "at": 8.741,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 9.674,
+          "value": "LIVE_CONNECT_ERROR"
+        },
+        {
+          "at": 62.732,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 70.031,
+          "value": "LIVING"
+        }
+      ],
+      "pong_ms": [
+        175.716,
+        201.682,
+        171.96,
+        205.015,
+        305.777,
+        237.958,
+        215.309,
+        209.225,
+        203.436
+      ],
+      "errors": [],
+      "websocket_open_seconds": 1.081,
+      "first_comment_seconds": 70.032,
+      "last_comment_seconds": 85.842,
+      "message_fields": [
+        "blackLevel",
+        "createdUsers",
+        "danmuContent",
+        "danmuUserId",
+        "danmuUserName",
+        "dyMsgId",
+        "dyRoomId",
+        "fansStatus",
+        "msgId",
+        "orderNumber",
+        "username"
+      ],
+      "observed_seconds": 90.209,
+      "pong_summary": {
+        "count": 9,
+        "median_ms": 205.015,
+        "max_ms": 305.777
+      },
+      "status_counts": {
+        "CONNECTING": 3,
+        "LIVE_CONNECT_ERROR": 2,
+        "LIVING": 1
+      }
+    },
+    {
+      "index": 1,
+      "comments": 9,
+      "duplicate_ids": 0,
+      "statuses": [
+        {
+          "at": 1.655,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 8.178,
+          "value": "LIVE_CONNECT_ERROR"
+        },
+        {
+          "at": 8.713,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 9.674,
+          "value": "LIVE_CONNECT_ERROR"
+        },
+        {
+          "at": 62.707,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 69.993,
+          "value": "LIVING"
+        }
+      ],
+      "pong_ms": [
+        201.093,
+        173.509,
+        188.864,
+        180.103,
+        290.544,
+        177.749,
+        175.991,
+        177.166,
+        176.519
+      ],
+      "errors": [],
+      "websocket_open_seconds": 1.654,
+      "first_comment_seconds": 69.999,
+      "last_comment_seconds": 85.794,
+      "message_fields": [
+        "blackLevel",
+        "createdUsers",
+        "danmuContent",
+        "danmuUserId",
+        "danmuUserName",
+        "dyMsgId",
+        "dyRoomId",
+        "fansStatus",
+        "msgId",
+        "orderNumber",
+        "username"
+      ],
+      "observed_seconds": 90.197,
+      "pong_summary": {
+        "count": 9,
+        "median_ms": 177.749,
+        "max_ms": 290.544
+      },
+      "status_counts": {
+        "CONNECTING": 3,
+        "LIVE_CONNECT_ERROR": 2,
+        "LIVING": 1
+      }
+    }
+  ],
+  "health_samples": [
+    {
+      "at": 0.057,
+      "error": "JSONDecodeError"
+    },
+    {
+      "at": 31.233,
+      "error": "JSONDecodeError"
+    },
+    {
+      "at": 61.98,
+      "error": "JSONDecodeError"
+    }
+  ],
+  "elapsed_seconds": 90.209
+}

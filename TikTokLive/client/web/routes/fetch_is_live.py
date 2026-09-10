@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import List, Optional
 
 from httpx import Response
 
@@ -56,7 +56,7 @@ class FetchIsLiveRoute(ClientRoute):
         if room_id is not None:
             try:
                 return (await self.fetch_is_live_room_ids(room_id))[0]
-            except:
+            except (IndexError, KeyError, TypeError):
                 raise MissingRoomIdInResponse(
                     f"Room ID {room_id} did not return any entries. This may be due to a nonexistent Room ID or being detected by TikTok."
                 )
@@ -73,7 +73,7 @@ class FetchIsLiveRoute(ClientRoute):
         """
 
         response: Response = await self._web.get(
-            url=WebDefaults.tiktok_webcast_url + f"/room/check_alive/",
+            url=WebDefaults.tiktok_webcast_url + "/room/check_alive/",
             extra_params={"room_ids": ",".join([str(room_id) for room_id in room_ids])}
         )
 

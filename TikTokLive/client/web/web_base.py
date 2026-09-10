@@ -1,20 +1,20 @@
 import logging
 import random
 from abc import ABC, abstractmethod
-from typing import Optional, Any, Awaitable, Dict, Literal, Union
+from typing import Any, Awaitable, Dict, Literal, Optional, Union
 
 import httpx
-from httpx import Cookies, AsyncClient, Proxy, URL
+from httpx import URL, AsyncClient, Cookies, Proxy
 
 from TikTokLive.client.logger import TikTokLiveLogHandler
-from TikTokLive.client.web.web_settings import WebDefaults, SUPPORTS_CURL_CFFI
-from TikTokLive.client.web.web_signer import TikTokSigner, SignData
+from TikTokLive.client.web.web_settings import SUPPORTS_CURL_CFFI, WebDefaults
+from TikTokLive.client.web.web_signer import SignData, TikTokSigner
 
 # Import the curl_cffi module if it is supported
 try:
     import curl_cffi.requests
 # Otherwise, import a dummy class
-except:
+except ImportError:
     from . import curl_cffi_dummy as curl_cffi
 
 
@@ -131,9 +131,17 @@ class TikTokHTTPClient:
 
         """
 
-        await self._httpx.aclose()
-        if self._curl_cffi:
-            await self._curl_cffi.close()
+        try:
+            await self._httpx.aclose()
+        finally:
+            try:
+                await self._tiktok_signer.aclose()
+            finally:
+                if self._curl_cffi:
+                    # curl_cffi's pool close is not idempotent. Detach before
+                    # yielding so concurrent disconnect paths close it once.
+                    session, self._curl_cffi = self._curl_cffi, None
+                    await session.close()
 
     def set_session(self, session_id: str | None, tt_target_idc: str | None) -> None:
         """

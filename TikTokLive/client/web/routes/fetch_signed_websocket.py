@@ -1,5 +1,6 @@
 import asyncio
 import json
+import math
 import os
 from http.cookies import SimpleCookie
 from json import JSONDecodeError
@@ -10,7 +11,7 @@ from httpx import Response
 
 from TikTokLive.client.errors import SignAPIError, SignatureRateLimitError
 from TikTokLive.client.web.web_base import ClientRoute
-from TikTokLive.client.web.web_settings import WebDefaults, CLIENT_NAME
+from TikTokLive.client.web.web_settings import CLIENT_NAME, WebDefaults
 from TikTokLive.client.web.web_utils import check_authenticated_session
 from TikTokLive.client.ws.ws_utils import extract_webcast_response_message
 from TikTokLive.proto import ProtoMessageFetchResult
@@ -43,6 +44,9 @@ class FetchSignedWebSocketRoute(ClientRoute):
             preferred_agent_ids: list[str] = None,
             session_id: Optional[str] = None,
             tt_target_idc: Optional[str] = None,
+            *,
+            timeout_seconds: float | None = None,
+            retries: int | None = None,
     ) -> ProtoMessageFetchResult:
         """
         Call the method to get the first ProtoMessageFetchResult (as bytes) to use to upgrade to WebSocket & perform the first ack
@@ -75,8 +79,14 @@ class FetchSignedWebSocketRoute(ClientRoute):
             sign_params['tt_target_idc'] = tt_target_idc
             self._logger.warning("Sending session ID to sign server for WebSocket connection. This is a risky operation.")
 
-        timeout_seconds: float = _get_float_env("SIGN_API_TIMEOUT_SECONDS", 20.0)
-        retries: int = max(_get_int_env("SIGN_API_RETRIES", 2), 0)
+        timeout_seconds = (
+            _get_float_env("SIGN_API_TIMEOUT_SECONDS", 20.0) if timeout_seconds is None else timeout_seconds
+        )
+        retries = max(_get_int_env("SIGN_API_RETRIES", 2), 0) if retries is None else retries
+        if not math.isfinite(timeout_seconds) or timeout_seconds <= 0:
+            raise ValueError("timeout_seconds must be a positive finite number")
+        if not isinstance(retries, int) or retries < 0:
+            raise ValueError("retries must be a non-negative integer")
         retry_backoff_seconds: float = max(_get_float_env("SIGN_API_RETRY_BACKOFF_SECONDS", 1.0), 0.0)
         retryable_status_codes = {500, 502, 503, 504}
         response: Optional[httpx.Response] = None
@@ -145,7 +155,12 @@ class FetchSignedWebSocketRoute(ClientRoute):
         data: bytes = await response.aread()
 
         if response.status_code == 429:
-            data_json = response.json()
+            try:
+                data_json = response.json()
+            except (ValueError, UnicodeDecodeError):
+                data_json = {}
+            if not isinstance(data_json, dict):
+                data_json = {}
             server_message: Optional[str] = None if os.environ.get('SIGN_SERVER_MESSAGE_DISABLED') else data_json.get("message")
             limit_label: str = f"({data_json['limit_label']}) " if data_json.get("limit_label") else ""
 
@@ -160,7 +175,7 @@ class FetchSignedWebSocketRoute(ClientRoute):
         elif not data:
             raise SignAPIError(
                 SignAPIError.ErrorReason.EMPTY_PAYLOAD,
-                f"Sign API returned an empty request. Are you being detected by TikTok?",
+                "Sign API returned an empty request. Are you being detected by TikTok?",
                 response=response
             )
 

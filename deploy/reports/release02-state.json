@@ -1,0 +1,101 @@
+{
+  "at": "2026-09-09T09:02:24.139117+00:00",
+  "release": "20260909-02",
+  "previous_release": "20260909-01",
+  "server": "163.7.2.127",
+  "tests_local": 116,
+  "tests_server": 116,
+  "service": {
+    "MainPID": 12393,
+    "NRestarts": 0,
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "nginx": {
+    "installed": true,
+    "enabled": true,
+    "http_public_health": "passed",
+    "config_test": "passed",
+    "domain": null,
+    "certificate_issued": false,
+    "https_wss_verified": false,
+    "certbot_timer_enabled": true,
+    "renewal_dry_run": false,
+    "pending": "User domain and DNS hosting/access information"
+  },
+  "network": {
+    "public_inbound": [
+      80,
+      443
+    ],
+    "ssh_and_8765_source": "104.28.211.105/32",
+    "redis": "loopback only"
+  },
+  "quality_test": {
+    "seconds": 240,
+    "clients": 2,
+    "comments_each": 29,
+    "duplicate_ids_each": 0,
+    "recovery_seconds": [
+      3.386,
+      2.131
+    ]
+  },
+  "production_test": {
+    "seconds": 90,
+    "clients": 2,
+    "comments_each": 9,
+    "duplicate_ids_each": 0
+  },
+  "code_hashes": {
+    "TikTokLive/__init__.py": "3862ae10e44ec334b374c3ccfda155fc8f054c8fd6cf88ac1d88306fb88d0a54",
+    "TikTokLive/__version__.py": "ac0386fb49d8e637d6739ea4fb341f2f10ca0cdb3890c4dcd007eb58b56cb859",
+    "TikTokLive/client/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "TikTokLive/client/client.py": "aa3f9897be296408bb43e24a157bddfb2846bbfa72c50cae152d170d5f1b8473",
+    "TikTokLive/client/diagnostics.py": "ff854ef0c0e6729bc16946620fb9a667e504f1bddf5386f576ccffe5e017702a",
+    "TikTokLive/client/errors.py": "d8ede9ef6dd2d90ac3219185cfac2f829e1cc8f3120137160d7aeb97d69f9757",
+    "TikTokLive/client/logger.py": "701783a8ae6690a511e2cd334b73d15044b84c3be673a4563e3a3f7cebb374f9",
+    "TikTokLive/client/web/__init__.py": "1759679ea40466b17833cfaf45edf4830cd3cb6cc6df6ee54512a0bab4c56de6",
+    "TikTokLive/client/web/routes/__init__.py": "42b59c2007bf675c50fb558a6eaabecb2ac647aea563d155ab0aebf9a8df9f1e",
+    "TikTokLive/client/web/routes/fetch_gift_list.py": "3493d9095d64817a1226a511eaafa133e783cdb70004d47da93d635e042d283b",
+    "TikTokLive/client/web/routes/fetch_image_data.py": "3751a303eec2a1264093e8a595855228bad3a6c67f0c84ccbfd401edce155536",
+    "TikTokLive/client/web/routes/fetch_is_live.py": "d7f96ec3a9cecdc039d2d945ca6fb2e64dc8a432506b9d81d1d5902b08cf1a47",
+    "TikTokLive/client/web/routes/fetch_room_id_api.py": "fe81a7e75f299ab88e768a8ef131073f10bc586694ac113ac9e79ccfcf5b97eb",
+    "TikTokLive/client/web/routes/fetch_room_id_live_html.py": "71efa55c171f6e1e5b012854346caa2f98eea7672eb22f5cb84b740af8492ef0",
+    "TikTokLive/client/web/routes/fetch_room_info.py": "aa4e2bcfe9ba05b7b003d75662ff7d20998cfc51033285fa336aabaa1bce1a18",
+    "TikTokLive/client/web/routes/fetch_signed_websocket.py": "3f5d2e5c57a81a7001858e073036f61cef68d27697e89e1098bf67966579f6a2",
+    "TikTokLive/client/web/routes/fetch_user_unique_id.py": "66eac0390c082b7da59578d738c375b9dd7736901d5027b42247a7b465958557",
+    "TikTokLive/client/web/routes/fetch_video_data.py": "16fcb5c82eac60e3862a148d31fd74d8b318335b2fb2d110977fe4189ae5fd15",
+    "TikTokLive/client/web/routes/send_room_chat.py": "a58825dc6a9f951a41280682351e08d8baffef390ebffd5378e972aceaba8d7d",
+    "TikTokLive/client/web/routes/send_room_gift.py": "82788f654c8bc903b6548777f0014a3b4a69847e4a6f90ae8dc3d159b98584ff",
+    "TikTokLive/client/web/routes/send_room_like.py": "2b8334575003c27e4856a09c5f4d68911e2ffb2d27d947a30f6f0c5b48536feb",
+    "TikTokLive/client/web/web_base.py": "6b338b9dfa83e0e0db5d9f2fcac79171ffd23adcac5f8799b3d6afc9375a0765",
+    "TikTokLive/client/web/web_client.py": "15d24356f313cc00154650cc91e2ac37b7efc75c80adeaa22892363e88009949",
+    "TikTokLive/client/web/web_presets.py": "2b95f8223b38dc0c525471f969f9976437f8e5e4709ba413a06b1acb01e3be7f",
+    "TikTokLive/client/web/web_settings.py": "9f98011208e1d375c8ca47f8868a2424525b2a587462059eb71c30e9e2412826",
+    "TikTokLive/client/web/web_signer.py": "4e693f3b622bc815c6afee7bb8f6bcb81ca6fe356cd43d54ed6f08aae8588923",
+    "TikTokLive/client/web/web_utils.py": "9a47d3819bce5bfb298e50c032e94c2436626972252c3179cb976e26c5245750",
+    "TikTokLive/client/ws/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "TikTokLive/client/ws/ws_client.py": "ec0d19cf501823b33d5c68b8e4d9d171a2d808c40c7678aa4b12a403e3a334a4",
+    "TikTokLive/client/ws/ws_connect.py": "22f65a6c6de5d3780d573ddd12b229fd1249778673012ad62baef2369e9a7877",
+    "TikTokLive/client/ws/ws_utils.py": "4c33735dfc81d1b1c6cbf182efc91c364512f8c7631057651dbe48a3ba986c41",
+    "TikTokLive/events/__init__.py": "0ea21e751181630312508eeac4d3a6b40c3c0131cd611948998109fd711a568a",
+    "TikTokLive/events/base_event.py": "874dc05a4346da9fe35f204678c0203384986b0b770395afa51afd5e324c24b1",
+    "TikTokLive/events/custom_events.py": "4273dfb438a94aeccfd6a8586722755f1c51641dd23ff7193de1063ad792bc5b",
+    "TikTokLive/events/proto_events.py": "39b0b30b90866d0407a1d82739ce9b71e29aab379c607184f3ca0f46848f02bf",
+    "TikTokLive/proto/__init__.py": "871b12521b36392743f2d3817da78a0bb81a6c76eb9f979295f2375d514029e1",
+    "TikTokLive/proto/custom_extras.py": "bc8ef5e106aceb86c130649f1fbb6bf43e12c406b73fa0c4637dd5cc00efe9ed",
+    "TikTokLive/proto/custom_proto.py": "4f4cc88924aa2313e09789971735d6c3191be36da86dc82be61a60f703ca5dae",
+    "TikTokLive/proto/proto_utils.py": "2ccfea781fb5437b366def993a67f9e93bca45c59c0d8d61bf45e1a37aea619a",
+    "TikTokLive/proto/tiktok_proto.py": "984a12955aa4cc8c40a81d95ccf11c59bcc7d6b491bc92097a6cde02b3d36cae",
+    "live_service/__init__.py": "d09e0ba1f923a8acfe7fbc96ee43ddce43d6d75a7b55685abbdc76c7a87561cc",
+    "live_service/app.py": "7d0a1ae9ac0df2ffc03de786f1b49c551bd79ddfc75886c9ed677aec255284be",
+    "live_service/config.py": "59a5f8b3b36ee7c2ebeb50ad1f2f5c2b67c790f7e09b296a625bb924320f3eca",
+    "live_service/delivery.py": "dc87d168dc79fc8ece0c0f88217e1332821134aa1edaf039dff5319df5533ffc",
+    "live_service/enrichment.py": "2e9a5c9564398dc2bf8bbf489be5a1f1b4ce6a16706f14a4721cd9718426f535",
+    "live_service/log_config.py": "7d0ec31b5540889815252718f2a5a7a924a9b104d7b5615776da741936e3eaaf",
+    "live_service/manager.py": "115d2a687e5a77d1017c3f715a6d9696765a0c49833909b4f53667dc7f2213fc",
+    "live_service/protocol.py": "7d5abf66e5eac8ab7cbbb04be42aff3c760b08a321d46c99e0d0ae01d71e0103"
+  },
+  "deployment_exception": "redis_store.py preserved from prior server release; old local legacy credential fallback was not uploaded"
+}

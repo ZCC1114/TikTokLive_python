@@ -1,0 +1,57 @@
+{
+  "cookie_cache_ttl_seconds": 5,
+  "purpose": "actual anonymous registration refresh using the same HTTP session",
+  "results": [
+    {
+      "iteration": 0,
+      "connect_seconds": 0.555,
+      "comments": 6,
+      "session": {
+        "registrations": 1,
+        "room_lookups": 1,
+        "cookie_cache_hits": 0,
+        "cooldown_seconds": 0
+      },
+      "wire": {
+        "transport": "anonymous_unsigned",
+        "counters": {
+          "heartbeats_sent": 10,
+          "frames": 51,
+          "non_message_frames": 11,
+          "acks_sent": 40,
+          "messages": 112,
+          "comments": 6,
+          "history_comments": 6
+        },
+        "last_frame_age_seconds": 0.22
+      }
+    },
+    {
+      "iteration": 1,
+      "connect_seconds": 0.534,
+      "comments": 8,
+      "session": {
+        "registrations": 2,
+        "room_lookups": 2,
+        "cookie_cache_hits": 0,
+        "cooldown_seconds": 0
+      },
+      "wire": {
+        "transport": "anonymous_unsigned",
+        "counters": {
+          "heartbeats_sent": 10,
+          "frames": 50,
+          "non_message_frames": 11,
+          "acks_sent": 39,
+          "messages": 119,
+          "comments": 8,
+          "history_comments": 6,
+          "timed_comments": 2,
+          "arrival_age_le_2s": 2,
+          "arrival_age_le_5s": 2
+        },
+        "last_frame_age_seconds": 0.345
+      }
+    }
+  ]
+}

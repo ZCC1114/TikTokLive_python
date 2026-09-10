@@ -1,0 +1,42 @@
+{
+  "at": "2026-09-09T07:51:55.186953+00:00",
+  "before": {
+    "MainPID": "9554",
+    "NRestarts": "0",
+    "User": "tiktoklive",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "before_health": {
+    "ready": true,
+    "rooms": 0,
+    "connected_rooms": 0,
+    "subscribers": 0,
+    "pending_events": 0,
+    "pending_sends": 0,
+    "pending_send_bytes": 0,
+    "suppressed_replays": 0,
+    "redis_failures": 0,
+    "redis_degraded_messages": 0
+  },
+  "after_health": {
+    "ready": true,
+    "rooms": 0,
+    "connected_rooms": 0,
+    "subscribers": 0,
+    "pending_events": 0,
+    "pending_sends": 0,
+    "pending_send_bytes": 0,
+    "suppressed_replays": 0,
+    "redis_failures": 0,
+    "redis_degraded_messages": 0
+  },
+  "after": {
+    "MainPID": "9940",
+    "NRestarts": "1",
+    "User": "tiktoklive",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "recovery_seconds": 6.048
+}

@@ -1,0 +1,26 @@
+{
+  "evidence_source": "Volcengine Cloud Assistant execution output, inspected through console UI",
+  "invocation_id": "ivk-yeupwr61vjlmv6aebtha",
+  "instance_id": "i-yeup1j0hkwz5gcnn36xa",
+  "scope": "Sanitized output excerpt; not the full server report",
+  "started_at_console": "2026-09-09 22:58:57 Asia/Shanghai",
+  "registration_http_status": 200,
+  "ttwid_obtained": true,
+  "handshake_ready_seconds_from_probe_start": 0.561,
+  "observed_seconds": 45.035,
+  "attempts": 1,
+  "totals": {
+    "heartbeats_sent": 5,
+    "enter_room_sent": 1,
+    "raw_frames": 58,
+    "non_message_frames": 5,
+    "acks_sent": 53,
+    "raw_messages": 144,
+    "comments": 8,
+    "comments_flagged_history": 6,
+    "fresh_comments": 2
+  },
+  "termination": "deadline",
+  "assessment": "fresh_comments_observed_review_metrics",
+  "production_after": {"MainPID": 13966, "NRestarts": 0, "ActiveState": "active"}
+}

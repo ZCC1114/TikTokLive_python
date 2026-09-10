@@ -2,17 +2,17 @@
 import json
 import os
 import re
-from typing import Optional, TypedDict, Literal
+from typing import Literal, Optional, TypedDict
 
 import httpx
 from httpx import URL
 
 from TikTokLive.__version__ import PACKAGE_VERSION
 from TikTokLive.client.errors import (
-    UnexpectedSignatureError,
-    SignatureMissingTokensError,
     PremiumEndpointError,
     SignAPIError,
+    SignatureMissingTokensError,
+    UnexpectedSignatureError,
 )
 from TikTokLive.client.web.web_settings import WebDefaults
 from TikTokLive.client.web.web_utils import check_authenticated_session
@@ -85,7 +85,7 @@ class TikTokSigner:
         self._httpx: httpx.AsyncClient = httpx.AsyncClient(
             headers=initial_headers,
             timeout=self._sign_api_timeout,
-            verify=False
+            verify=True
         )
 
     @property
@@ -187,6 +187,10 @@ class TikTokSigner:
             )
 
         return sign_response
+
+    async def aclose(self) -> None:
+        """Release the signature provider's connection pool."""
+        await self._httpx.aclose()
 
     @property
     def client(self) -> httpx.AsyncClient:

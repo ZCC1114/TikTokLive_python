@@ -2,6 +2,10 @@ TikTokLive Python API (Unofficial)
 ==================
 TikTokLive is an unofficial Python API wrapper for TikTok LIVE written in Python. With this library you can connect to any TikTok livestream and fetch all data available to users in a stream using just a creator's `@unique_id`.
 
+本仓库的正式弹幕服务已切换为 PirateTok 路线的匿名无签名采集，不需要 EulerStream 或 API Key。业务字段、Redis 标签和 `/ws/{live_id}` 保持兼容；超时状态改为 `UPSTREAM_TIMEOUT`。详见 [服务运行说明](SERVICE.md) 和 [落地计划](plans/unsigned-production-rollout.md)。原启动入口 `examples.fastapi_ws_server:app` 保留。
+
+以下为保留的上游通用 SDK 文档；其中签名服务配置不用于本仓库的正式弹幕服务。
+
 [![Discord](https://img.shields.io/discord/977648006063091742?logo=discord&label=TikTokLive%20Discord&labelColor=%23171717&color=%231877af)](https://discord.gg/N3KSxzvDX8)
 ![Connections](https://tiktok.eulerstream.com/analytics/pips/1)
 ![Downloads](https://pepy.tech/badge/tiktoklive)
@@ -473,4 +477,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 See also the full list of secondary [contributors](https://github.com/isaackogan/TikTokLive/contributors) who have participated in
 this project.
-

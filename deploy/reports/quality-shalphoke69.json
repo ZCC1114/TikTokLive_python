@@ -1,0 +1,2507 @@
+{
+  "started_at": "2026-09-09T08:47:24.404906+00:00",
+  "room": "shalphoke69",
+  "requested_seconds": 240,
+  "isolated_listener": {
+    "host": "127.0.0.1",
+    "port": 8766
+  },
+  "fault_injections": [
+    {
+      "index": 1,
+      "scheduled_at": 80.0,
+      "before": {
+        "ready": true,
+        "rooms": 1,
+        "connected_rooms": 1,
+        "subscribers": 2,
+        "pending_events": 0,
+        "pending_sends": 0,
+        "pending_send_bytes": 0,
+        "suppressed_replays": 0,
+        "suppressed_duplicates": 12,
+        "redis_failures": 0,
+        "redis_degraded_messages": 0,
+        "reconnects": 0,
+        "connection_details": {
+          "shalphoke69": {
+            "state": "streaming",
+            "generation": 1,
+            "connection_phase": "connected",
+            "last_connect_seconds": 5.932,
+            "last_recovery_seconds": 0.0,
+            "connect_timings": {
+              "resolve_user_seconds": 2.361999577260576e-06,
+              "resolve_room_seconds": 0.5187200430000303,
+              "live_check_seconds": 0.13382749099946523,
+              "sign_seconds": 4.897804172999713,
+              "handshake_seconds": 0.23392200299986143,
+              "total_seconds": 5.784308454999518
+            },
+            "source_messages": {
+              "signer_comments": 6,
+              "websocket_comments": 11,
+              "invalid_source_ids": 0,
+              "signer_duplicates": 0,
+              "signer_to_websocket_replays": 6,
+              "websocket_duplicates": 0,
+              "other_source_repeats": 0,
+              "repeated_ids_payload_changed": 0,
+              "tracked_source_ids": 11
+            }
+          }
+        }
+      },
+      "generation_before": 1,
+      "at": 80.001,
+      "recovered_at": 83.387,
+      "recovery_seconds": 3.386,
+      "generation_after": 2,
+      "after": {
+        "ready": true,
+        "rooms": 1,
+        "connected_rooms": 1,
+        "subscribers": 2,
+        "pending_events": 0,
+        "pending_sends": 0,
+        "pending_send_bytes": 0,
+        "suppressed_replays": 12,
+        "suppressed_duplicates": 12,
+        "redis_failures": 0,
+        "redis_degraded_messages": 0,
+        "reconnects": 1,
+        "connection_details": {
+          "shalphoke69": {
+            "state": "streaming",
+            "generation": 2,
+            "connection_phase": "connected",
+            "last_connect_seconds": 3.166,
+            "last_recovery_seconds": 3.339,
+            "connect_timings": {
+              "resolve_user_seconds": 3.0889996196492575e-06,
+              "resolve_room_seconds": 0.0,
+              "live_check_seconds": 0.0,
+              "sign_seconds": 2.2882035459997496,
+              "handshake_seconds": 0.8400731349993293,
+              "total_seconds": 3.128293696999208
+            },
+            "source_messages": {
+              "signer_comments": 6,
+              "websocket_comments": 0,
+              "invalid_source_ids": 0,
+              "signer_duplicates": 0,
+              "signer_to_websocket_replays": 0,
+              "websocket_duplicates": 0,
+              "other_source_repeats": 0,
+              "repeated_ids_payload_changed": 0,
+              "tracked_source_ids": 6
+            }
+          }
+        }
+      }
+    },
+    {
+      "index": 2,
+      "scheduled_at": 160.0,
+      "before": {
+        "ready": true,
+        "rooms": 1,
+        "connected_rooms": 1,
+        "subscribers": 2,
+        "pending_events": 0,
+        "pending_sends": 0,
+        "pending_send_bytes": 0,
+        "suppressed_replays": 24,
+        "suppressed_duplicates": 12,
+        "redis_failures": 0,
+        "redis_degraded_messages": 0,
+        "reconnects": 1,
+        "connection_details": {
+          "shalphoke69": {
+            "state": "streaming",
+            "generation": 2,
+            "connection_phase": "connected",
+            "last_connect_seconds": 3.166,
+            "last_recovery_seconds": 3.339,
+            "connect_timings": {
+              "resolve_user_seconds": 3.0889996196492575e-06,
+              "resolve_room_seconds": 0.0,
+              "live_check_seconds": 0.0,
+              "sign_seconds": 2.2882035459997496,
+              "handshake_seconds": 0.8400731349993293,
+              "total_seconds": 3.128293696999208
+            },
+            "source_messages": {
+              "signer_comments": 6,
+              "websocket_comments": 16,
+              "invalid_source_ids": 0,
+              "signer_duplicates": 0,
+              "signer_to_websocket_replays": 6,
+              "websocket_duplicates": 0,
+              "other_source_repeats": 0,
+              "repeated_ids_payload_changed": 0,
+              "tracked_source_ids": 16
+            }
+          }
+        }
+      },
+      "generation_before": 2,
+      "at": 160.001,
+      "recovered_at": 162.131,
+      "recovery_seconds": 2.131,
+      "generation_after": 3,
+      "after": {
+        "ready": true,
+        "rooms": 1,
+        "connected_rooms": 1,
+        "subscribers": 2,
+        "pending_events": 7,
+        "pending_sends": 0,
+        "pending_send_bytes": 0,
+        "suppressed_replays": 24,
+        "suppressed_duplicates": 12,
+        "redis_failures": 0,
+        "redis_degraded_messages": 0,
+        "reconnects": 2,
+        "connection_details": {
+          "shalphoke69": {
+            "state": "streaming",
+            "generation": 3,
+            "connection_phase": "connected",
+            "last_connect_seconds": 3.166,
+            "last_recovery_seconds": 2.09,
+            "connect_timings": {
+              "resolve_user_seconds": 3.0889996196492575e-06,
+              "resolve_room_seconds": 0.0,
+              "live_check_seconds": 0.0,
+              "sign_seconds": 2.2882035459997496,
+              "handshake_seconds": 0.8400731349993293,
+              "total_seconds": 3.128293696999208
+            },
+            "source_messages": {
+              "signer_comments": 6,
+              "websocket_comments": 0,
+              "invalid_source_ids": 0,
+              "signer_duplicates": 0,
+              "signer_to_websocket_replays": 0,
+              "websocket_duplicates": 0,
+              "other_source_repeats": 0,
+              "repeated_ids_payload_changed": 0,
+              "tracked_source_ids": 6
+            }
+          }
+        }
+      }
+    }
+  ],
+  "clients": [
+    {
+      "index": 0,
+      "comments": 29,
+      "duplicate_ids": 0,
+      "statuses": [
+        {
+          "at": 0.071,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 6.041,
+          "value": "LIVING"
+        },
+        {
+          "at": 80.002,
+          "value": "LIVE_CONNECT_ERROR"
+        },
+        {
+          "at": 80.212,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 83.378,
+          "value": "LIVING"
+        },
+        {
+          "at": 160.002,
+          "value": "LIVE_CONNECT_ERROR"
+        },
+        {
+          "at": 160.08,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 162.133,
+          "value": "LIVING"
+        }
+      ],
+      "pong_ms": [
+        2.766,
+        0.602,
+        0.503,
+        0.644,
+        0.609,
+        0.607,
+        0.615,
+        0.636,
+        0.644,
+        0.657,
+        0.61,
+        0.403,
+        0.624,
+        0.599,
+        0.602,
+        0.565,
+        0.597,
+        0.601,
+        0.578,
+        0.599,
+        0.595,
+        0.619,
+        0.54,
+        0.65
+      ],
+      "errors": [],
+      "websocket_open_seconds": 0.07,
+      "first_comment_seconds": 6.043,
+      "last_comment_seconds": 230.0,
+      "message_fields": [
+        "blackLevel",
+        "createdUsers",
+        "danmuContent",
+        "danmuUserId",
+        "danmuUserName",
+        "dyMsgId",
+        "dyRoomId",
+        "fansStatus",
+        "msgId",
+        "orderNumber",
+        "username"
+      ],
+      "observed_seconds": 240.002,
+      "pong_summary": {
+        "count": 24,
+        "median_ms": 0.607,
+        "max_ms": 2.766
+      },
+      "status_counts": {
+        "CONNECTING": 3,
+        "LIVING": 3,
+        "LIVE_CONNECT_ERROR": 2
+      }
+    },
+    {
+      "index": 1,
+      "comments": 29,
+      "duplicate_ids": 0,
+      "statuses": [
+        {
+          "at": 0.071,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 6.041,
+          "value": "LIVING"
+        },
+        {
+          "at": 80.002,
+          "value": "LIVE_CONNECT_ERROR"
+        },
+        {
+          "at": 80.213,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 83.378,
+          "value": "LIVING"
+        },
+        {
+          "at": 160.002,
+          "value": "LIVE_CONNECT_ERROR"
+        },
+        {
+          "at": 160.08,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 162.133,
+          "value": "LIVING"
+        }
+      ],
+      "pong_ms": [
+        2.539,
+        0.444,
+        0.406,
+        0.484,
+        0.43,
+        0.443,
+        0.442,
+        0.458,
+        0.485,
+        0.491,
+        0.438,
+        0.349,
+        0.458,
+        0.46,
+        0.44,
+        0.421,
+        0.43,
+        0.446,
+        0.42,
+        0.44,
+        0.423,
+        0.454,
+        0.421,
+        0.448
+      ],
+      "errors": [],
+      "websocket_open_seconds": 0.07,
+      "first_comment_seconds": 6.043,
+      "last_comment_seconds": 230.0,
+      "message_fields": [
+        "blackLevel",
+        "createdUsers",
+        "danmuContent",
+        "danmuUserId",
+        "danmuUserName",
+        "dyMsgId",
+        "dyRoomId",
+        "fansStatus",
+        "msgId",
+        "orderNumber",
+        "username"
+      ],
+      "observed_seconds": 240.002,
+      "pong_summary": {
+        "count": 24,
+        "median_ms": 0.443,
+        "max_ms": 2.539
+      },
+      "status_counts": {
+        "CONNECTING": 3,
+        "LIVING": 3,
+        "LIVE_CONNECT_ERROR": 2
+      }
+    }
+  ],
+  "health_samples": [
+    {
+      "at": 0.023,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 0,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 0,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "connecting",
+          "generation": 1,
+          "connection_phase": "resolve_room",
+          "last_connect_seconds": 0.0,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {},
+          "source_messages": {
+            "signer_comments": 0,
+            "websocket_comments": 0,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 0,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 0
+          }
+        }
+      },
+      "rss_kib": 82600
+    },
+    {
+      "at": 5.073,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 0,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 0,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "connecting",
+          "generation": 1,
+          "connection_phase": "sign",
+          "last_connect_seconds": 0.0,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {},
+          "source_messages": {
+            "signer_comments": 0,
+            "websocket_comments": 0,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 0,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 0
+          }
+        }
+      },
+      "rss_kib": 85032
+    },
+    {
+      "at": 10.076,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 6,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 6
+          }
+        }
+      },
+      "rss_kib": 91720
+    },
+    {
+      "at": 15.079,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 6,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 6
+          }
+        }
+      },
+      "rss_kib": 91772
+    },
+    {
+      "at": 20.083,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 6,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 6
+          }
+        }
+      },
+      "rss_kib": 91772
+    },
+    {
+      "at": 25.086,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 6,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 6
+          }
+        }
+      },
+      "rss_kib": 91776
+    },
+    {
+      "at": 30.089,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 7,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 7
+          }
+        }
+      },
+      "rss_kib": 91772
+    },
+    {
+      "at": 35.093,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 7,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 7
+          }
+        }
+      },
+      "rss_kib": 91776
+    },
+    {
+      "at": 40.096,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 7,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 7
+          }
+        }
+      },
+      "rss_kib": 91784
+    },
+    {
+      "at": 45.099,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 8,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 8
+          }
+        }
+      },
+      "rss_kib": 91776
+    },
+    {
+      "at": 50.102,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 8,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 8
+          }
+        }
+      },
+      "rss_kib": 91776
+    },
+    {
+      "at": 55.106,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 8,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 8
+          }
+        }
+      },
+      "rss_kib": 91788
+    },
+    {
+      "at": 60.109,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 9,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 9
+          }
+        }
+      },
+      "rss_kib": 91788
+    },
+    {
+      "at": 65.112,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 10,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 10
+          }
+        }
+      },
+      "rss_kib": 92072
+    },
+    {
+      "at": 70.115,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 10,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 10
+          }
+        }
+      },
+      "rss_kib": 92076
+    },
+    {
+      "at": 75.119,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 11,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 11
+          }
+        }
+      },
+      "rss_kib": 92076
+    },
+    {
+      "at": 80.122,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 0,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "retry_wait",
+          "generation": 1,
+          "connection_phase": null,
+          "last_connect_seconds": 5.932,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "resolve_user_seconds": 2.361999577260576e-06,
+            "resolve_room_seconds": 0.5187200430000303,
+            "live_check_seconds": 0.13382749099946523,
+            "sign_seconds": 4.897804172999713,
+            "handshake_seconds": 0.23392200299986143,
+            "total_seconds": 5.784308454999518
+          },
+          "source_messages": {}
+        }
+      },
+      "rss_kib": 92076
+    },
+    {
+      "at": 85.125,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 8,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 8
+          }
+        }
+      },
+      "rss_kib": 94036
+    },
+    {
+      "at": 90.128,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 8,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 8
+          }
+        }
+      },
+      "rss_kib": 94032
+    },
+    {
+      "at": 95.132,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 8,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 8
+          }
+        }
+      },
+      "rss_kib": 94052
+    },
+    {
+      "at": 100.135,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 10,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 10
+          }
+        }
+      },
+      "rss_kib": 94048
+    },
+    {
+      "at": 105.138,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 11,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 11
+          }
+        }
+      },
+      "rss_kib": 94060
+    },
+    {
+      "at": 110.142,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 12,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 12
+          }
+        }
+      },
+      "rss_kib": 94080
+    },
+    {
+      "at": 115.146,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 13,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 13
+          }
+        }
+      },
+      "rss_kib": 94124
+    },
+    {
+      "at": 120.149,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 13,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 13
+          }
+        }
+      },
+      "rss_kib": 94152
+    },
+    {
+      "at": 125.152,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 13,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 13
+          }
+        }
+      },
+      "rss_kib": 94164
+    },
+    {
+      "at": 130.156,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 13,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 13
+          }
+        }
+      },
+      "rss_kib": 94164
+    },
+    {
+      "at": 135.16,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 13,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 13
+          }
+        }
+      },
+      "rss_kib": 94168
+    },
+    {
+      "at": 140.163,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 13,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 13
+          }
+        }
+      },
+      "rss_kib": 95312
+    },
+    {
+      "at": 145.166,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 13,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 13
+          }
+        }
+      },
+      "rss_kib": 95320
+    },
+    {
+      "at": 150.169,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 13,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 13
+          }
+        }
+      },
+      "rss_kib": 95440
+    },
+    {
+      "at": 155.172,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 2,
+          "connection_phase": "connected",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 15,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 15
+          }
+        }
+      },
+      "rss_kib": 95460
+    },
+    {
+      "at": 160.175,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 0,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 24,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 1,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "connecting",
+          "generation": 3,
+          "connection_phase": "sign",
+          "last_connect_seconds": 3.166,
+          "last_recovery_seconds": 3.339,
+          "connect_timings": {
+            "resolve_user_seconds": 3.0889996196492575e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 2.2882035459997496,
+            "handshake_seconds": 0.8400731349993293,
+            "total_seconds": 3.128293696999208
+          },
+          "source_messages": {
+            "signer_comments": 0,
+            "websocket_comments": 0,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 0,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 0
+          }
+        }
+      },
+      "rss_kib": 96484
+    },
+    {
+      "at": 165.178,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 6,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 6
+          }
+        }
+      },
+      "rss_kib": 97716
+    },
+    {
+      "at": 170.181,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 7,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 7
+          }
+        }
+      },
+      "rss_kib": 97764
+    },
+    {
+      "at": 175.183,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 8,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 8
+          }
+        }
+      },
+      "rss_kib": 97772
+    },
+    {
+      "at": 180.187,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 9,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 9
+          }
+        }
+      },
+      "rss_kib": 101184
+    },
+    {
+      "at": 185.191,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 9,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 9
+          }
+        }
+      },
+      "rss_kib": 101316
+    },
+    {
+      "at": 190.194,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 9,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 9
+          }
+        }
+      },
+      "rss_kib": 101312
+    },
+    {
+      "at": 195.197,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 10,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 10
+          }
+        }
+      },
+      "rss_kib": 101332
+    },
+    {
+      "at": 200.201,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 11,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 11
+          }
+        }
+      },
+      "rss_kib": 101340
+    },
+    {
+      "at": 205.203,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 12,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 12
+          }
+        }
+      },
+      "rss_kib": 101364
+    },
+    {
+      "at": 210.207,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 12,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 12
+          }
+        }
+      },
+      "rss_kib": 101344
+    },
+    {
+      "at": 215.209,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 12,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 12
+          }
+        }
+      },
+      "rss_kib": 101372
+    },
+    {
+      "at": 220.212,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 13,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 13
+          }
+        }
+      },
+      "rss_kib": 101380
+    },
+    {
+      "at": 225.216,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 13,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 13
+          }
+        }
+      },
+      "rss_kib": 101392
+    },
+    {
+      "at": 230.219,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 14,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 14
+          }
+        }
+      },
+      "rss_kib": 101404
+    },
+    {
+      "at": 235.222,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 48,
+      "suppressed_duplicates": 12,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 2,
+      "connection_details": {
+        "shalphoke69": {
+          "state": "streaming",
+          "generation": 3,
+          "connection_phase": "connected",
+          "last_connect_seconds": 2.053,
+          "last_recovery_seconds": 2.09,
+          "connect_timings": {
+            "resolve_user_seconds": 2.35599964071298e-06,
+            "resolve_room_seconds": 0.0,
+            "live_check_seconds": 0.0,
+            "sign_seconds": 1.7824906559999363,
+            "handshake_seconds": 0.22884871499991277,
+            "total_seconds": 2.011351057999491
+          },
+          "source_messages": {
+            "signer_comments": 6,
+            "websocket_comments": 14,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 6,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 14
+          }
+        }
+      },
+      "rss_kib": 101388
+    }
+  ],
+  "elapsed_seconds": 240.002,
+  "final_health": {
+    "ready": true,
+    "rooms": 0,
+    "connected_rooms": 0,
+    "subscribers": 0,
+    "pending_events": 0,
+    "pending_sends": 0,
+    "pending_send_bytes": 0,
+    "suppressed_replays": 0,
+    "suppressed_duplicates": 0,
+    "redis_failures": 0,
+    "redis_degraded_messages": 0,
+    "reconnects": 0,
+    "connection_details": {}
+  },
+  "shutdown_health": {
+    "ready": false,
+    "rooms": 0,
+    "connected_rooms": 0,
+    "subscribers": 0,
+    "pending_events": 0,
+    "pending_sends": 0,
+    "pending_send_bytes": 0,
+    "suppressed_replays": 0,
+    "suppressed_duplicates": 0,
+    "redis_failures": 0,
+    "redis_degraded_messages": 0,
+    "reconnects": 0,
+    "connection_details": {}
+  },
+  "total_elapsed_seconds": 240.151
+}
