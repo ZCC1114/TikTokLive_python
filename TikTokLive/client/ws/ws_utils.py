@@ -4,6 +4,7 @@ import os
 from gzip import GzipFile
 from http.cookies import SimpleCookie
 from io import BytesIO
+from urllib.parse import quote
 
 from TikTokLive.client.errors import InitialCursorMissingError, WebsocketURLMissingError
 from TikTokLive.client.logger import TikTokLiveLogHandler
@@ -38,7 +39,7 @@ def build_webcast_uri(
 
     # Build the URI parameters dict
     uri_params: dict = {
-        **initial_webcast_response.route_params,
+        **{key: quote(str(value), safe="") for key, value in initial_webcast_response.route_params.items()},
         **base_uri_params,
         "internal_ext": initial_webcast_response.internal_ext,
         "cursor": initial_webcast_response.cursor,
