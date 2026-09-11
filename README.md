@@ -1,3 +1,5 @@
+> Quick Pick 海外服务当前部署与蓝绿操作见 [2026-09-12 海外部署说明](deploy/overseas-blue-green.md)。下文保留上游库使用文档。
+
 TikTokLive Python API (Unofficial)
 ==================
 TikTokLive is an unofficial Python API wrapper for TikTok LIVE written in Python. With this library you can connect to any TikTok livestream and fetch all data available to users in a stream using just a creator's `@unique_id`.
