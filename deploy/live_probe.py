@@ -65,7 +65,7 @@ async def probe(args):
                     try:
                         data = json.loads(message)
                     except (ValueError, TypeError):
-                        known = {"CONNECTING", "LIVING", "RECONNECTING", "LIVE_CONNECT_ERROR",
+                        known = {"CONNECTING", "LIVING", "UPSTREAM_RECONNECTING", "LIVE_CONNECT_ERROR",
                                  "UPSTREAM_TIMEOUT", "METADATA_READY", "METADATA_UNAVAILABLE"}
                         value = message if message in known else "unexpected_text_message"
                         stats["statuses"].append({"at": round(time.monotonic() - started, 3), "value": value})
