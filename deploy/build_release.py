@@ -29,7 +29,7 @@ def build(output: Path):
     ) if (ROOT / 'examples' / name).exists())
     paths.extend(ROOT / 'deploy' / name for name in (
         'quality_probe.py', 'live_probe.py', 'piratetok_bootstrap.py', 'configure_nginx.py',
-        'tiktok-live.service', 'build_release.py',
+        'tiktok-live.service', 'tiktok-live@.service', 'build_release.py',
     ))
     paths.append(ROOT / 'plans/unsigned-production-rollout.md')
     contents = {str(p.relative_to(ROOT)): p.read_bytes() for p in sorted(set(paths))}
