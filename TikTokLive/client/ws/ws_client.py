@@ -1,7 +1,8 @@
 import asyncio
-import typing
+import math
 from asyncio import Task
-from typing import Optional, AsyncIterator, Union, Type
+from contextlib import aclosing
+from typing import AsyncIterator, Optional, Type, Union
 
 import httpx
 from betterproto import Message
@@ -9,9 +10,17 @@ from websockets.legacy.client import WebSocketClientProtocol
 
 from TikTokLive.client.logger import TikTokLiveLogHandler
 from TikTokLive.client.web.web_settings import WebDefaults
-from TikTokLive.client.ws.ws_connect import WebcastProxyConnect, WebcastConnect, WebcastProxy, WebcastIterator
+from TikTokLive.client.ws.ws_connect import (
+    WebcastConnect,
+    WebcastProxy,
+    WebcastProxyConnect,
+)
 from TikTokLive.proto import ProtoMessageFetchResult
-from TikTokLive.proto.custom_extras import WebcastPushFrame, HeartbeatMessage, WebcastImEnterRoomMessage
+from TikTokLive.proto.custom_extras import (
+    HeartbeatMessage,
+    WebcastImEnterRoomMessage,
+    WebcastPushFrame,
+)
 
 
 class WebcastWSClient:
@@ -32,10 +41,14 @@ class WebcastWSClient:
         """
 
         self._seq_id: int = 1
-        self._ws_kwargs: dict = ws_kwargs or {}
+        self._ws_kwargs: dict = dict(ws_kwargs or {})
+        self._send_timeout = float(self._ws_kwargs.pop("send_timeout", 10.0))
+        if not math.isfinite(self._send_timeout) or self._send_timeout <= 0:
+            raise ValueError("send_timeout must be a positive finite number")
+        self._heartbeat_error: Optional[Exception] = None
         self._logger = TikTokLiveLogHandler.get_logger()
         self._ping_loop: Optional[Task] = None
-        self._ws_proxy: Optional[WebcastProxy] = ws_proxy or ws_kwargs.get("proxy")
+        self._ws_proxy: Optional[WebcastProxy] = ws_proxy or self._ws_kwargs.pop("proxy", None)
         self._connect_generator_class: Union[Type[WebcastConnect], Type[WebcastProxyConnect]] = WebcastProxyConnect if self._ws_proxy else WebcastConnect
         self._connection_generator: Optional[WebcastConnect] = None
 
@@ -64,7 +77,7 @@ class WebcastWSClient:
 
         """
 
-        return self.ws and self.ws.open
+        return bool(self.ws and self.ws.open)
 
     async def send(self, message: Union[bytes, Message]) -> None:
         """
@@ -80,11 +93,12 @@ class WebcastWSClient:
             return
 
         # Log outbound data
-        self._logger.debug(f"Sending data to Webcast Server... {message}")
+        self._logger.debug("Sending frame to Webcast Server")
 
         # Send the data (+ Serialize the data if it's a protobuf message)
-        await self.ws.send(
-            message=bytes(message) if isinstance(message, Message) else message
+        await asyncio.wait_for(
+            self.ws.send(message=bytes(message) if isinstance(message, Message) else message),
+            timeout=self._send_timeout,
         )
 
     async def send_ack(
@@ -146,21 +160,7 @@ class WebcastWSClient:
 
         cookie_string = " ".join(cookie_values)
 
-        # Handle session_id presence and create redacted cookie string
-        if session_id:
-            redacted_sid = session_id[:8] + "*" * (len(session_id) - 8)
-            redacted_cookie_string = cookie_string.replace(session_id, redacted_sid)
-
-            # Log that we're creating a cookie string for a logged-in session
-            self._logger.warning(
-                f"Created WS Cookie string for a LOGGED IN TikTok LIVE WebSocket session (Session ID: {redacted_sid}). "
-                f"Cookies: {redacted_cookie_string}"
-            )
-
-        else:
-            self._logger.debug(
-                f"Created WS Cookie string for an ANONYMOUS TikTok Live WebSocket session. Cookies: {cookie_string}"
-            )
+        self._logger.debug("Built WS cookies (authenticated=%s)", bool(session_id))
 
         return cookie_string
 
@@ -252,34 +252,32 @@ class WebcastWSClient:
             }
         )
 
-        # Open a connection & yield ProtoMessageFetchResult items
-        async for webcast_push_frame, webcast_response in typing.cast(WebcastIterator, self._connection_generator):
-
-            # The first message does NOT need an ack since we perform the ack with the actual WebSocket connect URI
-            if webcast_response.is_first:
-                await self.switch_rooms(room_id=room_id)
-
-            # Ack when necessary
-            if webcast_response.need_ack:
-                await self.send_ack(webcast_response=webcast_response, webcast_push_frame=webcast_push_frame)
-
-            # Yield the response
-            yield webcast_response
-
-            # If not connected, break
-            if not self.connected:
-                break
-
-        # Cancel the ping loop if it hasn't started to
-        if not self._ping_loop.done() and not self._ping_loop.cancelled():
-            self._ping_loop.cancel()
-
-        if not self._ping_loop.done():
-            await self._ping_loop
-
-        # Reset internal state
-        self._ping_loop = None
-        self._connection_generator = None
+        self._heartbeat_error = None
+        try:
+            # Explicitly close the inner generator even if the consumer is cancelled.
+            async with aclosing(self._connection_generator.__aiter__()) as responses:
+                async for webcast_push_frame, webcast_response in responses:
+                    if webcast_response.is_first:
+                        await self.enter_room(room_id=room_id)
+                    if webcast_response.need_ack and webcast_push_frame is not None:
+                        await self.send_ack(webcast_response, webcast_push_frame)
+                    yield webcast_response
+                    if not self.connected:
+                        break
+            if self._heartbeat_error is not None:
+                raise self._heartbeat_error
+        except Exception:
+            if self._heartbeat_error is not None:
+                raise self._heartbeat_error
+            raise
+        finally:
+            ping_task, self._ping_loop = self._ping_loop, None
+            try:
+                if ping_task is not None:
+                    ping_task.cancel()
+                    await asyncio.gather(ping_task, return_exceptions=True)
+            finally:
+                self._connection_generator = None
 
     def restart_ping_loop(self, room_id: int) -> None:
         """
@@ -294,8 +292,13 @@ class WebcastWSClient:
         self._ping_loop = asyncio.create_task(self._ping_loop_fn(room_id))
 
     async def switch_rooms(self, room_id: int) -> None:
+        """Preserve the SDK room-switching entry point."""
+        await self.enter_room(room_id)
 
-        im_enter_room_message = WebcastImEnterRoomMessage(
+    async def enter_room(self, room_id: int) -> None:
+        """Activate continuous event delivery after the WebSocket handshake."""
+
+        enter_room_message = WebcastImEnterRoomMessage(
             room_id=room_id,
             room_tag="",
             live_id=12,
@@ -304,16 +307,16 @@ class WebcastWSClient:
             account_type=0,
             enter_unique_id=0,
             filter_welcome_msg="0",
-            is_anchor_continue_keep_msg=False
+            is_anchor_continue_keep_msg=False,
         )
 
-        webcast_push_frame: WebcastPushFrame = WebcastPushFrame(
-            payload_type="im_enter_room",
-            payload_encoding="pb",
-            payload=bytes(im_enter_room_message)
+        await self.send(
+            message=WebcastPushFrame(
+                payload_type="im_enter_room",
+                payload_encoding="pb",
+                payload=bytes(enter_room_message),
+            )
         )
-
-        await self.send(message=webcast_push_frame)
         self.restart_ping_loop(room_id=room_id)
 
     async def _ping_loop_fn(self, room_id: int) -> None:
@@ -323,39 +326,31 @@ class WebcastWSClient:
         """
 
         try:
-            # Must be connected to loop as ping_interval requires the WS be instantiated
             if not self.connected:
                 return
-
-            # Calculate the ping interval
-            ping_interval: float = self.DEFAULT_PING_INTERVAL
-            if self._connection_generator is not None and self._connection_generator.ws_options is not None:
-                ping_interval = float(self._connection_generator.ws_options.get("ping-interval", ping_interval))
-
-        except:
-            self._logger.error("Failed to start ping loop!", exc_info=True)
-            return
-
-        # Ping Loop
-        try:
-            self._logger.debug(f"Starting ping loop with interval of {ping_interval} seconds.")
+            ping_interval = self.DEFAULT_PING_INTERVAL
+            if self._connection_generator is not None and self._connection_generator.ws_options:
+                try:
+                    proposed = float(self._connection_generator.ws_options.get("ping-interval", ping_interval))
+                    if math.isfinite(proposed) and proposed > 0:
+                        ping_interval = proposed
+                except (TypeError, ValueError):
+                    self._logger.warning("Invalid upstream heartbeat interval; using default")
             while self.connected:
-                # Create the heartbeat message (it is always the same)
-                hb_message = HeartbeatMessage(room_id=room_id, send_packet_seq_id=self._seq_id)
+                heartbeat = HeartbeatMessage(room_id=room_id, send_packet_seq_id=self._seq_id)
                 self._seq_id += 1
-
-                webcast_push_frame: WebcastPushFrame = WebcastPushFrame(
-                    payload_encoding="pb",
-                    payload_type="hb",
-                    payload=bytes(hb_message),
-                    headers={}
-                )
-
-                # Send the ping
-                await self.send(message=webcast_push_frame)
-
-                # Every 10 seconds
+                await self.send(WebcastPushFrame(
+                    payload_encoding="pb", payload_type="hb", payload=bytes(heartbeat), headers={},
+                ))
                 await asyncio.sleep(ping_interval)
-
         except asyncio.CancelledError:
-            self._logger.debug("Ping loop cancelled.")
+            raise
+        except Exception as exc:
+            self._heartbeat_error = exc
+            self._logger.warning("Heartbeat failed; closing upstream connection", exc_info=True)
+            # A failed/timed-out send already proves this transport is unusable.
+            # Waiting for its graceful close handshake would delay reconnection
+            # by several close_timeout intervals on a blackholed network.
+            ws = self.ws
+            if ws is not None:
+                ws.transport.abort()

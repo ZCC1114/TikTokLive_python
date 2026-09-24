@@ -1,0 +1,36 @@
+name: Service compatibility and reliability
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: sudo apt-get update && sudo apt-get install -y redis-server
+      - run: python -m pip install -r requirements-test.txt
+      - run: python -m pip install --no-deps -e '.[server]'
+      - run: python -m pip check
+      - run: python -m pytest -q
+      - run: >-
+          ruff check live_service tests
+          examples/fastapi_ws_server.py examples/redis_helper.py examples/log_config.py
+          TikTokLive/client/client.py TikTokLive/client/errors.py
+          TikTokLive/client/web/web_base.py TikTokLive/client/web/web_signer.py
+          TikTokLive/client/web/routes/fetch_is_live.py
+          TikTokLive/client/web/routes/fetch_room_id_live_html.py
+          TikTokLive/client/web/routes/fetch_signed_websocket.py
+          TikTokLive/client/ws/ws_client.py TikTokLive/client/ws/ws_connect.py
+          TikTokLive/client/ws/ws_utils.py

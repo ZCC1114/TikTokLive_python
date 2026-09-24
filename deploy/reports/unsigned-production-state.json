@@ -1,0 +1,36 @@
+{
+  "release": "/opt/tiktoklive/releases/20260910-unsigned-01",
+  "service": "MainPID=21811\nNRestarts=0\nMemoryCurrent=76267520\nActiveState=active",
+  "certbot": "NextElapseUSecRealtime=Thu 2026-09-10 05:19:39 CST\nActiveState=active\nUnitFileState=enabled",
+  "certificate": "issuer=C = US, O = Let's Encrypt, CN = YE2\nnotBefore=Sep  9 08:46:42 2026 GMT\nnotAfter=Dec  8 08:46:41 2026 GMT",
+  "redis_key_count": 0,
+  "ready": {
+    "collector": "anonymous_unsigned",
+    "anonymous_session": {
+      "registrations": 1,
+      "room_lookups": 4,
+      "cookie_cache_hits": 3,
+      "cooldown_seconds": 0
+    },
+    "ready": true,
+    "rooms": 0,
+    "connected_rooms": 0,
+    "subscribers": 0,
+    "pending_events": 0,
+    "pending_sends": 0,
+    "pending_send_bytes": 0,
+    "suppressed_replays": 0,
+    "suppressed_duplicates": 0,
+    "redis_failures": 0,
+    "redis_degraded_messages": 0,
+    "reconnects": 0,
+    "connection_details": {}
+  },
+  "listeners": "State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess\nLISTEN 0      4096      127.0.0.54:53        0.0.0.0:*          \nLISTEN 0      511          0.0.0.0:80        0.0.0.0:*          \nLISTEN 0      511          0.0.0.0:443       0.0.0.0:*          \nLISTEN 0      100        127.0.0.1:8767      0.0.0.0:*          \nLISTEN 0      2048       127.0.0.1:8765      0.0.0.0:*          \nLISTEN 0      4096   127.0.0.53%lo:53        0.0.0.0:*          \nLISTEN 0      511        127.0.0.1:6379      0.0.0.0:*          \nLISTEN 0      4096               *:22              *:*          \nLISTEN 0      511            [::1]:6379         [::]:*",
+  "ssh_key_only": [
+    "permitrootlogin without-password",
+    "pubkeyauthentication yes",
+    "passwordauthentication no"
+  ],
+  "snapshot_note": "Captured after public test and before management cleanup. Temporary relay route was then removed (HTTPS 404); SSH bridge disconnected and local listener stopped."
+}

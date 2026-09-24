@@ -1,0 +1,43 @@
+{
+  "task": "PirateTok anonymous bootstrap repair",
+  "date": "2026-09-09",
+  "production_collector_switched": false,
+  "tiktok_browser_route_used": false,
+  "login_cookies_or_third_party_signer_used": false,
+  "regression_tests": {
+    "passed": 17,
+    "scope": "tests/test_piratetok_bootstrap.py; includes real loopback HTTP response limit"
+  },
+  "source_sha256": {
+    "deploy/piratetok_bootstrap.py": "37ca8ed96749bf94cd61ffb53f8a9496c53e7743b6c791db09fbc76bd2184efd",
+    "deploy/piratetok_probe.py": "edbeb3d2a1b3b4f838615288bd87489f388b5bd4dd012e3de4e69e7babb63615",
+    "tests/test_piratetok_bootstrap.py": "21cb770de41c0b8f8547556e1919369d6992ea14a7f18daa78ff11e039c02ee8"
+  },
+  "server": {
+    "invocation_id": "ivk-yeupxlrm7tilu1did6yy",
+    "variant": "Previous server probe with registered-runtime.py overlay (anonymous registration, Chrome 136 UA and disabled RFC Ping timeout). Not the same bytes as the local integrated registered bootstrap.",
+    "submitted_runtime_source_sha256": "86662578c5eaf937fbacd0145b34fd8f4c7763e901e6ecfe8edeffe023e41cd9",
+    "full_report_path": "/opt/tiktoklive/experiments/piratetok-20260909/reports/repair-server-600s.json",
+    "local_report_omitted_fields": [
+      "source_sha256",
+      "resource_samples"
+    ],
+    "production_after": {
+      "MainPID": 13966,
+      "NRestarts": 0,
+      "ActiveState": "active",
+      "https_healthz": "ok"
+    },
+    "experiment_finished": true
+  },
+  "local": {
+    "report": "repair-local-600s.json",
+    "experiment_finished": true
+  },
+  "limitations": [
+    "One public room and ten-minute samples; not long-term uptime validation.",
+    "Controlled transport abort is not silent-packet-loss detection.",
+    "No independent message-ID set comparison; loss rate unknown.",
+    "Anonymous session expiry and production event mapping are not validated by this experiment."
+  ]
+}

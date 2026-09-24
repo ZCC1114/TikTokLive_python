@@ -1,0 +1,190 @@
+{
+  "started_at": "2026-09-09T15:11:58.110377+00:00",
+  "source_commit_expected": "ee836405ef122d7e2dd3403d99b91cb0d967977e",
+  "dependencies": {
+    "betterproto": "2.0.0b7",
+    "websockets": "15.0.1",
+    "curl_cffi": "0.13.0"
+  },
+  "requested_seconds": 600.0,
+  "room_alias_sha256": "fa10794a840f86f911b8a6eb0a3f20a2875b7edc371578fe276d7f41d3854886",
+  "path": "PirateTok anonymous ttwid + unsigned WSS; independent lifecycle supervision",
+  "bootstrap": {
+    "started_seconds": 0.309,
+    "result": "ok",
+    "completed_seconds": 0.412,
+    "cookie_present": true
+  },
+  "resolve": {
+    "started_seconds": 0.001,
+    "result": "ok",
+    "completed_seconds": 0.309
+  },
+  "attempts": [
+    {
+      "generation": 1,
+      "started_seconds": 0.412,
+      "counts": {
+        "raw_messages": 491,
+        "comments": 18,
+        "fresh_comments": 12,
+        "unique_comments_after_first_5s": 12
+      },
+      "handshake_ready_seconds": 0.537,
+      "handshake_duration_seconds": 0.125,
+      "first_frame_seconds": 0.62,
+      "last_frame_seconds": 179.951,
+      "first_message_seconds": 0.625,
+      "last_message_seconds": 179.951,
+      "first_comment_seconds": 0.625,
+      "last_comment_seconds": 179.1,
+      "first_fresh_comment_seconds": 16.023,
+      "last_fresh_comment_seconds": 179.1,
+      "error": {
+        "type": "ConnectionClosedError",
+        "api_code": 1006
+      },
+      "ended_by": "injected_transport_abort",
+      "ended_seconds": 180.001
+    },
+    {
+      "generation": 2,
+      "started_seconds": 180.202,
+      "counts": {
+        "raw_messages": 491,
+        "comments": 16,
+        "comment_duplicate_cross_reconnect": 6,
+        "fresh_comments": 10,
+        "unique_comments_after_first_5s": 10
+      },
+      "handshake_ready_seconds": 180.341,
+      "handshake_duration_seconds": 0.139,
+      "first_frame_seconds": 180.442,
+      "last_frame_seconds": 359.869,
+      "first_message_seconds": 180.444,
+      "last_message_seconds": 359.869,
+      "first_comment_seconds": 180.444,
+      "last_comment_seconds": 347.229,
+      "first_fresh_comment_seconds": 198.988,
+      "last_fresh_comment_seconds": 347.229,
+      "error": {
+        "type": "ConnectionClosedError",
+        "api_code": 1006
+      },
+      "ended_by": "injected_transport_abort",
+      "ended_seconds": 360.001
+    },
+    {
+      "generation": 3,
+      "started_seconds": 360.203,
+      "counts": {
+        "raw_messages": 575,
+        "comments": 28,
+        "comment_duplicate_cross_reconnect": 6,
+        "fresh_comments": 22,
+        "unique_comments_after_first_5s": 22
+      },
+      "handshake_ready_seconds": 360.405,
+      "handshake_duration_seconds": 0.202,
+      "first_frame_seconds": 360.48,
+      "last_frame_seconds": 599.685,
+      "first_message_seconds": 360.48,
+      "last_message_seconds": 599.685,
+      "first_comment_seconds": 360.494,
+      "last_comment_seconds": 599.685,
+      "first_fresh_comment_seconds": 381.198,
+      "last_fresh_comment_seconds": 599.685,
+      "ended_by": "deadline_or_cancel",
+      "ended_seconds": 600.087
+    }
+  ],
+  "faults": [
+    {
+      "scheduled_at": 180.0,
+      "at": 180.001,
+      "result": "transport_aborted",
+      "generation": 1,
+      "handshake_recovery_seconds": 0.34,
+      "recovered_generation": 2,
+      "message_recovery_seconds": 0.443,
+      "fresh_comment_recovery_seconds": 18.987
+    },
+    {
+      "scheduled_at": 360.0,
+      "at": 360.001,
+      "result": "transport_aborted",
+      "generation": 2,
+      "handshake_recovery_seconds": 0.404,
+      "recovered_generation": 3,
+      "message_recovery_seconds": 0.479,
+      "fresh_comment_recovery_seconds": 21.197
+    }
+  ],
+  "totals": {
+    "heartbeats_sent": 60,
+    "enter_room_sent": 3,
+    "raw_frames": 779,
+    "non_message_frames": 60,
+    "acks_sent": 719,
+    "raw_messages": 1557,
+    "comments": 62,
+    "comments_flagged_history": 18,
+    "fresh_comments": 44,
+    "raw_duplicate_cross_reconnect": 21,
+    "comment_duplicate_cross_reconnect": 12
+  },
+  "methods": {
+    "WebcastChatMessage": 62,
+    "WebcastLikeMessage": 144,
+    "WebcastMemberMessage": 985,
+    "WebcastRoomUserSeqMessage": 290,
+    "WebcastSocialMessage": 58,
+    "WebcastHotRoomMessage": 10,
+    "WebcastGameServerFeatureMessage": 3,
+    "WebcastBarrageMessage": 4,
+    "WebcastUnauthorizedMemberMessage": 1
+  },
+  "comment_buckets_30s": {
+    "0": 7,
+    "1": 3,
+    "2": 3,
+    "3": 1,
+    "4": 1,
+    "5": 3,
+    "6": 8,
+    "8": 2,
+    "9": 3,
+    "10": 2,
+    "11": 1,
+    "12": 7,
+    "14": 2,
+    "15": 8,
+    "16": 4,
+    "17": 2,
+    "18": 2,
+    "19": 3
+  },
+  "termination": "deadline",
+  "limitations": [
+    "No comparison source: missing upstream messages cannot be quantified.",
+    "Fresh timestamps depend on server/client clock alignment and history flags.",
+    "Observed reconnect delays exclude silent network-blackhole detection.",
+    "Successful sample is not a long-term uptime guarantee."
+  ],
+  "source_actual_path": "/opt/tiktoklive/experiments/piratetok-20260909/source/piratetok_live",
+  "url_signature_parameters_present": false,
+  "wss_host": "webcast-ws.tiktok.com",
+  "observed_seconds": 600.088,
+  "rss_high_water_mib": 48.94,
+  "loop_lag_ms": {
+    "p50": 0.298,
+    "p95": 1.112,
+    "max": 2.222
+  },
+  "id_window_evictions": {
+    "raw": 0,
+    "comments": 0
+  },
+  "injected_faults_recovered_with_fresh_comment": 2,
+  "assessment": "fresh_comments_observed_review_metrics"
+}

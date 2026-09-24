@@ -1,0 +1,39 @@
+{
+  "at": "2026-09-09T08:14:33.252483+00:00",
+  "previous_manager_sha256": "9aa40c5f6a39ec976347d5193114bacce8ce524030cd6e3f2c0b4deef64cbd30",
+  "manager_sha256": "0a0381c5576d937251776b37c5b6d24810a15958e43c43e640dc887b93b6dad9",
+  "test_manager_sha256": "0e332d53fde9f258d46599ec4568fdd83f366cfefe7003fe52ac4c551fcfaf9b",
+  "regression_passed": 62,
+  "before_health": {
+    "ready": true,
+    "rooms": 0,
+    "connected_rooms": 0,
+    "subscribers": 0,
+    "pending_events": 0,
+    "pending_sends": 0,
+    "pending_send_bytes": 0,
+    "suppressed_replays": 0,
+    "redis_failures": 0,
+    "redis_degraded_messages": 0
+  },
+  "after_health": {
+    "ready": true,
+    "rooms": 0,
+    "connected_rooms": 0,
+    "subscribers": 0,
+    "pending_events": 0,
+    "pending_sends": 0,
+    "pending_send_bytes": 0,
+    "suppressed_replays": 0,
+    "redis_failures": 0,
+    "redis_degraded_messages": 0
+  },
+  "service": {
+    "MainPID": "10477",
+    "NRestarts": "0",
+    "ActiveState": "active",
+    "SubState": "running",
+    "UnitFileState": "enabled"
+  },
+  "validation": "Real SDK parsing path and legacy ControlEvent subscription comparison; no new live stream-end observation"
+}

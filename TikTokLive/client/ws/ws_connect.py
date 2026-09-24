@@ -1,5 +1,6 @@
 import logging
-from typing import Optional, Tuple, Union, Type, AsyncIterator, Dict, Any
+import socket
+from typing import Any, AsyncIterator, Dict, Optional, Tuple, Type, Union
 
 import httpx
 from python_socks import ProxyType, parse_proxy_url
@@ -9,7 +10,11 @@ from websockets_proxy import websockets_proxy
 from websockets_proxy.websockets_proxy import ProxyConnect
 
 from TikTokLive.client.errors import WebcastBlocked200Error
-from TikTokLive.client.ws.ws_utils import extract_webcast_response_message, build_webcast_uri, extract_websocket_options
+from TikTokLive.client.ws.ws_utils import (
+    build_webcast_uri,
+    extract_webcast_response_message,
+    extract_websocket_options,
+)
 from TikTokLive.proto import ProtoMessageFetchResult
 from TikTokLive.proto.custom_extras import WebcastPushFrame
 
@@ -33,8 +38,24 @@ class WebcastConnect(Connect):
             base_uri_params: Dict[str, Any],
             base_uri_append_str: str,
             uri: Optional[str] = None,
+            tcp_keepalive: bool = False,
+            tcp_keepidle: int = 30,
+            tcp_keepintvl: int = 10,
+            tcp_keepcnt: int = 3,
+            tcp_user_timeout: int = 60000,
             **kwargs
     ):
+
+        keepalive_options = {
+            "tcp_keepidle": tcp_keepidle,
+            "tcp_keepintvl": tcp_keepintvl,
+            "tcp_keepcnt": tcp_keepcnt,
+            "tcp_user_timeout": tcp_user_timeout,
+        }
+        for name, value in keepalive_options.items():
+            if not isinstance(value, int) or value <= 0:
+                raise ValueError(f"{name} must be a positive integer")
+        self._keepalive_options = keepalive_options
 
         # If uri is provided (it should normally never be), bypass the construction
         if uri is None:
@@ -46,10 +67,34 @@ class WebcastConnect(Connect):
 
         super().__init__(uri, logger=logger, **kwargs)
         self.logger = self._logger = logger
-        self.logger.debug(f"Built Webcast URI: {uri}")
+        self.logger.debug("Built Webcast connection URI")
         self._ws: Optional[WebSocketClientProtocol] = None
         self._ws_options: Optional[dict[str, str]] = None
         self._initial_response: ProtoMessageFetchResult = initial_webcast_response
+        self._tcp_keepalive = tcp_keepalive
+
+    def _configure_keepalive(self, protocol: WebSocketClientProtocol) -> None:
+        """Detect dead TCP peers without requiring TikTok WebSocket pongs."""
+        sock = protocol.transport.get_extra_info("socket")
+        if sock is None:
+            return
+        options = [(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)]
+        idle = getattr(socket, "TCP_KEEPIDLE", getattr(socket, "TCP_KEEPALIVE", None))
+        if idle is not None:
+            options.append((socket.IPPROTO_TCP, idle, self._keepalive_options["tcp_keepidle"]))
+        for name, value in (
+            ("TCP_KEEPINTVL", self._keepalive_options["tcp_keepintvl"]),
+            ("TCP_KEEPCNT", self._keepalive_options["tcp_keepcnt"]),
+            ("TCP_USER_TIMEOUT", self._keepalive_options["tcp_user_timeout"]),
+        ):
+            option = getattr(socket, name, None)
+            if option is not None:
+                options.append((socket.IPPROTO_TCP, option, value))
+        for level, option, value in options:
+            try:
+                sock.setsockopt(level, option, value)
+            except OSError:
+                self._logger.debug("TCP keepalive option unavailable: %s", option)
 
     @property
     def ws(self) -> Optional[WebSocketClientProtocol]:
@@ -82,9 +127,12 @@ class WebcastConnect(Connect):
             # The connection happens in the "async with", so if you enter the loop, that means it connected to the WebSocket
             async with self as protocol:
                 self._ws = protocol
+                if self._tcp_keepalive:
+                    self._configure_keepalive(protocol)
                 self._ws_options = extract_websocket_options(self._ws.response_headers)
 
                 # Yield the first ProtoMessageFetchResult
+                self._initial_response.is_first = True
                 yield None, self._initial_response
 
                 # "async for" yields "WebcastPushFrame" payloads as unparsed bytes
@@ -95,8 +143,7 @@ class WebcastConnect(Connect):
 
                     # Only deal with messages
                     if webcast_push_frame.payload_type != "msg":
-                        webcast_push_frame.payload = extract_webcast_response_message(webcast_push_frame, logger=self._logger)
-                        self._logger.debug(f"Received payload of type '{webcast_push_frame.payload_type}', not 'msg': {webcast_push_frame}")
+                        self._logger.debug("Received non-message frame: %s", webcast_push_frame.payload_type)
                         continue
 
                     # If it is of type msg, we can extract the ProtoMessageFetchResult item within
@@ -141,7 +188,7 @@ class WebcastProxyConnect(WebcastConnect, ProxyConnect):
         parsed: list = list(parsed)
 
         # Add auth back
-        parsed[3] = proxy.auth[0]
-        parsed[4] = proxy.auth[1]
+        if proxy.auth:
+            parsed[3], parsed[4] = proxy.auth
 
         return websockets_proxy.Proxy(*parsed)

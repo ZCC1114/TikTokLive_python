@@ -1,0 +1,19 @@
+import sys,json,hashlib
+from pathlib import Path
+sys.path.insert(0,'/opt/tiktoklive/experiments/piratetok-20260909/source')
+from curl_cffi import requests
+import piratetok_live.auth.ttwid as auth
+UA='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36'
+def register(timeout=8,**kwargs):
+ with requests.Session(impersonate='chrome136',headers={'User-Agent':UA},verify=True,allow_redirects=False) as s:
+  r=s.post('https://www.tiktok.com/ttwid/register/',data=json.dumps({'aid':1988,'service':'www.tiktok.com','union':False,'unionHost':'','needFid':False,'fid':''}),headers={'Content-Type':'application/x-www-form-urlencoded','Origin':'https://www.tiktok.com','Referer':'https://www.tiktok.com/'},timeout=timeout)
+  cookies=[c.value for c in s.cookies.jar if c.name=='ttwid' and c.domain in ('.tiktok.com','tiktok.com') and c.domain_specified and c.path=='/' and not c.is_expired()]
+  print(json.dumps({'registration_status':r.status_code,'ttwid_obtained':bool(cookies)}),flush=True)
+  if r.status_code!=200 or not cookies:raise RuntimeError('Anonymous registration unavailable')
+  return cookies[-1]
+auth.fetch_ttwid=register
+p=Path('/opt/tiktoklive/experiments/piratetok-20260909/piratetok_probe.py')
+s=p.read_text().replace('Chrome/131.0.0.0','Chrome/136.0.0.0').replace('ping_interval=10, ping_timeout=10','ping_interval=None, ping_timeout=None')
+print(json.dumps({'runtime_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'effective_probe_sha256':hashlib.sha256(s.encode()).hexdigest()}),flush=True)
+sys.argv=[str(p),'--source-root','/opt/tiktoklive/experiments/piratetok-20260909/source','--room','tv_asahi_news','--seconds','600','--fault-at','180','--fault-at','360','--output','/opt/tiktoklive/experiments/piratetok-20260909/reports/repair-server-600s.json']
+exec(compile(s,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})

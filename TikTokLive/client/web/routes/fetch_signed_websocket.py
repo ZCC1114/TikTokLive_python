@@ -1,5 +1,7 @@
+import asyncio
 import enum
 import json
+import math
 import os
 from http.cookies import SimpleCookie
 from json import JSONDecodeError
@@ -10,7 +12,7 @@ from httpx import Response
 
 from TikTokLive.client.errors import SignAPIError, SignatureRateLimitError
 from TikTokLive.client.web.web_base import ClientRoute
-from TikTokLive.client.web.web_settings import WebDefaults, CLIENT_NAME
+from TikTokLive.client.web.web_settings import CLIENT_NAME, WebDefaults
 from TikTokLive.client.web.web_utils import check_authenticated_session
 from TikTokLive.client.ws.ws_utils import extract_webcast_response_message
 from TikTokLive.proto import ProtoMessageFetchResult
@@ -18,13 +20,24 @@ from TikTokLive.proto.custom_extras import WebcastPushFrame
 
 
 class WebcastPlatform(enum.Enum):
-    """
-    Enum for the platform to request the WebSocket URL for
-
-    """
+    """Platform used by the legacy signed WebSocket connector."""
 
     WEB = "web"
     MOBILE = "mobile"
+
+
+def _get_float_env(name: str, default: float) -> float:
+    try:
+        return float(os.environ.get(name, default))
+    except (TypeError, ValueError):
+        return default
+
+
+def _get_int_env(name: str, default: int) -> int:
+    try:
+        return int(os.environ.get(name, default))
+    except (TypeError, ValueError):
+        return default
 
 
 class FetchSignedWebSocketRoute(ClientRoute):
@@ -35,10 +48,14 @@ class FetchSignedWebSocketRoute(ClientRoute):
 
     async def __call__(
             self,
-            platform: WebcastPlatform,
+            platform: WebcastPlatform = WebcastPlatform.WEB,
             room_id: Optional[int] = None,
             session_id: Optional[str] = None,
-            tt_target_idc: Optional[str] = None
+            tt_target_idc: Optional[str] = None,
+            *,
+            preferred_agent_ids: list[str] | None = None,
+            timeout_seconds: float | None = None,
+            retries: int | None = None,
     ) -> ProtoMessageFetchResult:
         """
         Call the method to get the first ProtoMessageFetchResult (as bytes) to use to upgrade to WebSocket & perform the first ack
@@ -55,8 +72,11 @@ class FetchSignedWebSocketRoute(ClientRoute):
             'room_id': room_id or self._web.params.get('room_id', None),
             'user_agent': self._web.headers['User-Agent'],
             'platform': platform.value,
-            'client_enter': True
+            'client_enter': 'true',
         }
+
+        if preferred_agent_ids is not None:
+            sign_params['preferred_agent_ids'] = ",".join(preferred_agent_ids)
 
         # The session ID we want to add to the request
         session_id: str = session_id or self._web.cookies.get('sessionid')
@@ -70,18 +90,69 @@ class FetchSignedWebSocketRoute(ClientRoute):
         if platform == WebcastPlatform.MOBILE and not session_id:
             raise ValueError("Mobile platform requires a 'sessionid' cookie to be set, via client.web.set_session().")
 
-        try:
-            response: httpx.Response = await signer_client.get(
-                url=WebDefaults.tiktok_sign_url + "/webcast/fetch/",
-                params=sign_params,
-                timeout=15
-            )
-        except httpx.ConnectError as ex:
+        timeout_seconds = (
+            _get_float_env("SIGN_API_TIMEOUT_SECONDS", 20.0) if timeout_seconds is None else timeout_seconds
+        )
+        retries = max(_get_int_env("SIGN_API_RETRIES", 2), 0) if retries is None else retries
+        if not math.isfinite(timeout_seconds) or timeout_seconds <= 0:
+            raise ValueError("timeout_seconds must be a positive finite number")
+        if not isinstance(retries, int) or retries < 0:
+            raise ValueError("retries must be a non-negative integer")
+        retry_backoff_seconds: float = max(_get_float_env("SIGN_API_RETRY_BACKOFF_SECONDS", 1.0), 0.0)
+        retryable_status_codes = {500, 502, 503, 504}
+        response: Optional[httpx.Response] = None
+
+        for attempt in range(retries + 1):
+            try:
+                response = await signer_client.get(
+                    url=WebDefaults.tiktok_sign_url + "/webcast/fetch",
+                    params=sign_params,
+                    timeout=timeout_seconds,
+                )
+
+                if response.status_code in retryable_status_codes and attempt < retries:
+                    wait_seconds = retry_backoff_seconds * (attempt + 1)
+                    response_preview = response.text.replace("\n", " ")[:200]
+                    self._logger.warning(
+                        "Sign API returned HTTP %s (attempt %s/%s): %s; retrying in %.1fs",
+                        response.status_code,
+                        attempt + 1,
+                        retries + 1,
+                        response_preview,
+                        wait_seconds,
+                    )
+                    if wait_seconds:
+                        await asyncio.sleep(wait_seconds)
+                    continue
+
+                break
+            except httpx.ReadTimeout:
+                if attempt >= retries:
+                    raise
+
+                wait_seconds = retry_backoff_seconds * (attempt + 1)
+                self._logger.warning(
+                    "Sign API ReadTimeout for room_id=%s, retrying in %.1fs (%s/%s)",
+                    sign_params.get("room_id"),
+                    wait_seconds,
+                    attempt + 1,
+                    retries,
+                )
+                if wait_seconds:
+                    await asyncio.sleep(wait_seconds)
+            except httpx.ConnectError as ex:
+                raise SignAPIError(
+                    SignAPIError.ErrorReason.CONNECT_ERROR,
+                    "Failed to connect to the sign server due to an httpx.ConnectError!",
+                    response=None
+                ) from ex
+
+        if response is None:
             raise SignAPIError(
-                SignAPIError.ErrorReason.CONNECT_ERROR,
-                "Failed to connect to the sign server due to an httpx.ConnectError!",
+                SignAPIError.ErrorReason.EMPTY_PAYLOAD,
+                "Sign API did not return a response.",
                 response=None
-            ) from ex
+            )
 
         self._logger.debug(
             f"Attempted to fetch WebSocket information fetch from the Sign Server API! <-> "
@@ -95,7 +166,12 @@ class FetchSignedWebSocketRoute(ClientRoute):
         data: bytes = await response.aread()
 
         if response.status_code == 429:
-            data_json = response.json()
+            try:
+                data_json = response.json()
+            except (ValueError, UnicodeDecodeError):
+                data_json = {}
+            if not isinstance(data_json, dict):
+                data_json = {}
             server_message: Optional[str] = None if os.environ.get('SIGN_SERVER_MESSAGE_DISABLED') else data_json.get("message")
             limit_label: str = f"({data_json['limit_label']}) " if data_json.get("limit_label") else ""
 
@@ -110,7 +186,7 @@ class FetchSignedWebSocketRoute(ClientRoute):
         elif not data:
             raise SignAPIError(
                 SignAPIError.ErrorReason.EMPTY_PAYLOAD,
-                f"Sign API returned an empty request. Are you being detected by TikTok?",
+                "Sign API returned an empty request. Are you being detected by TikTok?",
                 response=response
             )
 

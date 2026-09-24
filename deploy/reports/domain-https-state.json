@@ -1,0 +1,210 @@
+{
+  "at": "2026-09-09T09:49:39.565490+00:00",
+  "domain": "live.quick-pick.net",
+  "address": "163.7.2.127",
+  "dns": {
+    "provider": "Volcengine TrafficRoute",
+    "zone_id": "274062",
+    "type": "A",
+    "ttl": 600,
+    "enabled": true
+  },
+  "certificate": {
+    "issuer": [
+      [
+        [
+          "countryName",
+          "US"
+        ]
+      ],
+      [
+        [
+          "organizationName",
+          "Let's Encrypt"
+        ]
+      ],
+      [
+        [
+          "commonName",
+          "YE2"
+        ]
+      ]
+    ],
+    "subject": [
+      [
+        [
+          "commonName",
+          "live.quick-pick.net"
+        ]
+      ]
+    ],
+    "notBefore": "Sep  9 08:46:42 2026 GMT",
+    "notAfter": "Dec  8 08:46:41 2026 GMT"
+  },
+  "renewal": {
+    "dry_run": "passed",
+    "hook_receipt": {
+      "lineage": "/etc/letsencrypt/live/live.quick-pick.net",
+      "completed_at_ns": 1788947125054652901
+    },
+    "timer": "NextElapseUSecRealtime=Thu 2026-09-10 05:19:39 CST\nActiveState=active\nUnitFileState=enabled"
+  },
+  "service": "MainPID=13966\nNRestarts=0\nActiveState=active",
+  "listeners": "State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess\nLISTEN 0      4096      127.0.0.54:53        0.0.0.0:*          \nLISTEN 0      511          0.0.0.0:80        0.0.0.0:*          \nLISTEN 0      511          0.0.0.0:443       0.0.0.0:*          \nLISTEN 0      2048       127.0.0.1:8765      0.0.0.0:*          \nLISTEN 0      4096   127.0.0.53%lo:53        0.0.0.0:*          \nLISTEN 0      511        127.0.0.1:6379      0.0.0.0:*          \nLISTEN 0      4096               *:22              *:*          \nLISTEN 0      511            [::1]:6379         [::]:*",
+  "ufw": "Status: active\n\nTo                         Action      From\n--                         ------      ----\n22/tcp                     ALLOW       104.28.211.105             # TikTok administration\n80/tcp                     ALLOW       Anywhere                  \n443/tcp                    ALLOW       Anywhere                  \n80/tcp (v6)                ALLOW       Anywhere (v6)             \n443/tcp (v6)               ALLOW       Anywhere (v6)",
+  "public_checks": {
+    "https_health": 200,
+    "http_ws_redirect": 308,
+    "public_readyz": 403
+  },
+  "deployment_script_sha256": "578bf0444957be194e81e44d856a4f20d0573767fd603c43f3a1ceeb2cd873fc",
+  "tests_nginx_local": 29,
+  "tests_nginx_server": 29,
+  "cloud_security_group": {
+    "id": "sg-z2lrf3bh20ao2xpagjxzpwqf",
+    "inbound": [
+      {
+        "port": 80,
+        "source": "0.0.0.0/0"
+      },
+      {
+        "port": 443,
+        "source": "0.0.0.0/0"
+      },
+      {
+        "port": 22,
+        "source": "104.28.211.105/32"
+      }
+    ],
+    "removed_public_8765": true
+  },
+  "wss_tests": {
+    "probe-public-wss": {
+      "duration": 90.209,
+      "clients": [
+        {
+          "comments": 9,
+          "duplicate_ids": 0,
+          "statuses": [
+            {
+              "at": 1.082,
+              "value": "CONNECTING"
+            },
+            {
+              "at": 8.212,
+              "value": "LIVE_CONNECT_ERROR"
+            },
+            {
+              "at": 8.741,
+              "value": "CONNECTING"
+            },
+            {
+              "at": 9.674,
+              "value": "LIVE_CONNECT_ERROR"
+            },
+            {
+              "at": 62.732,
+              "value": "CONNECTING"
+            },
+            {
+              "at": 70.031,
+              "value": "LIVING"
+            }
+          ],
+          "errors": [],
+          "first_comment_seconds": 70.032,
+          "last_comment_seconds": 85.842,
+          "pong_summary": {
+            "count": 9,
+            "median_ms": 205.015,
+            "max_ms": 305.777
+          }
+        },
+        {
+          "comments": 9,
+          "duplicate_ids": 0,
+          "statuses": [
+            {
+              "at": 1.655,
+              "value": "CONNECTING"
+            },
+            {
+              "at": 8.178,
+              "value": "LIVE_CONNECT_ERROR"
+            },
+            {
+              "at": 8.713,
+              "value": "CONNECTING"
+            },
+            {
+              "at": 9.674,
+              "value": "LIVE_CONNECT_ERROR"
+            },
+            {
+              "at": 62.707,
+              "value": "CONNECTING"
+            },
+            {
+              "at": 69.993,
+              "value": "LIVING"
+            }
+          ],
+          "errors": [],
+          "first_comment_seconds": 69.999,
+          "last_comment_seconds": 85.794,
+          "pong_summary": {
+            "count": 9,
+            "median_ms": 177.749,
+            "max_ms": 290.544
+          }
+        }
+      ],
+      "health_sample_note": "Public /readyz returns 403 by design; probe JSONDecodeError in health samples is expected for this restricted endpoint."
+    },
+    "probe-public-wss-loopback": {
+      "duration": 75.2,
+      "clients": [
+        {
+          "comments": 6,
+          "duplicate_ids": 0,
+          "statuses": [
+            {
+              "at": 1.483,
+              "value": "CONNECTING"
+            },
+            {
+              "at": 10.073,
+              "value": "SIGN_API_TIMEOUT"
+            },
+            {
+              "at": 10.635,
+              "value": "CONNECTING"
+            },
+            {
+              "at": 11.457,
+              "value": "LIVE_CONNECT_ERROR"
+            },
+            {
+              "at": 62.501,
+              "value": "CONNECTING"
+            },
+            {
+              "at": 65.336,
+              "value": "LIVING"
+            }
+          ],
+          "errors": [],
+          "first_comment_seconds": 65.338,
+          "last_comment_seconds": 65.34,
+          "pong_summary": {
+            "count": 8,
+            "median_ms": 191.133,
+            "max_ms": 201.655
+          }
+        }
+      ],
+      "health_sample_note": "Public /readyz returns 403 by design; probe JSONDecodeError in health samples is expected for this restricted endpoint."
+    }
+  },
+  "outstanding_quality_issue": "Signature request timeout / upstream handshake rejection followed by signing service Retry-After 51 or 53 seconds delayed first LIVING to about 65 or 70 seconds in these samples; not an HTTPS or Nginx failure."
+}

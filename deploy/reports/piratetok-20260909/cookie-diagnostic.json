@@ -1,0 +1,30 @@
+[
+  {
+    "path": "/@tv_asahi_news",
+    "status": 200,
+    "body_bytes": 1462,
+    "content_type": "text/html",
+    "system_error": "3",
+    "cookie_names": [
+      "ak_bmsc"
+    ],
+    "response_cookie_names": [
+      "ak_bmsc"
+    ],
+    "seconds": 0.144
+  },
+  {
+    "path": "/",
+    "status": 200,
+    "body_bytes": 1462,
+    "content_type": "text/html",
+    "system_error": "3",
+    "cookie_names": [
+      "ak_bmsc"
+    ],
+    "response_cookie_names": [
+      "ak_bmsc"
+    ],
+    "seconds": 0.113
+  }
+]

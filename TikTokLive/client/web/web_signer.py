@@ -1,13 +1,19 @@
 """API Url for euler sign services"""
+import json
 import os
 import re
-from typing import Optional, TypedDict, Literal
+from typing import Literal, Optional, TypedDict
 
 import httpx
 from httpx import URL
 
 from TikTokLive.__version__ import PACKAGE_VERSION
-from TikTokLive.client.errors import UnexpectedSignatureError, SignatureMissingTokensError, PremiumEndpointError
+from TikTokLive.client.errors import (
+    PremiumEndpointError,
+    SignAPIError,
+    SignatureMissingTokensError,
+    UnexpectedSignatureError,
+)
 from TikTokLive.client.web.web_settings import WebDefaults
 from TikTokLive.client.web.web_utils import check_authenticated_session
 
@@ -41,20 +47,33 @@ class TikTokSigner:
 
     """
 
+    @staticmethod
+    def _get_sign_api_timeout(sign_api_timeout: Optional[float]) -> float:
+        if sign_api_timeout is not None:
+            return sign_api_timeout
+
+        try:
+            return float(os.environ.get("SIGN_API_TIMEOUT_SECONDS", "20"))
+        except (TypeError, ValueError):
+            return 20.0
+
     def __init__(
             self,
             sign_api_key: Optional[str] = None,
-            sign_api_base: Optional[str] = None
+            sign_api_base: Optional[str] = None,
+            sign_api_timeout: Optional[float] = None
     ):
         """
         Initialize the signing class
 
         :param sign_api_key: API key for signing requests
+        :param sign_api_timeout: Timeout for signature provider requests
 
         """
 
         self._sign_api_key: Optional[str] = sign_api_key or os.environ.get("SIGN_API_KEY") or WebDefaults.tiktok_sign_api_key
         self._sign_api_base: str = sign_api_base or os.environ.get("SIGN_API_URL") or WebDefaults.tiktok_sign_url
+        self._sign_api_timeout: float = self._get_sign_api_timeout(sign_api_timeout)
 
         initial_headers: dict[str, str] = {
             "User-Agent": f"TikTokLive.py/{PACKAGE_VERSION}"
@@ -65,7 +84,8 @@ class TikTokSigner:
 
         self._httpx: httpx.AsyncClient = httpx.AsyncClient(
             headers=initial_headers,
-            verify=False
+            timeout=self._sign_api_timeout,
+            verify=True
         )
 
     @property
@@ -141,19 +161,36 @@ class TikTokSigner:
                 "Failed to retrieve JSON from a signed request: " + str(response)
             ) from ex
 
-        if sign_response['code'] == 403:
+        if response.status_code == 403 or sign_response.get('code') == 403:
             raise PremiumEndpointError(
                 "You do not have permission from the signature provider to sign this URL.",
-                api_message=sign_response['message'],
+                api_message=sign_response.get('message', 'No additional error details were provided by the sign server.'),
                 response=response
             )
 
-        if "msToken" not in sign_response['response']['signedUrl']:
+        if response.status_code != 200 or sign_response.get('code') != 200:
+            raise SignAPIError(
+                SignAPIError.ErrorReason.SIGN_NOT_200,
+                (
+                    f"Failed request to Sign API with status code {response.status_code} "
+                    f"and the following payload:\n{json.dumps(sign_response, ensure_ascii=False)}"
+                ),
+                response=response
+            )
+
+        signed_url: Optional[str] = (sign_response.get('response') or {}).get('signedUrl')
+
+        if not signed_url or "msToken" not in signed_url:
             raise SignatureMissingTokensError(
-                "Failed to sign a request due to missing tokens in response!"
+                "Failed to sign a request due to missing tokens in response!",
+                response=response
             )
 
         return sign_response
+
+    async def aclose(self) -> None:
+        """Release the signature provider's connection pool."""
+        await self._httpx.aclose()
 
     @property
     def client(self) -> httpx.AsyncClient:

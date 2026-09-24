@@ -1,0 +1,9 @@
+{
+  "kind": "diagnostic_unsigned_no_cookie",
+  "stock_piratetok_flow": false,
+  "room": "tv_asahi_news",
+  "frames": 0,
+  "error_type": "InvalidStatus",
+  "http_status": 200,
+  "elapsed_seconds": 0.437
+}

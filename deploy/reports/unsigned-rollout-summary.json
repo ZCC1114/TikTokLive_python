@@ -1,0 +1,99 @@
+{
+  "release": "20260910-unsigned-01",
+  "collector": "anonymous_unsigned",
+  "rollback": "20260909-02",
+  "automated_tests": {
+    "local_passed": 168,
+    "server_passed": 168,
+    "warnings": "2 upstream TestClient deprecation warnings; ResourceWarning/RuntimeWarning fail tests"
+  },
+  "public": {
+    "seconds": 600.228,
+    "comments": [
+      166,
+      166
+    ],
+    "duplicates": [
+      0,
+      0
+    ],
+    "contract_valid": [
+      166,
+      166
+    ],
+    "unplanned_reconnects": 0,
+    "upstream_connect_seconds": 0.576,
+    "first_comments_seconds": [
+      1.601,
+      1.672
+    ],
+    "pong": [
+      {
+        "count": 58,
+        "median_ms": 185.416,
+        "max_ms": 429.38
+      },
+      {
+        "count": 58,
+        "median_ms": 190.486,
+        "max_ms": 502.073
+      }
+    ],
+    "last_sample_counters": {
+      "heartbeats_sent": 199,
+      "frames": 929,
+      "non_message_frames": 200,
+      "acks_sent": 729,
+      "messages": 2027,
+      "comments": 165,
+      "history_comments": 6,
+      "timed_comments": 159,
+      "arrival_age_le_2s": 159,
+      "arrival_age_le_5s": 159
+    }
+  },
+  "server_faults": {
+    "seconds": 600.002,
+    "comments": [
+      34,
+      34
+    ],
+    "recovery_seconds": [
+      0.257,
+      8.333
+    ],
+    "peak_rss_mib": 96.54
+  },
+  "local_faults": {
+    "seconds": 180.004,
+    "comments": [
+      20,
+      20
+    ],
+    "recovery_seconds": [
+      1.158,
+      9.434
+    ]
+  },
+  "second_live_room": {
+    "room": "y277902",
+    "comments": [
+      7,
+      7
+    ],
+    "seconds": 60.219
+  },
+  "anonymous_refresh_registrations": 2,
+  "http_checks": {
+    "https_health": 200,
+    "http_ws_redirect": 308,
+    "public_readyz": 403
+  },
+  "artifact_sha256": "5f8b86bd4d0a05b87ea028d8db40fcd108f43be0a30590326b74ee26a89b0114",
+  "management_cleanup": {
+    "public_route_status": 404,
+    "ssh_master_closed": true,
+    "local_bridge_stopped": true,
+    "post_cleanup_https_health": 200
+  }
+}

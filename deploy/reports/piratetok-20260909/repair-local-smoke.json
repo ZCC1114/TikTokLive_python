@@ -1,0 +1,151 @@
+{
+  "started_at": "2026-09-09T15:03:10.991579+00:00",
+  "source_commit_expected": "ee836405ef122d7e2dd3403d99b91cb0d967977e",
+  "source_sha256": {
+    "auth/ttwid.py": "f3dbc8ef7309d04dd2d4d28de7808f89ac6f583b784dac2f83391339a9e346d0",
+    "http/api.py": "6d66964f330fc52834ab65aab844706a8623f2882981e03d63d46881c8810a98",
+    "connection/url.py": "f61c3432574d49058690436ec6adec7f5c56601907428fac7a9a999bb3cf0e2c",
+    "connection/frames.py": "cfb74bb31ea3abce906484205f923b46cec8ea34407ceea9b90281babe7a8f8e",
+    "proto/schema.py": "7606a8c0d64e1f094231e186351f732664f2c0b3b081154b63de9405355f43d9"
+  },
+  "dependencies": {
+    "betterproto": "2.0.0b7",
+    "websockets": "15.0.1",
+    "curl_cffi": "0.13.0"
+  },
+  "requested_seconds": 30.0,
+  "room_alias_sha256": "fa10794a840f86f911b8a6eb0a3f20a2875b7edc371578fe276d7f41d3854886",
+  "path": "PirateTok anonymous ttwid + unsigned WSS; independent lifecycle supervision",
+  "bootstrap_mode": "registered",
+  "bootstrap": {
+    "started_seconds": 0.003,
+    "result": "ok",
+    "completed_seconds": 1.584,
+    "cookie_present": true,
+    "diagnostics": {
+      "stages": [
+        {
+          "stage": "profile",
+          "seconds": 0.666,
+          "http_status": 200,
+          "http_version": 3,
+          "body_bytes": 1462,
+          "tt_system_error": 3
+        },
+        {
+          "stage": "homepage",
+          "seconds": 0.233,
+          "http_status": 200,
+          "http_version": 3,
+          "body_bytes": 1462,
+          "tt_system_error": 3
+        },
+        {
+          "stage": "register",
+          "seconds": 0.229,
+          "http_status": 200,
+          "http_version": 3,
+          "body_bytes": 69,
+          "api_code": 0
+        },
+        {
+          "stage": "room",
+          "seconds": 0.449,
+          "http_status": 200,
+          "http_version": 3,
+          "body_bytes": 21269,
+          "api_code": 0,
+          "live_status": 2,
+          "user_status": 2
+        }
+      ],
+      "seconds": 1.578
+    }
+  },
+  "resolve": {
+    "result": "ok",
+    "included_in_bootstrap": true
+  },
+  "attempts": [
+    {
+      "generation": 1,
+      "started_seconds": 1.585,
+      "counts": {
+        "raw_messages": 99,
+        "comments": 8,
+        "fresh_comments": 2,
+        "unique_comments_after_first_5s": 2
+      },
+      "handshake_ready_seconds": 2.751,
+      "handshake_duration_seconds": 1.166,
+      "first_frame_seconds": 3.019,
+      "last_frame_seconds": 29.701,
+      "first_message_seconds": 3.147,
+      "last_message_seconds": 29.701,
+      "first_comment_seconds": 3.147,
+      "last_comment_seconds": 23.846,
+      "first_fresh_comment_seconds": 18.931,
+      "last_fresh_comment_seconds": 23.846,
+      "ended_by": "deadline_or_cancel",
+      "ended_seconds": 30.187
+    }
+  ],
+  "faults": [],
+  "totals": {
+    "heartbeats_sent": 3,
+    "enter_room_sent": 1,
+    "raw_frames": 39,
+    "non_message_frames": 3,
+    "acks_sent": 36,
+    "raw_messages": 99,
+    "comments": 8,
+    "comments_flagged_history": 6,
+    "fresh_comments": 2
+  },
+  "methods": {
+    "WebcastChatMessage": 8,
+    "WebcastRoomUserSeqMessage": 15,
+    "WebcastLikeMessage": 23,
+    "WebcastMemberMessage": 49,
+    "WebcastHotRoomMessage": 1,
+    "WebcastGameServerFeatureMessage": 1,
+    "WebcastSocialMessage": 2
+  },
+  "comment_buckets_30s": {
+    "0": 8
+  },
+  "resource_samples": [
+    {
+      "at": 0.256,
+      "rss_high_water_mib": 45.97
+    },
+    {
+      "at": 15.356,
+      "rss_high_water_mib": 50.81
+    }
+  ],
+  "termination": "deadline",
+  "limitations": [
+    "No comparison source: missing upstream messages cannot be quantified.",
+    "Fresh timestamps depend on server/client clock alignment and history flags.",
+    "Observed reconnect delays exclude silent network-blackhole detection.",
+    "Successful sample is not a long-term uptime guarantee."
+  ],
+  "bootstrap_helper_sha256": "37ca8ed96749bf94cd61ffb53f8a9496c53e7743b6c791db09fbc76bd2184efd",
+  "source_actual_path": "/private/tmp/piratetok-research-live-py/piratetok_live",
+  "url_signature_parameters_present": false,
+  "wss_host": "webcast-ws.tiktok.com",
+  "observed_seconds": 30.189,
+  "rss_high_water_mib": 50.94,
+  "loop_lag_ms": {
+    "p50": 1.94,
+    "p95": 2.223,
+    "max": 9.163
+  },
+  "id_window_evictions": {
+    "raw": 0,
+    "comments": 0
+  },
+  "injected_faults_recovered_with_fresh_comment": 0,
+  "assessment": "fresh_comments_observed_review_metrics"
+}

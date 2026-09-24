@@ -1,4 +1,7 @@
 import enum
+import math
+import time
+from email.utils import parsedate_to_datetime
 from functools import cached_property
 from typing import Optional
 
@@ -205,7 +208,25 @@ class SignatureRateLimitError(SignAPIError):
 
         """
 
-        return int(response.headers.get("RateLimit-Remaining"))
+        retry_after = response.headers.get("Retry-After")
+        if retry_after:
+            try:
+                seconds = float(retry_after)
+                if math.isfinite(seconds):
+                    return max(1, math.ceil(seconds))
+            except (TypeError, ValueError, OverflowError):
+                try:
+                    return max(1, math.ceil(parsedate_to_datetime(retry_after).timestamp() - time.time()))
+                except (TypeError, ValueError, OverflowError):
+                    pass
+        try:
+            reset = float(response.headers.get("RateLimit-Reset", "nan"))
+            if math.isfinite(reset):
+                return max(1, math.ceil(reset - time.time()))
+        except (TypeError, ValueError, OverflowError):
+            pass
+        # Remaining quota is a count, not a retry duration.
+        return 60
 
     @cached_property
     def retry_after(self) -> int:

@@ -1,0 +1,64 @@
+{
+  "started_at": "2026-09-09T14:31:54.079517+00:00",
+  "source_commit_expected": "ee836405ef122d7e2dd3403d99b91cb0d967977e",
+  "source_sha256": {
+    "auth/ttwid.py": "f3dbc8ef7309d04dd2d4d28de7808f89ac6f583b784dac2f83391339a9e346d0",
+    "http/api.py": "6d66964f330fc52834ab65aab844706a8623f2882981e03d63d46881c8810a98",
+    "connection/url.py": "f61c3432574d49058690436ec6adec7f5c56601907428fac7a9a999bb3cf0e2c",
+    "connection/frames.py": "cfb74bb31ea3abce906484205f923b46cec8ea34407ceea9b90281babe7a8f8e",
+    "proto/schema.py": "7606a8c0d64e1f094231e186351f732664f2c0b3b081154b63de9405355f43d9"
+  },
+  "dependencies": {
+    "betterproto": "2.0.0b7",
+    "websockets": "15.0.1",
+    "curl_cffi": "0.13.0"
+  },
+  "requested_seconds": 30.0,
+  "room_alias_sha256": "fa10794a840f86f911b8a6eb0a3f20a2875b7edc371578fe276d7f41d3854886",
+  "path": "PirateTok anonymous ttwid + unsigned WSS; independent lifecycle supervision",
+  "bootstrap": {
+    "started_seconds": 1.085,
+    "result": "failed",
+    "completed_seconds": 3.836,
+    "error": {
+      "type": "RuntimeError"
+    }
+  },
+  "resolve": {
+    "started_seconds": 0.002,
+    "result": "ok",
+    "completed_seconds": 1.085
+  },
+  "attempts": [],
+  "faults": [],
+  "totals": {},
+  "methods": {},
+  "comment_buckets_30s": {},
+  "resource_samples": [
+    {
+      "at": 0.254,
+      "rss_high_water_mib": 46.42
+    }
+  ],
+  "termination": "bootstrap_failed",
+  "limitations": [
+    "No comparison source: missing upstream messages cannot be quantified.",
+    "Fresh timestamps depend on server/client clock alignment and history flags.",
+    "Observed reconnect delays exclude silent network-blackhole detection.",
+    "Successful sample is not a long-term uptime guarantee."
+  ],
+  "source_actual_path": "/private/tmp/piratetok-research-live-py/piratetok_live",
+  "observed_seconds": 3.836,
+  "rss_high_water_mib": 49.59,
+  "loop_lag_ms": {
+    "p50": 1.097,
+    "p95": 1.2,
+    "max": 1.387
+  },
+  "id_window_evictions": {
+    "raw": 0,
+    "comments": 0
+  },
+  "injected_faults_recovered_with_fresh_comment": 0,
+  "assessment": "no_fresh_comments_stability_not_demonstrated"
+}

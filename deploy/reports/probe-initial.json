@@ -1,0 +1,151 @@
+{
+  "started_at": "2026-09-09T07:38:00.953538+00:00",
+  "room": "y277902",
+  "requested_seconds": 65,
+  "clients": [
+    {
+      "index": 0,
+      "comments": 12,
+      "duplicate_ids": 5,
+      "statuses": [
+        {
+          "at": 0.07,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 9.205,
+          "value": "LIVING"
+        }
+      ],
+      "pong_ms": [
+        35.951,
+        0.665,
+        0.553,
+        0.641,
+        0.63,
+        0.649,
+        0.71
+      ],
+      "errors": [],
+      "websocket_open_seconds": 0.069,
+      "first_comment_seconds": 9.206,
+      "last_comment_seconds": 9.491,
+      "message_fields": [
+        "blackLevel",
+        "createdUsers",
+        "danmuContent",
+        "danmuUserId",
+        "danmuUserName",
+        "dyMsgId",
+        "dyRoomId",
+        "fansStatus",
+        "msgId",
+        "orderNumber",
+        "username"
+      ],
+      "observed_seconds": 65.002,
+      "pong_summary": {
+        "count": 7,
+        "median_ms": 0.649,
+        "max_ms": 35.951
+      },
+      "status_counts": {
+        "CONNECTING": 1,
+        "LIVING": 1
+      }
+    },
+    {
+      "index": 1,
+      "comments": 12,
+      "duplicate_ids": 5,
+      "statuses": [
+        {
+          "at": 0.105,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 9.205,
+          "value": "LIVING"
+        }
+      ],
+      "pong_ms": [
+        2.141,
+        0.485,
+        0.445,
+        0.472,
+        0.466,
+        0.486,
+        0.526
+      ],
+      "errors": [],
+      "websocket_open_seconds": 0.103,
+      "first_comment_seconds": 9.206,
+      "last_comment_seconds": 9.491,
+      "message_fields": [
+        "blackLevel",
+        "createdUsers",
+        "danmuContent",
+        "danmuUserId",
+        "danmuUserName",
+        "dyMsgId",
+        "dyRoomId",
+        "fansStatus",
+        "msgId",
+        "orderNumber",
+        "username"
+      ],
+      "observed_seconds": 65.002,
+      "pong_summary": {
+        "count": 7,
+        "median_ms": 0.485,
+        "max_ms": 2.141
+      },
+      "status_counts": {
+        "CONNECTING": 1,
+        "LIVING": 1
+      }
+    }
+  ],
+  "health_samples": [
+    {
+      "at": 0.04,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 0,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 1,
+      "pending_send_bytes": 10,
+      "suppressed_replays": 0,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0
+    },
+    {
+      "at": 30.106,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0
+    },
+    {
+      "at": 60.11,
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0
+    }
+  ],
+  "elapsed_seconds": 65.002
+}

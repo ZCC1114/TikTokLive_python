@@ -1,0 +1,669 @@
+{
+  "started_at": "2026-09-09T16:13:17.957123+00:00",
+  "room": "shalphoke69",
+  "requested_seconds": 60,
+  "clients": [
+    {
+      "index": 0,
+      "comments": 0,
+      "duplicate_ids": 0,
+      "contract_valid_comments": 0,
+      "invalid_contract_comments": 0,
+      "statuses": [
+        {
+          "at": 1.966,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 2.061,
+          "value": "LIVE_CONNECT_ERROR"
+        }
+      ],
+      "pong_ms": [
+        217.954,
+        560.232,
+        226.683,
+        217.719,
+        222.133,
+        216.939
+      ],
+      "errors": [],
+      "websocket_open_seconds": 1.961,
+      "observed_seconds": 60.217,
+      "pong_summary": {
+        "count": 6,
+        "median_ms": 222.133,
+        "max_ms": 560.232
+      },
+      "status_counts": {
+        "CONNECTING": 1,
+        "LIVE_CONNECT_ERROR": 1
+      }
+    },
+    {
+      "index": 1,
+      "comments": 0,
+      "duplicate_ids": 0,
+      "contract_valid_comments": 0,
+      "invalid_contract_comments": 0,
+      "statuses": [
+        {
+          "at": 0.805,
+          "value": "CONNECTING"
+        },
+        {
+          "at": 1.226,
+          "value": "LIVE_CONNECT_ERROR"
+        },
+        {
+          "at": 2.029,
+          "value": "LIVE_CONNECT_ERROR"
+        }
+      ],
+      "pong_ms": [
+        183.2,
+        182.286,
+        251.433,
+        183.797,
+        182.712,
+        193.09
+      ],
+      "errors": [],
+      "websocket_open_seconds": 0.804,
+      "observed_seconds": 60.182,
+      "pong_summary": {
+        "count": 6,
+        "median_ms": 183.797,
+        "max_ms": 251.433
+      },
+      "status_counts": {
+        "CONNECTING": 1,
+        "LIVE_CONNECT_ERROR": 2
+      }
+    }
+  ],
+  "health_samples": [
+    {
+      "at": 0.049,
+      "collector": "anonymous_unsigned",
+      "anonymous_session": {
+        "registrations": 1,
+        "room_lookups": 1,
+        "cookie_cache_hits": 0,
+        "cooldown_seconds": 0
+      },
+      "ready": true,
+      "rooms": 1,
+      "connected_rooms": 1,
+      "subscribers": 2,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 0,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "tv_asahi_news": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_error": null,
+          "upstream": {
+            "transport": "anonymous_unsigned",
+            "counters": {
+              "heartbeats_sent": 8,
+              "frames": 40,
+              "non_message_frames": 9,
+              "acks_sent": 31,
+              "messages": 85,
+              "comments": 9,
+              "history_comments": 6,
+              "timed_comments": 3,
+              "arrival_age_le_2s": 3,
+              "arrival_age_le_5s": 3
+            },
+            "last_frame_age_seconds": 0.206
+          },
+          "last_connect_seconds": 0.576,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "bootstrap": {
+              "stages": [
+                {
+                  "stage": "register",
+                  "seconds": 0.11,
+                  "http_status": 200,
+                  "http_version": 3,
+                  "body_bytes": 69,
+                  "api_code": 0
+                },
+                {
+                  "stage": "room",
+                  "seconds": 0.269,
+                  "http_status": 200,
+                  "http_version": 3,
+                  "body_bytes": 16393,
+                  "api_code": 0
+                }
+              ],
+              "cookie_cached": false,
+              "room_cached": false,
+              "seconds": 0.394
+            },
+            "handshake_seconds": 0.168,
+            "total_seconds": 0.576
+          },
+          "source_messages": {
+            "signer_comments": 0,
+            "websocket_comments": 9,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 0,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 9
+          }
+        }
+      }
+    },
+    {
+      "at": 10.459,
+      "collector": "anonymous_unsigned",
+      "anonymous_session": {
+        "registrations": 1,
+        "room_lookups": 3,
+        "cookie_cache_hits": 2,
+        "cooldown_seconds": 0
+      },
+      "ready": true,
+      "rooms": 2,
+      "connected_rooms": 1,
+      "subscribers": 4,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 0,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "tv_asahi_news": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_error": null,
+          "upstream": {
+            "transport": "anonymous_unsigned",
+            "counters": {
+              "heartbeats_sent": 12,
+              "frames": 57,
+              "non_message_frames": 13,
+              "acks_sent": 44,
+              "messages": 120,
+              "comments": 9,
+              "history_comments": 6,
+              "timed_comments": 3,
+              "arrival_age_le_2s": 3,
+              "arrival_age_le_5s": 3
+            },
+            "last_frame_age_seconds": 0.554
+          },
+          "last_connect_seconds": 0.576,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "bootstrap": {
+              "stages": [
+                {
+                  "stage": "register",
+                  "seconds": 0.11,
+                  "http_status": 200,
+                  "http_version": 3,
+                  "body_bytes": 69,
+                  "api_code": 0
+                },
+                {
+                  "stage": "room",
+                  "seconds": 0.269,
+                  "http_status": 200,
+                  "http_version": 3,
+                  "body_bytes": 16393,
+                  "api_code": 0
+                }
+              ],
+              "cookie_cached": false,
+              "room_cached": false,
+              "seconds": 0.394
+            },
+            "handshake_seconds": 0.168,
+            "total_seconds": 0.576
+          },
+          "source_messages": {
+            "signer_comments": 0,
+            "websocket_comments": 9,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 0,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 9
+          }
+        },
+        "shalphoke69": {
+          "state": "stopped",
+          "generation": 2,
+          "connection_phase": null,
+          "last_error": "offline",
+          "upstream": {},
+          "last_connect_seconds": 0.096,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "total_seconds": 0.096
+          },
+          "source_messages": {}
+        }
+      }
+    },
+    {
+      "at": 20.847,
+      "collector": "anonymous_unsigned",
+      "anonymous_session": {
+        "registrations": 1,
+        "room_lookups": 3,
+        "cookie_cache_hits": 2,
+        "cooldown_seconds": 0
+      },
+      "ready": true,
+      "rooms": 2,
+      "connected_rooms": 1,
+      "subscribers": 4,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 0,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "tv_asahi_news": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_error": null,
+          "upstream": {
+            "transport": "anonymous_unsigned",
+            "counters": {
+              "heartbeats_sent": 15,
+              "frames": 73,
+              "non_message_frames": 16,
+              "acks_sent": 57,
+              "messages": 162,
+              "comments": 10,
+              "history_comments": 6,
+              "timed_comments": 4,
+              "arrival_age_le_2s": 4,
+              "arrival_age_le_5s": 4
+            },
+            "last_frame_age_seconds": 0.258
+          },
+          "last_connect_seconds": 0.576,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "bootstrap": {
+              "stages": [
+                {
+                  "stage": "register",
+                  "seconds": 0.11,
+                  "http_status": 200,
+                  "http_version": 3,
+                  "body_bytes": 69,
+                  "api_code": 0
+                },
+                {
+                  "stage": "room",
+                  "seconds": 0.269,
+                  "http_status": 200,
+                  "http_version": 3,
+                  "body_bytes": 16393,
+                  "api_code": 0
+                }
+              ],
+              "cookie_cached": false,
+              "room_cached": false,
+              "seconds": 0.394
+            },
+            "handshake_seconds": 0.168,
+            "total_seconds": 0.576
+          },
+          "source_messages": {
+            "signer_comments": 0,
+            "websocket_comments": 10,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 0,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 10
+          }
+        },
+        "shalphoke69": {
+          "state": "stopped",
+          "generation": 2,
+          "connection_phase": null,
+          "last_error": "offline",
+          "upstream": {},
+          "last_connect_seconds": 0.096,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "total_seconds": 0.096
+          },
+          "source_messages": {}
+        }
+      }
+    },
+    {
+      "at": 31.61,
+      "collector": "anonymous_unsigned",
+      "anonymous_session": {
+        "registrations": 1,
+        "room_lookups": 3,
+        "cookie_cache_hits": 2,
+        "cooldown_seconds": 0
+      },
+      "ready": true,
+      "rooms": 2,
+      "connected_rooms": 1,
+      "subscribers": 4,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 0,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "tv_asahi_news": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_error": null,
+          "upstream": {
+            "transport": "anonymous_unsigned",
+            "counters": {
+              "heartbeats_sent": 19,
+              "frames": 91,
+              "non_message_frames": 20,
+              "acks_sent": 71,
+              "messages": 193,
+              "comments": 11,
+              "history_comments": 6,
+              "timed_comments": 5,
+              "arrival_age_le_2s": 5,
+              "arrival_age_le_5s": 5
+            },
+            "last_frame_age_seconds": 0.123
+          },
+          "last_connect_seconds": 0.576,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "bootstrap": {
+              "stages": [
+                {
+                  "stage": "register",
+                  "seconds": 0.11,
+                  "http_status": 200,
+                  "http_version": 3,
+                  "body_bytes": 69,
+                  "api_code": 0
+                },
+                {
+                  "stage": "room",
+                  "seconds": 0.269,
+                  "http_status": 200,
+                  "http_version": 3,
+                  "body_bytes": 16393,
+                  "api_code": 0
+                }
+              ],
+              "cookie_cached": false,
+              "room_cached": false,
+              "seconds": 0.394
+            },
+            "handshake_seconds": 0.168,
+            "total_seconds": 0.576
+          },
+          "source_messages": {
+            "signer_comments": 0,
+            "websocket_comments": 11,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 0,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 11
+          }
+        },
+        "shalphoke69": {
+          "state": "stopped",
+          "generation": 2,
+          "connection_phase": null,
+          "last_error": "offline",
+          "upstream": {},
+          "last_connect_seconds": 0.096,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "total_seconds": 0.096
+          },
+          "source_messages": {}
+        }
+      }
+    },
+    {
+      "at": 42.657,
+      "collector": "anonymous_unsigned",
+      "anonymous_session": {
+        "registrations": 1,
+        "room_lookups": 3,
+        "cookie_cache_hits": 2,
+        "cooldown_seconds": 0
+      },
+      "ready": true,
+      "rooms": 2,
+      "connected_rooms": 1,
+      "subscribers": 4,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 0,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "tv_asahi_news": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_error": null,
+          "upstream": {
+            "transport": "anonymous_unsigned",
+            "counters": {
+              "heartbeats_sent": 23,
+              "frames": 106,
+              "non_message_frames": 24,
+              "acks_sent": 82,
+              "messages": 224,
+              "comments": 13,
+              "history_comments": 6,
+              "timed_comments": 7,
+              "arrival_age_le_2s": 7,
+              "arrival_age_le_5s": 7
+            },
+            "last_frame_age_seconds": 0.104
+          },
+          "last_connect_seconds": 0.576,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "bootstrap": {
+              "stages": [
+                {
+                  "stage": "register",
+                  "seconds": 0.11,
+                  "http_status": 200,
+                  "http_version": 3,
+                  "body_bytes": 69,
+                  "api_code": 0
+                },
+                {
+                  "stage": "room",
+                  "seconds": 0.269,
+                  "http_status": 200,
+                  "http_version": 3,
+                  "body_bytes": 16393,
+                  "api_code": 0
+                }
+              ],
+              "cookie_cached": false,
+              "room_cached": false,
+              "seconds": 0.394
+            },
+            "handshake_seconds": 0.168,
+            "total_seconds": 0.576
+          },
+          "source_messages": {
+            "signer_comments": 0,
+            "websocket_comments": 13,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 0,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 13
+          }
+        },
+        "shalphoke69": {
+          "state": "stopped",
+          "generation": 2,
+          "connection_phase": null,
+          "last_error": "offline",
+          "upstream": {},
+          "last_connect_seconds": 0.096,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "total_seconds": 0.096
+          },
+          "source_messages": {}
+        }
+      }
+    },
+    {
+      "at": 53.052,
+      "collector": "anonymous_unsigned",
+      "anonymous_session": {
+        "registrations": 1,
+        "room_lookups": 3,
+        "cookie_cache_hits": 2,
+        "cooldown_seconds": 0
+      },
+      "ready": true,
+      "rooms": 2,
+      "connected_rooms": 1,
+      "subscribers": 4,
+      "pending_events": 0,
+      "pending_sends": 0,
+      "pending_send_bytes": 0,
+      "suppressed_replays": 0,
+      "suppressed_duplicates": 0,
+      "redis_failures": 0,
+      "redis_degraded_messages": 0,
+      "reconnects": 0,
+      "connection_details": {
+        "tv_asahi_news": {
+          "state": "streaming",
+          "generation": 1,
+          "connection_phase": "connected",
+          "last_error": null,
+          "upstream": {
+            "transport": "anonymous_unsigned",
+            "counters": {
+              "heartbeats_sent": 26,
+              "frames": 122,
+              "non_message_frames": 27,
+              "acks_sent": 95,
+              "messages": 254,
+              "comments": 14,
+              "history_comments": 6,
+              "timed_comments": 8,
+              "arrival_age_le_2s": 8,
+              "arrival_age_le_5s": 8
+            },
+            "last_frame_age_seconds": 0.354
+          },
+          "last_connect_seconds": 0.576,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "bootstrap": {
+              "stages": [
+                {
+                  "stage": "register",
+                  "seconds": 0.11,
+                  "http_status": 200,
+                  "http_version": 3,
+                  "body_bytes": 69,
+                  "api_code": 0
+                },
+                {
+                  "stage": "room",
+                  "seconds": 0.269,
+                  "http_status": 200,
+                  "http_version": 3,
+                  "body_bytes": 16393,
+                  "api_code": 0
+                }
+              ],
+              "cookie_cached": false,
+              "room_cached": false,
+              "seconds": 0.394
+            },
+            "handshake_seconds": 0.168,
+            "total_seconds": 0.576
+          },
+          "source_messages": {
+            "signer_comments": 0,
+            "websocket_comments": 14,
+            "invalid_source_ids": 0,
+            "signer_duplicates": 0,
+            "signer_to_websocket_replays": 0,
+            "websocket_duplicates": 0,
+            "other_source_repeats": 0,
+            "repeated_ids_payload_changed": 0,
+            "tracked_source_ids": 14
+          }
+        },
+        "shalphoke69": {
+          "state": "stopped",
+          "generation": 2,
+          "connection_phase": null,
+          "last_error": "offline",
+          "upstream": {},
+          "last_connect_seconds": 0.096,
+          "last_recovery_seconds": 0.0,
+          "connect_timings": {
+            "total_seconds": 0.096
+          },
+          "source_messages": {}
+        }
+      }
+    }
+  ],
+  "elapsed_seconds": 60.217
+}
