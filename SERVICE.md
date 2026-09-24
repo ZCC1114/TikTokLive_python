@@ -4,6 +4,8 @@
 
 [落地计划](plans/unsigned-production-rollout.md)记录迁移步骤；[部署目录](deploy/README.md)记录实际上线范围。仓库内保留的通用 `TikTokLiveClient` 是旧 SDK 兼容入口，正式服务不通过它采集。README 后半部分的旧 SDK 签名参数不适用于本服务。
 
+已知待处理问题：[旧 SDK 位置参数兼容交接](plans/sdk-positional-compatibility-2026-09-24.md)。合并后两处旧 SDK 调用可能因参数错位无法连接，已复现、尚未修复；当前正式无签名服务不走这些入口。
+
 ## 业务与接口
 
 - 启动入口保持 `examples.fastapi_ws_server:app`，单进程、端口 8765。
