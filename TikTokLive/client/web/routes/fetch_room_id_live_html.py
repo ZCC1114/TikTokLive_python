@@ -3,9 +3,12 @@ import re
 from json import JSONDecodeError
 from typing import Optional
 
-from httpx import Response
+from httpx import HTTPError, Response
 
-from TikTokLive.client.errors import UserOfflineError, UserNotFoundError, TikTokLiveError, SignAPIError
+from TikTokLive.client.errors import (
+    TikTokLiveError,
+    UserOfflineError,
+)
 from TikTokLive.client.web.web_base import ClientRoute
 from TikTokLive.client.web.web_settings import WebDefaults
 
@@ -36,34 +39,17 @@ class FetchRoomIdLiveHTMLRoute(ClientRoute):
 
         """
 
-        # Get their livestream HTML
-        response: Response = await self._web.get(
-            url=WebDefaults.tiktok_app_url + f"/@{unique_id}/live",
-            base_params=False
-        )
-
-        # Try to parse the room ID from the HTML
+        # Own the fallback here, so an API failure isn't fetched a second time
+        # by TikTokLiveClient.start(). Transport errors retain their type.
         try:
+            response: Response = await self._web.get(
+                url=WebDefaults.tiktok_app_url + f"/@{unique_id}/live",
+                base_params=False,
+            )
             return self.parse_room_id(response.text)
-        except FailedParseRoomIdError:
-            pass
-
-        # Fallback: Use the API to fetch the room ID
-        # Import here to avoid circular dependency
-        from TikTokLive.client.web.routes.fetch_room_id_api import FetchRoomIdAPIRoute
-        
-        try:
-            api_route = FetchRoomIdAPIRoute(web=self._web)
-            return str(await api_route(unique_id))
-        except (UserNotFoundError, SignAPIError):
-            raise
-        except Exception as ex:
-            # If the API also fails, raise a UserNotFoundError with a clear message
-            raise UserNotFoundError(
-                unique_id,
-                "Failed to retrieve room_id from both HTML and API. "
-                "The user might be offline, blocked, or the page structure has changed."
-            ) from ex
+        except (FailedParseRoomIdError, HTTPError):
+            from TikTokLive.client.web.routes.fetch_room_id_api import FetchRoomIdAPIRoute
+            return str(await FetchRoomIdAPIRoute(web=self._web)(unique_id))
 
     @classmethod
     def parse_room_id(cls, html: str) -> str:
@@ -89,10 +75,11 @@ class FetchRoomIdLiveHTMLRoute(ClientRoute):
                     if room_data.get('status') == 4:
                         raise UserOfflineError("The requested TikTok LIVE user is offline.")
                         
-                    return room_data.get('roomId')
-            except JSONDecodeError:
-                pass
-            except Exception:
+                    if room_data.get('roomId'):
+                        return room_data['roomId']
+            except UserOfflineError:
+                raise
+            except (JSONDecodeError, KeyError, TypeError, AttributeError):
                 pass
 
         # Method 2: __UNIVERSAL_DATA_FOR_REHYDRATION__
@@ -116,9 +103,9 @@ class FetchRoomIdLiveHTMLRoute(ClientRoute):
                     if user_info.get('status') == 4:
                         raise UserOfflineError("The requested TikTok LIVE user is offline.")
                     return user_info.get('roomId')
-            except JSONDecodeError:
-                pass
-            except Exception:
+            except UserOfflineError:
+                raise
+            except (JSONDecodeError, KeyError, TypeError, AttributeError):
                 pass
 
         # If we reach here, we failed to parse from HTML

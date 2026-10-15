@@ -14,10 +14,11 @@ authors = [
 ]
 keywords = ["tiktok", "tiktok live", "python3", "api", "unofficial"]
 dependencies = [
-    "httpx>=0.26.0",
-    "pyee>=9.0.4",
+    "httpx>=0.26.0,<0.29",
+    "pyee>=9.0.4,<14",
     "ffmpy>=0.3.0",
     "websockets_proxy==0.1.3",
+    "websockets>=13,<14",
     "betterproto==2.0.0b7",
     "async-timeout>=4.0.3",
     "mashumaro>=3.5",
@@ -38,8 +39,16 @@ classifiers = [
 
 [project.optional-dependencies]
 interactive = [
-    "curl_cffi==v0.8.0b7"
+    "curl_cffi==0.13.0"
 ]
+server = [
+    "curl_cffi==0.13.0",
+    "fastapi>=0.110,<1",
+    "uvicorn>=0.22,<1",
+    "redis>=5,<6",
+    "pydantic>=2,<3",
+]
+test = ["pytest>=8,<10", "pytest-asyncio>=0.24,<2", "ruff>=0.9,<1"]
 
 [project.urls]
 Homepage = "https://github.com/isaackogan/TikTokLive"
@@ -49,7 +58,21 @@ license-files = ['LICENSE']
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["TikTokLive*"]
+include = ["TikTokLive*", "live_service*", "examples*"]
 
 [tool.setuptools.package-data]
 "*" = ["*.txt", "*.rst", "*.md"]  # Proper wildcard for including package data
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+filterwarnings = ["error::RuntimeWarning", "error::ResourceWarning"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+extend-exclude = ["TikTokLive/proto/tiktok_proto.py", "scripts/docs", "docs"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
