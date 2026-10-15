@@ -12,7 +12,8 @@ from live_service.config import Settings
 from live_service.delivery import Subscriber
 from live_service.enrichment import RedisEnricher
 from live_service.protocol import comment_message, control_status
-from live_service.upstream.bootstrap import AnonymousBootstrap, normalize_username
+from live_service.upstream.bootstrap import normalize_username
+from live_service.upstream.regional_bootstrap import build_bootstrap
 from live_service.upstream.client import AnonymousLiveClient
 from live_service.upstream.errors import UpstreamError
 from TikTokLive.client.errors import (
@@ -71,7 +72,7 @@ class ConnectionManager:
             self.settings.redis_failure_cooldown,
         )
         self.client_factory = client_factory or self._make_client
-        self.bootstrap = AnonymousBootstrap(timeout=self.settings.bootstrap_timeout,
+        self.bootstrap = build_bootstrap(timeout=self.settings.bootstrap_timeout,
                                             cookie_ttl=self.settings.anonymous_cookie_ttl)
         self._connect_limit = asyncio.Semaphore(self.settings.connect_concurrency)
         self._upstream_not_before = 0.0
@@ -243,7 +244,8 @@ class ConnectionManager:
         if isinstance(exc, UpstreamError):
             if exc.retry_after is not None:
                 delay = max(1.0, exc.retry_after)
-                self._upstream_not_before = max(self._upstream_not_before, time.monotonic() + delay)
+                if exc.cooldown_scope == "global":
+                    self._upstream_not_before = max(self._upstream_not_before, time.monotonic() + delay)
                 return delay
             if exc.terminal:
                 return None

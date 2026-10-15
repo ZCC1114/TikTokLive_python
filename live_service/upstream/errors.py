@@ -21,9 +21,10 @@ class UpstreamError(ConnectionError):
     """Only safe, fixed protocol reasons cross the transport boundary."""
 
     def __init__(self, reason: str, *, terminal: bool = False, retry_after: float | None = None,
-                 refresh_room: bool = False):
+                 refresh_room: bool = False, cooldown_scope: str = "global"):
         self.reason = reason
         self.terminal = terminal
         self.retry_after = retry_after
         self.refresh_room = refresh_room
+        self.cooldown_scope = cooldown_scope
         super().__init__(reason)

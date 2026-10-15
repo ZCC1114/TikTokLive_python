@@ -1,0 +1,35 @@
+[Unit]
+Description=TikTok regional lookup egress
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=120
+StartLimitBurst=5
+
+[Service]
+Type=simple
+DynamicUser=yes
+StateDirectory=tiktoklive-us-egress
+StateDirectoryMode=0700
+LoadCredential=proxy.json:/etc/tiktoklive-us-egress/proxy.json
+ExecStart=/opt/tiktoklive-us-egress/bin/mihomo-v1.19.17 -d /var/lib/tiktoklive-us-egress -f %d/proxy.json
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=15
+UMask=0077
+LimitCORE=0
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+MemoryMax=192M
+TasksMax=64
+StandardOutput=null
+StandardError=null
+
+[Install]
+WantedBy=multi-user.target
