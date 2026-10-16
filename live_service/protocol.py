@@ -11,6 +11,28 @@ from TikTokLive.proto.custom_proto import ControlAction
 logger = logging.getLogger(__name__)
 
 
+def fan_badge_level(user) -> int:
+    """Use the FANS badge on this comment, not follows, subscriptions or gifts.
+
+    BadgeStruct.badge_scene=10 identifies FANS; log_extra.level is a decimal
+    string. Missing or invalid badge data must not interrupt comment delivery.
+    """
+    highest_level = 0
+    for badge in getattr(user, "badge_list", None) or ():
+        if getattr(badge, "badge_scene", None) != 10:
+            continue
+        raw_level = getattr(getattr(badge, "log_extra", None), "level", None)
+        if not isinstance(raw_level, str):
+            continue
+        raw_level = raw_level.strip()
+        if not (0 < len(raw_level) <= 10 and raw_level.isascii() and raw_level.isdecimal()):
+            continue
+        level = int(raw_level)
+        if 0 < level <= 2_147_483_647:
+            highest_level = max(highest_level, level)
+    return highest_level
+
+
 def control_status(action: ControlAction) -> str:
     return {
         ControlAction.CONTROL_ACTION_STREAM_ENDED: "3",
@@ -30,6 +52,7 @@ def comment_message(event, *, debug_raw: bool = False) -> dict:
         except Exception:
             logger.warning("Raw comment logging failed", exc_info=True)
     user = event.user
+    level = fan_badge_level(event.user)
     return {
         "msgId": str(uuid.uuid4()),
         "dyMsgId": str(event.base_message.message_id),
@@ -38,5 +61,6 @@ def comment_message(event, *, debug_raw: bool = False) -> dict:
         "danmuUserName": str(user.nick_name),
         "danmuContent": str(event.comment),
         "dyRoomId": str(event.base_message.room_id),
-        "fansStatus": "0",
+        "fansStatus": "1" if level else "0",
+        "fansLevel": level,
     }
